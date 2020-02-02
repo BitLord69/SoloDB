@@ -15,6 +15,7 @@ public class Disc extends Data {
     public static final String BRAND = "brand";
     public static final String WEIGHT = "weight";
     public static final String COLOR = "color";
+    public static final String PLASTIC = "plastic";
 
     public Disc(String fileName) {
         super(fileName);
@@ -25,16 +26,17 @@ public class Disc extends Data {
         setName(hm.get(NAME));
     } // User
 
-    public Disc(String name, String brand, String weight, String color) {
-        this("", name, brand, weight, color);
+    public Disc(String name, String brand, String weight, String color, String plastic) {
+        this("", name, brand, weight, color, plastic);
     }
 
-    public Disc(String fileName, String name, String brand, String weight, String color) {
+    public Disc(String fileName, String name, String brand, String weight, String color, String plastic) {
         super(fileName);
         setName(name);
         setBrand(brand);
         setWeight(weight);
         setColor(color);
+        setPlastic(plastic);
     }
 
     @Override
@@ -78,6 +80,14 @@ public class Disc extends Data {
 
     public void setColor(String color) {
         getData().put(Disc.COLOR, color);
+    }
+
+    public String getPlastic() {
+        return (String)getData().get(Disc.PLASTIC);
+    }
+
+    public void setPlastic(String plastic) {
+        getData().put(Disc.PLASTIC, plastic);
     }
 
     @Override
