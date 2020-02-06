@@ -14,7 +14,7 @@ public class FloatField<T> extends Field<T> {
 //    private boolean useMaxValue = false;
 
     public FloatField(String name) {
-        super(name, Type.INT);
+        super(name, Type.FLOAT);
     }
 
     public FloatField(String name, float minValue, float maxValue) {

@@ -6,7 +6,7 @@ Programmering i Java EMMJUH19, EC-Utbildning
 CopyLeft 2020 - JanInc
 */
 
-import com.janinc.Data;
+import com.janinc.DataObject;
 import com.janinc.Database;
 import com.janinc.Table;
 import com.janinc.exceptions.FieldNotFoundException;
@@ -16,7 +16,6 @@ import com.janinc.testapp.testdb.DiscDB;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class Query {
     private String[] fields;
@@ -42,7 +41,7 @@ public class Query {
         return this;
     } // where
 
-    public ArrayList<Data> execute() throws QueryException, FieldNotFoundException {
+    public ArrayList<DataObject> execute() throws QueryException, FieldNotFoundException {
         if (fields.equals("")) throw new QueryException("From table not set!");
         if (clauses.size() == 0) throw new QueryException("No Where-clauses present!");
 

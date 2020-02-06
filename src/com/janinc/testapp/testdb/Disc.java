@@ -5,93 +5,176 @@ Programmerat av Jan-Erik "Janis" Karlsson 2020-02-01
 Programmering i Java EMMJUH19, EC-Utbildning
 CopyLeft 2020 - JanInc
 */
-import com.janinc.Data;
+import com.janinc.DataObject;
+import com.janinc.annotations.*;
 
-import java.util.HashMap;
+@Table(name="disc")
+public class Disc extends DataObject {
+//    @StringField(maxlength=300, uniquevalue = true)
+//    public static final String NAME = "name";
+//
+//    @StringField
+//    public static final String BRAND = "brand";
+//
+//    @IntField(minvalue = 140, maxvalue = 200)
+//    public static final String WEIGHT = "weight";
+//
+//    @StringField
+//    public static final String COLOR = "color";
+//
+//    @StringField
+//    public static final String PLASTIC = "plastic";
 
-public class Disc extends Data {
+    @StringField(maxlength = 300, uniquevalue = true)
+    private String name;
 
-    public static final String NAME = "name";
-    public static final String BRAND = "brand";
-    public static final String WEIGHT = "weight";
-    public static final String COLOR = "color";
-    public static final String PLASTIC = "plastic";
+    @StringField(lookup=true, lookupTable="Manufacturer.class", lookupField="name", shadowField="brandShadow")
+    private String brand;
 
-    public Disc(String fileName) {
-        super(fileName);
+    @StringField()
+    private transient String brandShadow;
+
+    @IntField(minvalue = 140, maxvalue = 200)
+    private int weight;
+
+    @StringField()
+    private String color;
+
+    @StringField()
+    private String plastic;
+
+    public Disc() {
     }
 
-    public Disc(HashMap<String, String> hm){
-        super("");
-        setName(hm.get(NAME));
-    } // User
-
-    public Disc(String name, String brand, String weight, String color, String plastic) {
-        this("", name, brand, weight, color, plastic);
+    public Disc(String name, String brand, int weight, String color, String plastic) {
+        this.name = name;
+        this.brand = brand;
+        this.weight = weight;
+        this.color = color;
+        this.plastic = plastic;
     }
-
-    public Disc(String fileName, String name, String brand, String weight, String color, String plastic) {
-        super(fileName);
-        setName(name);
-        setBrand(brand);
-        setWeight(weight);
-        setColor(color);
-        setPlastic(plastic);
-    }
-
-    @Override
-    public boolean load() {
-        super.load();
-        return true;
-    } // load
-
-    @Override
-    public String getFolderName() {
-        return DiscTable.TABLE_NAME;
-    } // getFolderName
 
     public String getName() {
-        return (String)getData().get(Disc.NAME);
+        return name;
     }
 
     public void setName(String name) {
-        getData().put(Disc.NAME, name);
+        this.name = name;
     }
 
     public String getBrand() {
-        return (String)getData().get(Disc.BRAND);
+        return brand;
     }
 
     public void setBrand(String brand) {
-        getData().put(Disc.BRAND, brand);
+        this.brand = brand;
     }
 
-    public String getWeight() {
-        return (String)getData().get(Disc.WEIGHT);
+    public int getWeight() {
+        return weight;
     }
 
-    public void setWeight(String weight) {
-        getData().put(Disc.WEIGHT, weight);
+    public void setWeight(int weight) {
+        this.weight = weight;
     }
 
     public String getColor() {
-        return (String)getData().get(Disc.COLOR);
+        return color;
     }
 
     public void setColor(String color) {
-        getData().put(Disc.COLOR, color);
+        this.color = color;
     }
 
     public String getPlastic() {
-        return (String)getData().get(Disc.PLASTIC);
+        return plastic;
     }
 
     public void setPlastic(String plastic) {
-        getData().put(Disc.PLASTIC, plastic);
+        this.plastic = plastic;
     }
 
     @Override
     public String toString() {
-        return String.format("%s", getName());
+        return String.format("%s, manufactured by: %s, weight: %d, color: %s, Plastic: %s", getName(), getBrand(), getWeight(), getColor(), getPlastic());
     } // toString
-} // class User
+} // class Disc
+
+//    public Disc(String fileName) {
+//        super(fileName);
+//    }
+//
+//    public Disc(HashMap<String, String> hm){
+//        super("");
+//        setName(hm.get(NAME));
+//    } // User
+//
+//    public Disc(String name, String brand, String weight, String color, String plastic) {
+//        this("", name, brand, weight, color, plastic);
+//    }
+//
+//    public Disc(String fileName, String name, String brand, String weight, String color, String plastic) {
+//        super(fileName);
+//        setName(name);
+//        setBrand(brand);
+//        setWeight(weight);
+//        setColor(color);
+//        setPlastic(plastic);
+//    }
+//
+//    @Override
+//    public boolean load() {
+//        super.load();
+//        return true;
+//    } // load
+//
+//    @Override
+//    public String getFolderName() {
+//        return DiscTable.TABLE_NAME;
+//    } // getFolderName
+//
+//    public String getName() {
+//        return (String)getData().get(Disc.NAME);
+//    }
+//
+//    public void setName(String name) {
+//        getData().put(Disc.NAME, name);
+//    }
+//
+//    public String getBrand() {
+//        return (String)getData().get(Disc.BRAND);
+//    }
+//
+//    public void setBrand(String brand) {
+//        getData().put(Disc.BRAND, brand);
+//    }
+//
+//    public String getWeight() {
+//        return (String)getData().get(Disc.WEIGHT);
+//    }
+//
+//    public void setWeight(String weight) {
+//        getData().put(Disc.WEIGHT, weight);
+//    }
+//
+//    public String getColor() {
+//        return (String)getData().get(Disc.COLOR);
+//    }
+//
+//    public void setColor(String color) {
+//        getData().put(Disc.COLOR, color);
+//    }
+//
+//    public String getPlastic() {
+//        return (String)getData().get(Disc.PLASTIC);
+//    }
+//
+//    public void setPlastic(String plastic) {
+//        getData().put(Disc.PLASTIC, plastic);
+//    }
+//
+//    @Override
+//    public String toString() {
+//        return String.format("%s", getName());
+//    } // toString
+//} // class User

@@ -18,8 +18,10 @@ public class DiscDB extends Database {
     private DiscDB(String name) {
         super(name);
 
-        addTable(DiscTable.TABLE_NAME, new DiscTable<Disc>());
+        addClass(Disc.class);
+        addClass(Manufacturer.class);
 
+        // Annotations for this as well???
 //        addTable(HobbyTable.TABLE_NAME, new HobbyTable());
 //        addTable(LocationTable.TABLE_NAME, new LocationTable());
 //        addTable(LikeTable.TABLE_NAME, new LikeTable());
@@ -28,10 +30,18 @@ public class DiscDB extends Database {
 //        getTable(HobbyTable.TABLE_NAME).addReference(new Reference(getTable(LocationTable.TABLE_NAME), Hobby.LOCATIONS, Data.ID, Location.NAME));
     } // TestDB:TestDB
 
+//    public static DiscDB getInstance() {
+//        if (mInstance == null) {
+//            mInstance = new DiscDB(DBNAME);
+//        }
+//        return (DiscDB) mInstance;
+//    } // getInstance
+
     public static DiscDB getInstance() {
         if (mInstance == null) {
             mInstance = new DiscDB(DBNAME);
-        }
+        } // if mInstance...
+
         return (DiscDB) mInstance;
     } // getInstance
 } // class TestDB
