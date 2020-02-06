@@ -6,6 +6,8 @@ Programmering i Java EMMJUH19, EC-Utbildning
 CopyLeft 2020 - JanInc
 */
 
+import com.janinc.DataObject;
+
 public class FloatField<T> extends Field<T> {
 
     private float minValue = 0;
@@ -25,7 +27,7 @@ public class FloatField<T> extends Field<T> {
     }
 
     @Override
-    public <T> boolean validate(T t) {
+    public boolean validate(DataObject data) {
         return false;
     } // validate
 } // class StringField

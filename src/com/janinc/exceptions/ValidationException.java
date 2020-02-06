@@ -6,10 +6,10 @@ Programmering i Java EMMJUH19, EC-Utbildning
 CopyLeft 2020 - JanInc
 */
 
-public class DBNotInitializedException extends Exception {
+public class ValidationException extends Exception {
 
-    public DBNotInitializedException() {
-        super(String.format("Teh database has not been initialized! Please call 'Database.initialize()' first!"));
+    public ValidationException(String field, String message) {
+        super(String.format("Validation error for field '%s', %s:", field, message));
     } // DBNotInitializedException
 } // class DBNotInitializedException
 

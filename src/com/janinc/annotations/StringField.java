@@ -18,10 +18,12 @@ public @interface StringField {
     int maxlength() default 0;
 
     boolean lookup() default false;
+    String lookupKey() default "";
     String lookupTable() default "";
     String lookupField() default "";
     String shadowField() default "";
 
     boolean uniquevalue() default false;
+    boolean mandatory() default false;
     boolean usevalidation() default false;
 }

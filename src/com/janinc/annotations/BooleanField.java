@@ -13,10 +13,7 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface IntField {
+public @interface BooleanField {
     String name() default "";
-    int minvalue() default 0;
-    int maxvalue() default 0;
-    boolean uniqueValue() default false;
-    boolean useValidation() default false;
+    boolean usevalidation() default false;
 }

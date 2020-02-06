@@ -7,9 +7,11 @@ CopyLeft 2020 - JanInc
 */
 
 import com.janinc.DataObject;
+import com.janinc.exceptions.ValidationException;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.HashMap;
+import java.util.stream.Collectors;
 
 public class FieldManager {
     private Map<String, Field> fields = new HashMap<>();
@@ -39,8 +41,11 @@ public class FieldManager {
         return fields;
     } // getFields
 
-    public boolean validateData(DataObject data) {
+    public boolean validateData(DataObject data) throws ValidationException {
         // TODO: 2020-01-30 Maybe replace the 'return false' with a custom exception to signal what went wrong
+        for (Field f : fields.values()) {
+            f.validate(data);
+        }    
 //        for (String key : data.getData().keySet()) {
 //            if (fields.containsKey(key)) {
 //                // TODO: 2020-01-30 Need to pass in the data to validate, but how? Should the Data class have the fields instead, which will contain the values as well?
@@ -54,4 +59,16 @@ public class FieldManager {
 
         return true;
     } // validateData
+
+    @Override
+    public String toString() {
+        return String.format("FieldManager för tabell '%s' : antal fält: %d, fält:%n%s",
+                dataClass,
+                fields.size(),
+                fields
+                        .entrySet()
+                        .stream()
+                        .map(o -> ((Field)o.getValue()).toString())
+                        .collect(Collectors.joining("\n")));
+    } // toString
 } // class FieldManager

@@ -23,5 +23,9 @@ public abstract class Field<T> implements IValidateable {
         return type;
     }
 
+    @Override
+    public String toString() {
+        return "name='" + name + '\'' + ", type=" + type;
+    }
 //    public abstract boolean validate(T t);
 } // class Field

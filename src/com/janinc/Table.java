@@ -1,6 +1,7 @@
 package com.janinc;
 
-import com.janinc.annotations.StringField;
+import com.janinc.annotations.*;
+import com.janinc.exceptions.ValidationException;
 import com.janinc.field.FieldManager;
 
 import java.io.*;
@@ -13,7 +14,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class Table<D> {
+public class Table<D extends DataObject> {
     private final static String DATAFILE_EXTENSION = ".row";
 
     private Class<?> dataClass;
@@ -32,12 +33,6 @@ public class Table<D> {
 
         loadRecords();
     } // Table:Table
-
-//    private D createDataObject() throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
-//        Constructor constructor = dataClass.getConstructor();
-//        var dataObject = constructor.newInstance();
-//        return (D) dataObject;
-//    } // createDataObject
 
     private void checkCreateFolder(){
         File folder = new File("./" + name);
@@ -69,7 +64,7 @@ public class Table<D> {
                     return;
                 }
 
-                 dataMap.put(((DataObject)data).getId(), (D)data);
+                 dataMap.put(((DataObject)data).getId(), (D) data);
             });
         } catch (IOException e) {
             e.printStackTrace();
@@ -100,14 +95,15 @@ public class Table<D> {
         ((DataObject)data).setId(fileName);
     } // createUniqueId
 
-    public void save(D data){
-        fieldManager.validateData((DataObject) data);
-
+    public void save(D data) throws ValidationException{
         if(((DataObject)data).getId().equals("")){
             createUniqueId(data);
         } // if DataObject...
 
         try {
+            if (!fieldManager.validateData(data))
+                return;
+
             FileOutputStream fileOut = new FileOutputStream(((DataObject)data).getId());
             ObjectOutputStream out = new ObjectOutputStream(fileOut);
             out.writeObject(data);
@@ -119,27 +115,19 @@ public class Table<D> {
         } // catch
     } // save
 
-    public void saveAll(){
-        dataMap.forEach((k, v) -> save(v));
+    public void saveAll() throws ValidationException {
+        for (Map.Entry<String, D> entry : dataMap.entrySet()) {
+            String k = entry.getKey();
+            D v = entry.getValue();
+                save(v);
+          } // for entry...
     } // saveAll
 
-    public boolean addRecord(D data){
+    public boolean addRecord(D data) throws ValidationException {
         save(data);
         dataMap.put(((DataObject)data).getId(), data);
         return true;
     }  // addRecord
-
-//    public Set getKeys(){
-//        if(dataMap.isEmpty()){
-//            return null;
-//        } // if dataMap...
-//        else{
-//            Map.Entry<String, D> entry = dataMap.entrySet().iterator().next();
-//            D d = entry.getValue();
-//            HashMap<String, String> h = ((DataObject)d).getData();
-//            return h.keySet();
-//        } // else
-//    } // getKeys
 
     public D getRecord(String id){
         return dataMap.get(id);
@@ -165,23 +153,99 @@ public class Table<D> {
         return dataMap;
     }
 
-    public String getName() {
-        return name;
-    }
+    public String getName() { return name; }
 
     public void populateFieldManager() {
-        // TODO: 2020-02-04 Reflect the dataclass and add the fields to the field manager
         Field[] fields = dataClass.getDeclaredFields();
 
+        // TODO: 2020-02-06 Check fields from superclass(es) as well!
+        
         for (Field field: fields) {
-            Annotation annotation = field.getAnnotation(StringField.class);
-            if(annotation != null){
-                StringField myAnnotation = (StringField) annotation;
-//                field.set(this, myAnnotation.name());
-            }
-        }
-//        fieldManager.addField();
+            AnnotationHandlerParams ahp = getAnnotationParams(field);
+
+            if (ahp != null) {
+                Annotation annotation = field.getAnnotation(ahp.getFieldClass());
+                if (annotation != null) {
+                    ahp.getHandler().accept(field, annotation);
+                } // if annotation...
+            } // if ahp...
+        } // for Field...
     } // populateFieldManager
+
+    private void handleIntField(Object field, Object annotation) {
+        Field theField = (Field)field;
+        IntField myA = (IntField)annotation;
+        String name = theField.getName();
+
+        fieldManager.addField(new com.janinc.field.IntField(name, myA.minvalue(), myA.maxvalue(), myA.useValidation(), myA.uniqueValue()));
+    } // handleIntField
+
+    private void handleBooleanField(Object field, Object annotation) {
+        Field theField = (Field)field;
+        BooleanField myA = (BooleanField)annotation;
+        String name = theField.getName();
+
+        // TODO: 2020-02-06 Create fields for booleans
+    } // handleBooleanField
+
+    private void handleFloatField(Object field, Object annotation) {
+        Field theField = (Field)field;
+        FloatField myA = (FloatField)annotation;
+        String name = theField.getName();
+
+        // TODO: 2020-02-06 Create fields for floats
+    } // handleFloatField
+
+    private void handleStringField(Object field, Object annotation) {
+        Field theField = (Field)field;
+        StringField myA = (StringField)annotation;
+
+        String name = theField.getName();
+        int maxLength = myA.maxlength();
+        // name, maxLength
+        com.janinc.field.StringField stringField =
+                new com.janinc.field.StringField(name, maxLength, myA.mandatory(), myA.uniquevalue());
+        fieldManager.addField(stringField);
+
+        // TODO: 2020-02-06 Check for correct lookup syntax and create a reference object
+        if (myA.lookup()) {
+            ;
+        } // if myAnnotation...
+    } // handleStringField
+
+    private AnnotationHandlerParams getAnnotationParams(Field field) {
+        Object fieldClass = field.getType();
+        AnnotationHandlerParams ahp = new AnnotationHandlerParams();
+
+        System.out.println("I table.getAnnotationClass: namn="  + field.getName() + ", typ=" + field.getType());
+
+        if(field.getType().isAssignableFrom(String.class)) {
+            ahp.setFieldClass(StringField.class);
+            ahp.setHandler(this::handleStringField);
+            return ahp;
+        }
+        else if(field.getType().isAssignableFrom(Float.class)) {
+            ahp.setFieldClass(FloatField.class);
+            ahp.setHandler(this::handleFloatField);
+            return ahp;
+        }
+        else if(field.getType().isAssignableFrom(Boolean.class)) {
+            ahp.setFieldClass(BooleanField.class);
+            ahp.setHandler(this::handleBooleanField);
+            return ahp;
+        }
+        else if (field.getType() == int.class) {
+            ahp.setFieldClass(IntField.class);
+            ahp.setHandler(this::handleIntField);
+            return ahp;
+        } else if (field.getType() == boolean.class) {
+            ahp.setFieldClass(BooleanField.class);
+            ahp.setHandler(this::handleBooleanField);
+            return ahp;
+        }
+
+        return null;
+    } // getAnnotationParams
 
 //    public HashMap<String, String> getResolvedDataHM(HashMap<String, Reference> references) {
 //
@@ -228,7 +292,7 @@ public class Table<D> {
     @Override
     public String toString() {
         return String.format("Table: '%s', number of records: %d", name, dataMap.size());
-    }
+    } // toString
 
 //    public HashMap<String, String> getResolvedDataRaw(D data){
 //        return ((Data)data).getResolvedDataHM(references);

@@ -1,4 +1,5 @@
 package com.janinc;
+import com.janinc.exceptions.ValidationException;
 import com.janinc.interfaces.ISingletonDB;
 
 import java.io.File;
@@ -52,7 +53,7 @@ public class Database extends ISingletonDB {
         dataClassList.forEach(this::createTableClass);
     } // inspectClasses
 
-    private <c> void createTableClass(Class c, String s) {
+    private <c extends DataObject> void createTableClass(Class c, String s) {
         Annotation annotation = c.getAnnotation(com.janinc.annotations.Table.class);
         com.janinc.annotations.Table t = (com.janinc.annotations.Table)annotation;
         String name = (annotation == null) ? c.getSimpleName() : t.name();
@@ -107,12 +108,12 @@ public class Database extends ISingletonDB {
         return getTable(table) != null;
     } // tableExists
 
-    public void save(DataObject data) {
+    public void save(DataObject data) throws ValidationException {
         String className = dataClassList.get(data.getClass());
         getTable(className).save(data);
     } // save
 
-    public boolean addRecord(DataObject data) {
+    public boolean addRecord(DataObject data) throws ValidationException {
         String className = dataClassList.get(data.getClass());
 
         return getTable(className).addRecord(data);

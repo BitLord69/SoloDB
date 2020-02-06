@@ -10,31 +10,16 @@ import com.janinc.annotations.*;
 
 @Table(name="disc")
 public class Disc extends DataObject {
-//    @StringField(maxlength=300, uniquevalue = true)
-//    public static final String NAME = "name";
-//
-//    @StringField
-//    public static final String BRAND = "brand";
-//
-//    @IntField(minvalue = 140, maxvalue = 200)
-//    public static final String WEIGHT = "weight";
-//
-//    @StringField
-//    public static final String COLOR = "color";
-//
-//    @StringField
-//    public static final String PLASTIC = "plastic";
-
     @StringField(maxlength = 300, uniquevalue = true)
     private String name;
 
-    @StringField(lookup=true, lookupTable="Manufacturer.class", lookupField="name", shadowField="brandShadow")
+    @StringField(lookup=true, lookupTable="Manufacturer.class", lookupKey="id", lookupField="name", shadowField="brandShadow")
     private String brand;
+//getTable(UserTable.TABLE_NAME).addReference(new Reference(getTable(HobbyTable.TABLE_NAME), User.HOBBIES, Data.ID, Hobby.NAME));
 
-    @StringField()
     private transient String brandShadow;
 
-    @IntField(minvalue = 140, maxvalue = 200)
+    @IntField(minvalue = 140, maxvalue = 200, useValidation = true)
     private int weight;
 
     @StringField()
@@ -58,9 +43,7 @@ public class Disc extends DataObject {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    public void setName(String name) { this.name = name; }
 
     public String getBrand() {
         return brand;
@@ -93,6 +76,8 @@ public class Disc extends DataObject {
     public void setPlastic(String plastic) {
         this.plastic = plastic;
     }
+
+    public String getBrandShadow() { return brandShadow; }
 
     @Override
     public String toString() {
