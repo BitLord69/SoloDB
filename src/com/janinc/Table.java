@@ -47,24 +47,8 @@ public class Table<D extends DataObject> {
                     .map(Path::toString).collect(Collectors.toList());
 
             result.forEach(fileName -> {
-                Object data;
-
-                try {
-                    FileInputStream fileIn = new FileInputStream(fileName);
-                    ObjectInputStream in = new ObjectInputStream(fileIn);
-                    data = dataClass.cast(in.readObject());
-                    in.close();
-                    fileIn.close();
-                } catch (IOException i) {
-                    i.printStackTrace();
-                    return;
-                } catch (ClassNotFoundException c) {
-                    System.out.println("Class not found!");
-                    c.printStackTrace();
-                    return;
-                }
-
-                 dataMap.put(((DataObject)data).getId(), (D) data);
+                Object data = dataClass.cast(FileHandler.readFile("", fileName));
+                dataMap.put(((DataObject)data).getId(), (D) data);
             });
         } catch (IOException e) {
             e.printStackTrace();
@@ -79,8 +63,8 @@ public class Table<D extends DataObject> {
        return new File(name).delete();
    } // delete
 
-    public boolean deleteRecord(D data){
-        String id = ((DataObject)data).getId();
+    public boolean deleteRecord(DataObject data){
+        String id = data.getId();
         dataMap.remove(id);
         return new File(id).delete();
     } // deleteRecord
@@ -90,29 +74,20 @@ public class Table<D extends DataObject> {
         dataMap.clear();
     } // deleteAll
 
-    private void createUniqueId(D data){
+    private void createUniqueId(DataObject data){
         String fileName = String.format("%s/%d%s", name, System.currentTimeMillis(), DATAFILE_EXTENSION);
         ((DataObject)data).setId(fileName);
     } // createUniqueId
 
-    public void save(D data) throws ValidationException{
+    public void save(DataObject data) throws ValidationException{
         if(((DataObject)data).getId().equals("")){
             createUniqueId(data);
         } // if DataObject...
 
-        try {
-            if (!fieldManager.validateData(data))
-                return;
+        if (!fieldManager.validateData(data))
+            return;
 
-            FileOutputStream fileOut = new FileOutputStream(((DataObject)data).getId());
-            ObjectOutputStream out = new ObjectOutputStream(fileOut);
-            out.writeObject(data);
-            out.close();
-            fileOut.close();
-            System.out.printf("Serialized data is saved in %s%n", ((DataObject)data).getId());
-        } catch (IOException i) {
-            i.printStackTrace();
-        } // catch
+        FileHandler.writeFile("", ((DataObject)data).getId(), data);
     } // save
 
     public void saveAll() throws ValidationException {
@@ -120,18 +95,16 @@ public class Table<D extends DataObject> {
             String k = entry.getKey();
             D v = entry.getValue();
                 save(v);
-          } // for entry...
+        } // for Map...
     } // saveAll
 
-    public boolean addRecord(D data) throws ValidationException {
+    public boolean addRecord(DataObject data) throws ValidationException {
         save(data);
-        dataMap.put(((DataObject)data).getId(), data);
+        dataMap.put(data.getId(), (D) data);
         return true;
     }  // addRecord
 
-    public D getRecord(String id){
-        return dataMap.get(id);
-    }
+    public D getRecord(String id) {return dataMap.get(id); }
 
     public ArrayList<D> search(String key, String value){
 //        ArrayList<D> result = new ArrayList<>();
@@ -145,21 +118,15 @@ public class Table<D extends DataObject> {
         return null;
     } // search
 
-    public void addReference(Reference ref){
-        references.put(ref.getKey(), ref);
-    }
+    public void addReference(Reference ref) { references.put(ref.getKey(), ref); }
 
-    public HashMap<String, D> getRecords(){
-        return dataMap;
-    }
+    public HashMap<String, D> getRecords() { return dataMap; }
 
     public String getName() { return name; }
 
-    public void populateFieldManager() {
-        Field[] fields = dataClass.getDeclaredFields();
+    private void checkClass(Class<?> aClass) {
+        Field[] fields = aClass.getDeclaredFields();
 
-        // TODO: 2020-02-06 Check fields from superclass(es) as well!
-        
         for (Field field: fields) {
             AnnotationHandlerParams ahp = getAnnotationParams(field);
 
@@ -170,14 +137,19 @@ public class Table<D extends DataObject> {
                 } // if annotation...
             } // if ahp...
         } // for Field...
+    } // checkClass
+
+    public void populateFieldManager() {
+        Class<?> theClass = dataClass;
+        while (!(theClass.getName().equals(Object.class.getName()))) {
+            checkClass(theClass);
+            theClass = theClass.getSuperclass();
+        } // while...
     } // populateFieldManager
 
     private void handleIntField(Object field, Object annotation) {
         Field theField = (Field)field;
-        IntField myA = (IntField)annotation;
-        String name = theField.getName();
-
-        fieldManager.addField(new com.janinc.field.IntField(name, myA.minvalue(), myA.maxvalue(), myA.useValidation(), myA.uniqueValue()));
+        fieldManager.addField(new com.janinc.field.IntField<D>(theField.getName(), (IntField)annotation));
     } // handleIntField
 
     private void handleBooleanField(Object field, Object annotation) {
@@ -198,19 +170,15 @@ public class Table<D extends DataObject> {
 
     private void handleStringField(Object field, Object annotation) {
         Field theField = (Field)field;
-        StringField myA = (StringField)annotation;
-
         String name = theField.getName();
-        int maxLength = myA.maxlength();
-        // name, maxLength
-        com.janinc.field.StringField stringField =
-                new com.janinc.field.StringField(name, maxLength, myA.mandatory(), myA.uniquevalue());
+        StringField strAnn = (StringField)annotation;
+
+        com.janinc.field.StringField<D> stringField = new com.janinc.field.StringField<D>(name, strAnn);
         fieldManager.addField(stringField);
 
-        // TODO: 2020-02-06 Check for correct lookup syntax and create a reference object
-        if (myA.lookup()) {
-            ;
-        } // if myAnnotation...
+        if (strAnn.lookup()) {
+            Reference ref = new Reference(theField.getName(), strAnn);
+        } // if strAnn...
     } // handleStringField
 
     private AnnotationHandlerParams getAnnotationParams(Field field) {

@@ -20,11 +20,11 @@ public class StringField<T> extends Field<T>{
         super(name, Type.STRING);
     }
 
-    public StringField(String name, int maxLength, boolean mandatory, boolean unique) {
+    public StringField(String name, com.janinc.annotations.StringField annotation) {
         this(name);
-        this.unique = unique;
-        this.maxLength = maxLength;
-        this.mandatory = mandatory;
+        this.unique = annotation.uniquevalue();
+        this.maxLength = annotation.maxlength();
+        this.mandatory = annotation.mandatory();
         this.useValidation = maxLength > 0 || mandatory || unique;
     }
 

@@ -20,12 +20,12 @@ public class IntField<D> extends Field<D>{
         super(name, Type.INT);
     }
 
-    public IntField(String name, int minValue, int maxValue, boolean useValidation, boolean unique) {
+    public IntField(String name, com.janinc.annotations.IntField annotation) {
         this(name);
-        this.minValue = minValue;
-        this.maxValue = maxValue;
-        this.useValidation = useValidation;
-        this.unique = unique;
+        minValue = annotation.minvalue();
+        maxValue = annotation.maxvalue();
+        useValidation = annotation.useValidation();
+        unique = annotation.uniqueValue();
     }
 
     @Override
@@ -52,13 +52,13 @@ public class IntField<D> extends Field<D>{
         return true;
     } // validate
     
-    @Override
-    public String toString() {
-        return "IntField{" +
-                "minValue=" + minValue +
-                ", maxValue=" + maxValue +
-                ", useValidation=" + useValidation +
-                ", unique=" + unique +
-                '}';
-    }
+//    @Override
+//    public String toString() {
+//        return "IntField{" +
+//                "minValue=" + minValue +
+//                ", maxValue=" + maxValue +
+//                ", useValidation=" + useValidation +
+//                ", unique=" + unique +
+//                '}';
+//    }
 } // class StringField

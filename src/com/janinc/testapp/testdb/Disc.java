@@ -13,9 +13,8 @@ public class Disc extends DataObject {
     @StringField(maxlength = 300, uniquevalue = true)
     private String name;
 
-    @StringField(lookup=true, lookupTable="Manufacturer.class", lookupKey="id", lookupField="name", shadowField="brandShadow")
+    @StringField(lookup=true, lookupTable=Manufacturer.class, lookupForeignKey="id", lookupForeignField="name", shadowField="brandShadow")
     private String brand;
-//getTable(UserTable.TABLE_NAME).addReference(new Reference(getTable(HobbyTable.TABLE_NAME), User.HOBBIES, Data.ID, Hobby.NAME));
 
     private transient String brandShadow;
 

@@ -3,10 +3,8 @@ import com.janinc.exceptions.ValidationException;
 import com.janinc.interfaces.ISingletonDB;
 
 import java.io.File;
-import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -15,8 +13,8 @@ public class Database extends ISingletonDB {
 
     private String name = "";
     private String baseDir = "";
-    private Map<Class, String> dataClassList = new HashMap<>();
-    private Map<String, com.janinc.Table> tables = new HashMap<>();
+    private Map<Class<? extends DataObject>, String> dataClassList = new HashMap<>();
+    private Map<String, com.janinc.Table<? extends DataObject>> tables = new HashMap<>();
 
     public static Database getInstance() {
         if (mInstance == null) {
@@ -45,7 +43,7 @@ public class Database extends ISingletonDB {
         createClasses();
     } // initializeDB
 
-    public void addClass(Class dataClassName) {
+    public void addClass(Class<? extends DataObject> dataClassName) {
         dataClassList.put(dataClassName, "");
     } // addClass
 
@@ -53,11 +51,10 @@ public class Database extends ISingletonDB {
         dataClassList.forEach(this::createTableClass);
     } // inspectClasses
 
-    private <c extends DataObject> void createTableClass(Class c, String s) {
-        Annotation annotation = c.getAnnotation(com.janinc.annotations.Table.class);
-        com.janinc.annotations.Table t = (com.janinc.annotations.Table)annotation;
-        String name = (annotation == null) ? c.getSimpleName() : t.name();
-        Table<c> table = new Table<c>(name, c);
+    private <c extends DataObject> void createTableClass(Class<? extends DataObject> c, String s) {
+        com.janinc.annotations.Table annotation = c.getAnnotation(com.janinc.annotations.Table.class);
+        String name = (annotation == null) ? c.getSimpleName() : annotation.name();
+        Table<c> table = new Table<>(name, c);
         addTable(name, table);
         dataClassList.put(c, name);
         table.populateFieldManager();
@@ -71,8 +68,8 @@ public class Database extends ISingletonDB {
         return baseDir;
     } // getBaseDir
 
-    public HashMap<String, com.janinc.Table> getTables() {
-        return (HashMap<String, Table>) tables;
+    public HashMap<String, Table<? extends DataObject>> getTables() {
+        return (HashMap<String, Table<? extends DataObject>>) tables;
     } // getTables
 
     private void checkCreateFolder() {
@@ -82,7 +79,7 @@ public class Database extends ISingletonDB {
         } // if !folder...
     } // createFolder
 
-    public void addTable(String name, com.janinc.Table table) {
+    public void addTable(String name, Table<? extends DataObject> table) {
         tables.put(name, table);
     } // addTable
 
@@ -91,16 +88,16 @@ public class Database extends ISingletonDB {
     } // removeTable
 
     public boolean dropTable(String name) {
-        com.janinc.Table t = tables.get(name);
+        com.janinc.Table<? extends DataObject> t = tables.get(name);
         removeTable(name);
         return t.deleteTable();
     } // dropTable
 
-    public com.janinc.Table getTable(String table) {
+    public com.janinc.Table<? extends DataObject> getTable(String table) {
         return tables.get(table);
     } // getTable
 
-    public com.janinc.Table getTable(Class dataClass) {
+    public com.janinc.Table<? extends DataObject> getTable(Class<? extends DataObject> dataClass) {
         return tables.get(dataClassList.get(dataClass));
     } // getTable
 
@@ -124,22 +121,24 @@ public class Database extends ISingletonDB {
         return getTable(className).deleteRecord(data);
     } // deleteRecord
 
-    public HashMap<String, DataObject> getRecords(String table) {
+    public HashMap getRecords(String table) {
         return getTable(table).getRecords();
     } // getRecords
 
-    public HashMap<String, DataObject> getRecords(Class dataClass) {
+    public HashMap getRecords(Class<? extends DataObject> dataClass) {
         return getTable(dataClass).getRecords();
     } // getRecords
 
     public ArrayList<DataObject> search(String table, String searchField, String searchTerm) {
-        return getTable(table).search(searchField, searchTerm);
+//        return getTable(table).search(searchField, searchTerm);
+        return null;
     } // search
 
     @Override
     public String toString() {
-        String tableNames = (String) tables.entrySet().stream(). map(Map.Entry::getValue).map(v -> v.toString()).collect(Collectors.joining("\n"));
-        return String.format("-------------------------------%nDatabase name:%s, number of tables: %d%n%s%n-------------------------------", name, tables.size(), tableNames);
+        String tableNames = tables.values().stream().map(Table::toString).collect(Collectors.joining("\n"));
+        return String.format("%s%nDatabase name:%s, number of tables: %d%n%s%n%s",
+                "-".repeat(30), name, tables.size(), tableNames, "-".repeat(30));
     } // toString
 //    public HashMap<String, String> getResolvedDataRaw(Data data) {
 //        return getTable(data.getFolderName()).getResolvedDataRaw(data);

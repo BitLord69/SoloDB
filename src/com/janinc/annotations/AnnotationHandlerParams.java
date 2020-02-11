@@ -9,7 +9,7 @@ CopyLeft 2020 - JanInc
 import java.util.function.BiConsumer;
 
 public class AnnotationHandlerParams {
-    private Class fieldClass;
+    private Class<?> fieldClass;
 
     private BiConsumer handler;
 

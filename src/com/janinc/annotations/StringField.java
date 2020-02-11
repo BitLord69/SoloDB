@@ -6,6 +6,8 @@ Programmering i Java EMMJUH19, EC-Utbildning
 CopyLeft 2020 - JanInc
 */
 
+import com.janinc.DataObject;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -14,14 +16,16 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface StringField {
+    public static Class<? extends DataObject> DEFAULT_CLASS = DataObject.class;
+
     String name() default "";
     int maxlength() default 0;
 
     boolean lookup() default false;
-    String lookupKey() default "";
-    String lookupTable() default "";
-    String lookupField() default "";
+    String lookupForeignKey() default "";
+    String lookupForeignField() default "";
     String shadowField() default "";
+    Class<? extends DataObject> lookupTable() default DEFAULT_CLASS;
 
     boolean uniquevalue() default false;
     boolean mandatory() default false;
