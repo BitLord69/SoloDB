@@ -7,27 +7,42 @@ CopyLeft 2020 - JanInc
 */
 
 import com.janinc.DataObject;
+import com.janinc.exceptions.ValidationException;
 
 public class FloatField<T> extends Field<T> {
 
-    private float minValue = 0;
-    private float maxValue = 0;
-    private boolean useMinMaxValue = false;
+    private float minValue = Float.MIN_VALUE;
+    private float maxValue = Float.MAX_VALUE;
+    private boolean useValidation = false;
 //    private boolean useMaxValue = false;
 
     public FloatField(String name) {
         super(name, Type.FLOAT);
     }
 
-    public FloatField(String name, float minValue, float maxValue) {
+    public FloatField(String name, com.janinc.annotations.FloatField annotation) {
         this(name);
-        this.minValue = minValue;
-        this.maxValue = maxValue;
-        useMinMaxValue = true;
+        minValue = annotation.minvalue();
+        maxValue = annotation.maxvalue();
+        useValidation = annotation.useValidation();
     }
 
     @Override
-    public boolean validate(DataObject data) {
-        return false;
+    public void validate(DataObject d) throws ValidationException {
+        float value = Float.MIN_VALUE;
+        if (useValidation)
+        {
+            try {
+                java.lang.reflect.Field field = d.getClass().getDeclaredField(getName());
+                field.setAccessible(true);
+                value = (float) field.get(d);
+            } catch (NoSuchFieldException | IllegalAccessException e) {
+                e.printStackTrace();
+            }
+
+            if (value < minValue || value > maxValue) {
+                throw new ValidationException(getName(), toString());
+            }
+        } // if useValidation...
     } // validate
 } // class StringField

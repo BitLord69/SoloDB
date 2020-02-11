@@ -17,18 +17,18 @@ public class TestApp {
     public static void main(String[] args) {
         DiscDB.getInstance().initializeDB();
 
-        DiscDB db = DiscDB.getInstance();
-
-        Table t1 = db.getTable("disc");
-        Table t2 = db.getTable("manu");
-
-        System.out.printf("DB%n%s%nTable 1: %s, table2: %s%n%n", db, t1.getName(), t2.getName());
-
-        System.out.println(t1.getFieldManager() + "\n\n" + t2.getFieldManager() + "\n");
-
 // Uncomment the two rows below to create a few records
 //        createDiscs();
 //        createManufacturers();
+
+        DiscDB db = DiscDB.getInstance();
+
+        Table t1 = db.getTable("manu");
+        Table t2 = db.getTable("disc");
+
+        System.out.printf("%nDB%n%s%nTable 1: %s, table2: %s%n%n", db, t1.getName(), t2.getName());
+
+        System.out.println(t1.getFieldManager() + "\n\n" + t2.getFieldManager() + "\n");
 
         db.getRecords(Disc.class).forEach((k, v) -> System.out.println("Id: " + k + " values: " + v));
         db.getRecords(Manufacturer.class).forEach((k, v) -> System.out.println("Id: " + k + " values: " + v));
@@ -36,16 +36,16 @@ public class TestApp {
         HashMap hm =  db.getRecords("disc");
 //        hm.forEach((k, v) -> System.out.println("Key: " + k + " v:" + v));
 
-        Disc d = (Disc) hm.get("disc/1581009067358.row");
-        d.setWeight(130);
-        try {
-            db.save(d);
-        }
-        catch (ValidationException e){
-            System.out.println(e.getMessage());
-        }
-
-        System.out.println(d);
+//        Disc d = (Disc) hm.get("disc/1581433750751.row");
+//        d.setWeight(130);
+//        try {
+//            db.save(d);
+//        }
+//        catch (ValidationException e){
+//            System.out.println(e.getMessage());
+//        }
+//
+//        System.out.println(d);
 
 //        System.out.println("Innan getInstance...");
 //        DiscDB db = DiscDB.getInstance();
@@ -82,12 +82,13 @@ public class TestApp {
     private static void createDiscs() {
         DiscDB db = DiscDB.getInstance();
         try {
-            db.addRecord((DataObject)new Disc("Reko", "KastaPlast", 172, "White translucent", "Glow"));
-            db.addRecord((DataObject)new Disc("Reko", "KastaPlast", 174, "Lila", "K1"));
+            db.addRecord((DataObject)new Disc("Reko", "manu/1581430055274.row", 172, "White translucent", "Glow", 1.5f));
+            db.addRecord((DataObject)new Disc("Reko", "manu/1581430055274.row", 174, "Lila", "K1", 1.2f));
+            db.addRecord((DataObject)new Disc("Firebird", "manu/1581430058047.row", 176, "Orange", "Champion", 1.2f));
         } catch (ValidationException e) {
             e.printStackTrace();
-        }
-    }
+        } // catch
+    } // createDisc
 
     private static void createManufacturers() {
         DiscDB db = DiscDB.getInstance();

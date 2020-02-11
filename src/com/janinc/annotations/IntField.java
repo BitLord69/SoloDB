@@ -15,8 +15,8 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface IntField {
     String name() default "";
-    int minvalue() default 0;
-    int maxvalue() default 0;
+    int minvalue() default Integer.MIN_VALUE;
+    int maxvalue() default Integer.MAX_VALUE;
     boolean uniqueValue() default false;
     boolean useValidation() default false;
 }

@@ -10,5 +10,5 @@ CopyLeft 2020 - JanInc
 */
 @FunctionalInterface
 public interface IValidateable {
-    boolean validate(DataObject d) throws ValidationException;
+    void validate(DataObject d) throws ValidationException;
 }

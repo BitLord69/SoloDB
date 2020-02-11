@@ -18,8 +18,8 @@ public class DiscDB extends Database {
     private DiscDB(String name) {
         super(name);
 
-        addClass(Disc.class);
         addClass(Manufacturer.class);
+        addClass(Disc.class);
 
         // Annotations for this as well???
 //        addTable(HobbyTable.TABLE_NAME, new HobbyTable());

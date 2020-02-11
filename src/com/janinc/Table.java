@@ -31,7 +31,7 @@ public class Table<D extends DataObject> {
         this.name = name;
         checkCreateFolder();
 
-        loadRecords();
+//        loadRecords();
     } // Table:Table
 
     private void checkCreateFolder(){
@@ -41,7 +41,7 @@ public class Table<D extends DataObject> {
         } // if !folder.. .
     } // checkCreateFolder
 
-    private void loadRecords() {
+    public void loadRecords() {
         try (Stream<Path> walk = Files.walk(Paths.get("./" + name))) {
             List<String> result = walk.filter(Files::isRegularFile)
                     .map(Path::toString).collect(Collectors.toList());
@@ -49,6 +49,7 @@ public class Table<D extends DataObject> {
             result.forEach(fileName -> {
                 Object data = dataClass.cast(FileHandler.readFile("", fileName));
                 dataMap.put(((DataObject)data).getId(), (D) data);
+                resolveData((D)data);
             });
         } catch (IOException e) {
             e.printStackTrace();
@@ -84,9 +85,8 @@ public class Table<D extends DataObject> {
             createUniqueId(data);
         } // if DataObject...
 
-        if (!fieldManager.validateData(data))
-            return;
-
+        fieldManager.validateData(data);
+        resolveData((D)data);
         FileHandler.writeFile("", ((DataObject)data).getId(), data);
     } // save
 
@@ -124,6 +124,8 @@ public class Table<D extends DataObject> {
 
     public String getName() { return name; }
 
+    public Class<?> getDataClass() { return dataClass; }
+
     private void checkClass(Class<?> aClass) {
         Field[] fields = aClass.getDeclaredFields();
 
@@ -152,20 +154,17 @@ public class Table<D extends DataObject> {
         fieldManager.addField(new com.janinc.field.IntField<D>(theField.getName(), (IntField)annotation));
     } // handleIntField
 
-    private void handleBooleanField(Object field, Object annotation) {
-        Field theField = (Field)field;
-        BooleanField myA = (BooleanField)annotation;
-        String name = theField.getName();
-
-        // TODO: 2020-02-06 Create fields for booleans
-    } // handleBooleanField
+//    private void handleBooleanField(Object field, Object annotation) {
+//        Field theField = (Field)field;
+//        BooleanField myA = (BooleanField)annotation;
+//        String name = theField.getName();
+//
+//        // TODO: 2020-02-06 Create fields for booleans???
+//    } // handleBooleanField
 
     private void handleFloatField(Object field, Object annotation) {
         Field theField = (Field)field;
-        FloatField myA = (FloatField)annotation;
-        String name = theField.getName();
-
-        // TODO: 2020-02-06 Create fields for floats
+        fieldManager.addField(new com.janinc.field.FloatField<D>(theField.getName(), (FloatField)annotation));
     } // handleFloatField
 
     private void handleStringField(Object field, Object annotation) {
@@ -173,11 +172,11 @@ public class Table<D extends DataObject> {
         String name = theField.getName();
         StringField strAnn = (StringField)annotation;
 
-        com.janinc.field.StringField<D> stringField = new com.janinc.field.StringField<D>(name, strAnn);
+        com.janinc.field.StringField<D> stringField = new com.janinc.field.StringField<>(name, strAnn);
         fieldManager.addField(stringField);
 
         if (strAnn.lookup()) {
-            Reference ref = new Reference(theField.getName(), strAnn);
+            addReference(new Reference(theField.getName(), strAnn));
         } // if strAnn...
     } // handleStringField
 
@@ -197,76 +196,33 @@ public class Table<D extends DataObject> {
             ahp.setHandler(this::handleFloatField);
             return ahp;
         }
-        else if(field.getType().isAssignableFrom(Boolean.class)) {
-            ahp.setFieldClass(BooleanField.class);
-            ahp.setHandler(this::handleBooleanField);
-            return ahp;
-        }
+//        else if(field.getType().isAssignableFrom(Boolean.class)) {
+//            ahp.setFieldClass(BooleanField.class);
+//            ahp.setHandler(this::handleBooleanField);
+//            return ahp;
+//        }
         else if (field.getType() == int.class) {
             ahp.setFieldClass(IntField.class);
             ahp.setHandler(this::handleIntField);
             return ahp;
-        } else if (field.getType() == boolean.class) {
-            ahp.setFieldClass(BooleanField.class);
-            ahp.setHandler(this::handleBooleanField);
-            return ahp;
-        }
+        } // else if field...
+//        } else if (field.getType() == boolean.class) {
+//            ahp.setFieldClass(BooleanField.class);
+//            ahp.setHandler(this::handleBooleanField);
+//            return ahp;
+//        }
 
         return null;
     } // getAnnotationParams
 
-//    public HashMap<String, String> getResolvedDataHM(HashMap<String, Reference> references) {
-//
-//        HashMap <String, String> newData = (HashMap<String, String>) data.clone();
-//
-//        data.forEach((fieldKey, v) -> {
-//            if (references.containsKey(fieldKey)) {
-//                Reference ref = (Reference) references.get(fieldKey);
-//                String[] keyList = newData.get(ref.getKey()).split(",");
-//
-//                if (keyList.length > 0)
-//                {
-//                    String newList = replaceData(ref, keyList);
-//                    newData.put(ref.getKey(), newList);
-//                } // if keyList...
-//            } // if references...
-//        });
-//        return newData;
-//    } // getResolvedData
-//
-//    private String replaceData(Reference ref, String[] keyList) {
-//        StringBuilder newList = new StringBuilder();
-//
-//        for (String s : keyList){
-//            if (s != null && !s.equals("")){
-//                ArrayList res = ref.getRefTable().search(ref.getRefKey(), s);
-//
-//                if (res.size() > 0) {
-//                    Data refRecord = (Data) res.get(0);
-//                    if (refRecord != null) {
-//                        newList.append(refRecord.getData().get(ref.getRefTextKey()));
-//                        newList.append(",");
-//                    } // if refData...
-//                } // if res...
-//            } // if !s...
-//        } // for s...
-//
-//        String temp = newList.toString();
-//        if (temp.length() > 0)
-//            temp = temp.substring(0, temp.length() - 1);
-//        return temp;
-//    } // replaceData
+    public void resolveData(DataObject d) {
+        references.forEach((k, v) -> {
+            v.resolve(d);
+        });
+    } // getResolvedData
 
     @Override
     public String toString() {
-        return String.format("Table: '%s', number of records: %d", name, dataMap.size());
+        return String.format("Table: '%s', number of records: %d, references:%s", name, dataMap.size(), references);
     } // toString
-
-//    public HashMap<String, String> getResolvedDataRaw(D data){
-//        return ((Data)data).getResolvedDataHM(references);
-//    } // getResolvedData
-
-//    public D getResolvedData(D data){
-//        return (D) createDataObject(getResolvedDataRaw(data));
-//    } // getResolvedData
 } // class Table

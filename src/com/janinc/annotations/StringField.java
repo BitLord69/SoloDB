@@ -16,8 +16,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface StringField {
-    public static Class<? extends DataObject> DEFAULT_CLASS = DataObject.class;
-
     String name() default "";
     int maxlength() default 0;
 
@@ -25,7 +23,7 @@ public @interface StringField {
     String lookupForeignKey() default "";
     String lookupForeignField() default "";
     String shadowField() default "";
-    Class<? extends DataObject> lookupTable() default DEFAULT_CLASS;
+    Class<? extends DataObject> lookupTable() default DataObject.class;
 
     boolean uniquevalue() default false;
     boolean mandatory() default false;

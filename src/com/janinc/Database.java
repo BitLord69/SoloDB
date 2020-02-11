@@ -5,6 +5,7 @@ import com.janinc.interfaces.ISingletonDB;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -13,8 +14,8 @@ public class Database extends ISingletonDB {
 
     private String name = "";
     private String baseDir = "";
-    private Map<Class<? extends DataObject>, String> dataClassList = new HashMap<>();
-    private Map<String, com.janinc.Table<? extends DataObject>> tables = new HashMap<>();
+    private Map<Class<? extends DataObject>, String> dataClassList = new LinkedHashMap<>();
+    private Map<String, com.janinc.Table<? extends DataObject>> tables = new LinkedHashMap<>();
 
     public static Database getInstance() {
         if (mInstance == null) {
@@ -57,7 +58,9 @@ public class Database extends ISingletonDB {
         Table<c> table = new Table<>(name, c);
         addTable(name, table);
         dataClassList.put(c, name);
+System.out.println("I Database.createTableClass: " + name);
         table.populateFieldManager();
+        table.loadRecords();
     } // createTableClass
 
     public String getName() {
@@ -68,8 +71,8 @@ public class Database extends ISingletonDB {
         return baseDir;
     } // getBaseDir
 
-    public HashMap<String, Table<? extends DataObject>> getTables() {
-        return (HashMap<String, Table<? extends DataObject>>) tables;
+    public LinkedHashMap<String, Table<? extends DataObject>> getTables() {
+        return (LinkedHashMap<String, Table<? extends DataObject>>) tables;
     } // getTables
 
     private void checkCreateFolder() {
@@ -98,7 +101,9 @@ public class Database extends ISingletonDB {
     } // getTable
 
     public com.janinc.Table<? extends DataObject> getTable(Class<? extends DataObject> dataClass) {
-        return tables.get(dataClassList.get(dataClass));
+        var t = dataClassList.get(dataClass);
+        var t2 = tables.get(t);
+        return t2;
     } // getTable
 
     public boolean tableExists(String table) {
@@ -120,6 +125,10 @@ public class Database extends ISingletonDB {
         String className = dataClassList.get(data.getClass());
         return getTable(className).deleteRecord(data);
     } // deleteRecord
+
+    public DataObject getRecord(Class<? extends DataObject> dataClass, String id) {
+        return getTable(dataClass).getRecord(id);
+    } // getRecord
 
     public HashMap getRecords(String table) {
         return getTable(table).getRecords();

@@ -15,8 +15,8 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface FloatField {
     String name() default "";
-    float minvalue() default 0.0f;
-    float maxvlaue() default 0.0f;
+    float minvalue() default Float.MIN_VALUE;
+    float maxvalue() default Float.MAX_VALUE;
     boolean uniquevalue() default false;
-    boolean usevalidation() default false;
+    boolean useValidation() default false;
 }

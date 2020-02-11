@@ -10,9 +10,8 @@ import com.janinc.DataObject;
 import com.janinc.exceptions.ValidationException;
 
 public class IntField<D> extends Field<D>{
-
-    private int minValue = 0;
-    private int maxValue = 0;
+    private int minValue = Integer.MIN_VALUE;
+    private int maxValue = Integer.MAX_VALUE;
     private boolean useValidation = false;
     private boolean unique = false;
 
@@ -29,7 +28,7 @@ public class IntField<D> extends Field<D>{
     }
 
     @Override
-    public boolean validate(DataObject d) throws ValidationException {
+    public void validate(DataObject d) throws ValidationException {
         int value = Integer.MIN_VALUE;
         if (useValidation)
         {
@@ -45,11 +44,7 @@ public class IntField<D> extends Field<D>{
             if (value < minValue || value > maxValue) {
                 throw new ValidationException(getName(), this.toString());
             }
-
-            return true;
         } // if useValidation...
-        
-        return true;
     } // validate
     
 //    @Override

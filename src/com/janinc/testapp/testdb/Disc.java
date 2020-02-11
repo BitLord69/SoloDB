@@ -21,21 +21,24 @@ public class Disc extends DataObject {
     @IntField(minvalue = 140, maxvalue = 200, useValidation = true)
     private int weight;
 
-    @StringField()
+    private float fade;
+
+//    @StringField()
     private String color;
 
-    @StringField()
+//    @StringField()
     private String plastic;
 
     public Disc() {
     }
 
-    public Disc(String name, String brand, int weight, String color, String plastic) {
+    public Disc(String name, String brand, int weight, String color, String plastic, float fade) {
         this.name = name;
         this.brand = brand;
         this.weight = weight;
         this.color = color;
         this.plastic = plastic;
+        this.fade = fade;
     }
 
     public String getName() {
@@ -78,9 +81,14 @@ public class Disc extends DataObject {
 
     public String getBrandShadow() { return brandShadow; }
 
+    public float getFade() { return fade; }
+
+    public void setFade(float fade) { this.fade = fade; }
+
     @Override
     public String toString() {
-        return String.format("%s, manufactured by: %s, weight: %d, color: %s, Plastic: %s", getName(), getBrand(), getWeight(), getColor(), getPlastic());
+        return String.format("%s, manufactured by: %s, weight: %d, color: %s, Plastic: %s, fade: %.1f, shadow: %s",
+                getName(), getBrand(), getWeight(), getColor(), getPlastic(), getFade(), getBrandShadow());
     } // toString
 } // class Disc
 

@@ -7,14 +7,17 @@ CopyLeft 2020 - JanInc
 */
 
 import com.janinc.DataObject;
+import com.janinc.ReflectionHelper;
 import com.janinc.exceptions.ValidationException;
+
+import java.util.List;
+import java.util.Map;
 
 public class StringField<T> extends Field<T>{
     private int maxLength = 0;
     private boolean mandatory = false;
     private boolean useValidation = false;
     private boolean unique = false;
-
 
     public StringField(String name) {
         super(name, Type.STRING);
@@ -41,15 +44,18 @@ public class StringField<T> extends Field<T>{
     }
 
     @Override
-    public boolean validate(DataObject d) throws ValidationException {
+    public void validate(DataObject d) throws ValidationException {
         if (useValidation)
         {
+            Map<String, java.lang.reflect.Field> fields = ReflectionHelper.getAllFields(d.getClass());
+
             String value = "";
             try {
-                java.lang.reflect.Field field = d.getClass().getDeclaredField(getName());
+                java.lang.reflect.Field field = fields.get(getName());
                 field.setAccessible(true);
+
                 value = (String) field.get(d);
-            } catch (NoSuchFieldException | IllegalAccessException e) {
+            } catch (IllegalAccessException e) {
                 e.printStackTrace();
             }
 
@@ -61,13 +67,9 @@ public class StringField<T> extends Field<T>{
             if (mandatory && (value.isEmpty() || value.isBlank()))
                 throw new ValidationException(getName(), "Field is mandatory, please provide a string!");
 
-            if (value.length() > maxLength) {
-                throw new ValidationException(getName(), "Field too long, only " + maxLength +  " characters allowed!");
+            if (maxLength > 0 && value.length() > maxLength) {
+                throw new ValidationException(getName(), "Field too long, only [" + maxLength +  "] characters allowed!");
             } // if value...
-
-            return true;
         } // if useValidation...
-
-        return true;
     } // validate
 } // class StringField

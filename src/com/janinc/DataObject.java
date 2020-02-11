@@ -9,9 +9,7 @@ CopyLeft 2020 - JanInc
 import com.janinc.annotations.StringField;
 
 public abstract class DataObject implements java.io.Serializable {
-    public final static String ID = "id";
-
-    @StringField(name = "Id", uniquevalue = true)
+    @StringField(name = "id", uniquevalue = true)
     private String id = "";
 
     public String getId() { return id; }

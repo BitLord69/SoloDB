@@ -21,9 +21,11 @@ public class FileHandler {
             if (!folder.exists()){
                 folder.mkdir();
             } // if !folder...
+
+            directory = "/" + directory;
         } // if !directory...
 
-        Path path = Paths.get(directory + "/" + fileName);
+        Path path = Paths.get(directory + fileName);
 
         try (ObjectOutputStream oos = new ObjectOutputStream(Files.newOutputStream(path))) {
             oos.writeObject(object);
