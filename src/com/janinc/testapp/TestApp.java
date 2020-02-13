@@ -12,46 +12,44 @@ import com.janinc.exceptions.ValidationException;
 import com.janinc.testapp.testdb.*;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class TestApp {
     public static void main(String[] args) {
         DiscDB.getInstance().initializeDB();
 
-// Uncomment the two rows below to create a few records
-//        createDiscs();
-//        createManufacturers();
-
         DiscDB db = DiscDB.getInstance();
 
-        Table t1 = db.getTable("manu");
-        Table t2 = db.getTable("disc");
+        TestDataFactory.createTestRecordsIfNone();
 
-        System.out.printf("%nDB%n%s%nTable 1: %s, table2: %s%n%n", db, t1.getName(), t2.getName());
+        System.out.printf("%n%s%n", db);
 
-        System.out.println(t1.getFieldManager() + "\n\n" + t2.getFieldManager() + "\n");
-
-        db.getRecords(Disc.class).forEach((k, v) -> System.out.println("Id: " + k + " values: " + v));
+        System.out.println("\nRecords in manufacturer:");
         db.getRecords(Manufacturer.class).forEach((k, v) -> System.out.println("Id: " + k + " values: " + v));
 
+        System.out.println("\nRecords in disc:");
+        db.getRecords("disc").forEach((k, v) -> System.out.println("Id: " + k + " values: " + v));
+
+
         HashMap hm =  db.getRecords("disc");
-//        hm.forEach((k, v) -> System.out.println("Key: " + k + " v:" + v));
+        Map.Entry<String, DataObject> entry = (Map.Entry<String, DataObject>) hm.entrySet().iterator().next();
+        DataObject value = entry.getValue();
 
-//        Disc d = (Disc) hm.get("disc/1581433750751.row");
-//        d.setWeight(130);
-//        try {
-//            db.save(d);
-//        }
-//        catch (ValidationException e){
-//            System.out.println(e.getMessage());
-//        }
-//
-//        System.out.println(d);
+        // Get the "first" disc and set the weight to an invalid value
+        Disc d = (Disc) hm.get(value.getId());
+        System.out.println("\nTrying to set an illegal value for disc '" + d + "'");
+        d.setWeight(130);
+        try {
+            db.save(d);
+        } // try
+        catch (ValidationException e){
+            System.out.println(e.getMessage());
+            d.refresh();
+        } // catch
 
-//        System.out.println("Innan getInstance...");
-//        DiscDB db = DiscDB.getInstance();
-//        System.out.println("Efter getInstance...");
-
-//        System.out.println("TestDB : " + DiscDB.getInstance() + "\nDatabase: " + Database.getInstance());
+        System.out.println("\nRecords in disc (all values still valid):");
+        hm =  db.getRecords("disc");
+        hm.forEach((k, v) -> System.out.println("Key: " + k + " v:" + v));
 
 //        Query q = new Query();
 //        System.out.println("QueryDB: " + q.getQDB());
@@ -78,26 +76,4 @@ public class TestApp {
         } // catch
 */
     } // main
-
-    private static void createDiscs() {
-        DiscDB db = DiscDB.getInstance();
-        try {
-            db.addRecord((DataObject)new Disc("Reko", "manu/1581430055274.row", 172, "White translucent", "Glow", 1.5f));
-            db.addRecord((DataObject)new Disc("Reko", "manu/1581430055274.row", 174, "Lila", "K1", 1.2f));
-            db.addRecord((DataObject)new Disc("Firebird", "manu/1581430058047.row", 176, "Orange", "Champion", 1.2f));
-        } catch (ValidationException e) {
-            e.printStackTrace();
-        } // catch
-    } // createDisc
-
-    private static void createManufacturers() {
-        DiscDB db = DiscDB.getInstance();
-        try {
-            db.addRecord((DataObject)new Manufacturer("KastaPlast"));
-            db.addRecord((DataObject)new Manufacturer("Innova"));
-            db.addRecord((DataObject)new Manufacturer("Discraft"));
-        } catch (ValidationException e) {
-            e.printStackTrace();
-        }
-    }
 } // class TestApp

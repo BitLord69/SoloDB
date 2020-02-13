@@ -3,10 +3,12 @@ package com.janinc;
 import com.janinc.annotations.*;
 import com.janinc.exceptions.ValidationException;
 import com.janinc.field.FieldManager;
+import com.janinc.util.FileHandler;
 
 import java.io.*;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -24,14 +26,11 @@ public class Table<D extends DataObject> {
     private HashMap<String, Reference> references = new HashMap<>();
 
     public Table (String name, Class<?> dataClass){
+        this.name = name;
         this.dataClass = dataClass;
-
         fieldManager = new FieldManager(dataClass);
 
-        this.name = name;
         checkCreateFolder();
-
-//        loadRecords();
     } // Table:Table
 
     private void checkCreateFolder(){
@@ -126,6 +125,10 @@ public class Table<D extends DataObject> {
 
     public Class<?> getDataClass() { return dataClass; }
 
+    public long getNumberOfRecords() {
+        return dataMap.size();
+    } // getNumberOfRecords
+
     private void checkClass(Class<?> aClass) {
         Field[] fields = aClass.getDeclaredFields();
 
@@ -154,12 +157,12 @@ public class Table<D extends DataObject> {
         fieldManager.addField(new com.janinc.field.IntField<D>(theField.getName(), (IntField)annotation));
     } // handleIntField
 
+//        // TODO: 2020-02-06 Create fields for booleans???
 //    private void handleBooleanField(Object field, Object annotation) {
 //        Field theField = (Field)field;
 //        BooleanField myA = (BooleanField)annotation;
 //        String name = theField.getName();
 //
-//        // TODO: 2020-02-06 Create fields for booleans???
 //    } // handleBooleanField
 
     private void handleFloatField(Object field, Object annotation) {
@@ -184,7 +187,12 @@ public class Table<D extends DataObject> {
         Object fieldClass = field.getType();
         AnnotationHandlerParams ahp = new AnnotationHandlerParams();
 
-        System.out.println("I table.getAnnotationClass: namn="  + field.getName() + ", typ=" + field.getType());
+        System.out.println("I table.getAnnotationParams: namn="  + field.getName() + ", typ=" + field.getType());
+
+        if (Modifier.isStatic(field.getModifiers())){
+            System.out.println("Static field encountered, skipping...");
+            return null;
+        } // if Modifier...
 
         if(field.getType().isAssignableFrom(String.class)) {
             ahp.setFieldClass(StringField.class);
@@ -223,6 +231,7 @@ public class Table<D extends DataObject> {
 
     @Override
     public String toString() {
-        return String.format("Table: '%s', number of records: %d, references:%s", name, dataMap.size(), references);
+        String refs = this.references.values().stream().map(Reference::toString).collect(Collectors.joining("\n"));
+        return String.format("Table: '%s', number of records: %d, number of references: %d%n%s%n%s", name, dataMap.size(), references.size(), refs, fieldManager);
     } // toString
 } // class Table

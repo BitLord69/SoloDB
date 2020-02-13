@@ -14,7 +14,6 @@ public class FloatField<T> extends Field<T> {
     private float minValue = Float.MIN_VALUE;
     private float maxValue = Float.MAX_VALUE;
     private boolean useValidation = false;
-//    private boolean useMaxValue = false;
 
     public FloatField(String name) {
         super(name, Type.FLOAT);
@@ -38,11 +37,11 @@ public class FloatField<T> extends Field<T> {
                 value = (float) field.get(d);
             } catch (NoSuchFieldException | IllegalAccessException e) {
                 e.printStackTrace();
-            }
+            } // catch
 
             if (value < minValue || value > maxValue) {
-                throw new ValidationException(getName(), toString());
-            }
+                throw new ValidationException(getName(), String.format("value has to be within [%.2f] and [%.2f], but is %.2f!", minValue, maxValue, value));
+            } // if value...
         } // if useValidation...
     } // validate
-} // class StringField
+} // class FloatField

@@ -1,5 +1,6 @@
 package com.janinc;
 import com.janinc.exceptions.ValidationException;
+import com.janinc.field.Field;
 import com.janinc.interfaces.ISingletonDB;
 
 import java.io.File;
@@ -58,7 +59,6 @@ public class Database extends ISingletonDB {
         Table<c> table = new Table<>(name, c);
         addTable(name, table);
         dataClassList.put(c, name);
-System.out.println("I Database.createTableClass: " + name);
         table.populateFieldManager();
         table.loadRecords();
     } // createTableClass
@@ -102,8 +102,7 @@ System.out.println("I Database.createTableClass: " + name);
 
     public com.janinc.Table<? extends DataObject> getTable(Class<? extends DataObject> dataClass) {
         var t = dataClassList.get(dataClass);
-        var t2 = tables.get(t);
-        return t2;
+        return tables.get(t);
     } // getTable
 
     public boolean tableExists(String table) {
@@ -117,7 +116,6 @@ System.out.println("I Database.createTableClass: " + name);
 
     public boolean addRecord(DataObject data) throws ValidationException {
         String className = dataClassList.get(data.getClass());
-
         return getTable(className).addRecord(data);
     } // addRecord
 
@@ -138,6 +136,14 @@ System.out.println("I Database.createTableClass: " + name);
         return getTable(dataClass).getRecords();
     } // getRecords
 
+    public long getNumberOfRecords(String table) {
+        return  getTable(table).getNumberOfRecords();
+    } // getNumberOfRecords
+
+    public long getNumberOfRecords(Class<? extends DataObject> dataClass) {
+        return getTable(dataClass).getNumberOfRecords();
+    } // getNumberOfRecords
+
     public ArrayList<DataObject> search(String table, String searchField, String searchTerm) {
 //        return getTable(table).search(searchField, searchTerm);
         return null;
@@ -146,14 +152,7 @@ System.out.println("I Database.createTableClass: " + name);
     @Override
     public String toString() {
         String tableNames = tables.values().stream().map(Table::toString).collect(Collectors.joining("\n"));
-        return String.format("%s%nDatabase name:%s, number of tables: %d%n%s%n%s",
-                "-".repeat(30), name, tables.size(), tableNames, "-".repeat(30));
+        String s = String.format("-------------------- Database name: '%s', number of tables: %d --------------------", name, tables.size());
+        return String.format("%s%n%s%n%s", s, tableNames, "-".repeat(s.length()));
     } // toString
-//    public HashMap<String, String> getResolvedDataRaw(Data data) {
-//        return getTable(data.getFolderName()).getResolvedDataRaw(data);
-//    } // getResolvedData
-//
-//    public Data getResolvedData(Data data) {
-//        return getTable(data.getFolderName()).getResolvedData(data);
-//    } // getResolvedData
 } // class Database

@@ -7,26 +7,24 @@ CopyLeft 2020 - JanInc
 */
 
 import com.janinc.annotations.StringField;
+import com.janinc.util.ReflectionHelper;
 
 import java.lang.reflect.Field;
 import java.util.Map;
-import java.util.Objects;
-
-import static com.janinc.Database.getInstance;
 
 public class Reference {
     private Table<? extends DataObject> refTable;
     private String key;
     private String refKey;
     private String refTextKey;
-    private String shadowField;
+    private String targetField;
 
-    public Reference(Table<? extends DataObject> refTable, String key, String refKey, String refTextKey, String shadowField){
+    public Reference(Table<? extends DataObject> refTable, String key, String refKey, String refTextKey, String targetField){
         this.refTable = refTable;
         this.key = key;
         this.refKey = refKey;
         this.refTextKey = refTextKey;
-        this.shadowField = shadowField;
+        this.targetField = targetField;
     } // Reference
 
     public Reference(String name, StringField annotation) {
@@ -34,7 +32,7 @@ public class Reference {
                 name,
                 annotation.lookupForeignKey(),
                 annotation.lookupForeignField(),
-                annotation.shadowField());
+                annotation.targetField());
     } // Reference
 
     public Table<? extends DataObject> getRefTable() {
@@ -53,7 +51,7 @@ public class Reference {
         return refTextKey;
     }
 
-    public String getShadowField() { return shadowField; }
+    public String getTargetField() { return targetField; }
 
     public void resolve(DataObject d) {
         if (refTable == null)
@@ -69,7 +67,7 @@ public class Reference {
         try {
             String value = (String) sourceField.get(d);
 
-            // TODO: 2020-02-11 Do a proper search on the refKey later on; for now just looks for the id
+            // TODO: 2020-02-11 Do a proper search on the refKey later on; for now just look for the id
             DataObject refRecord = db.getRecord((Class<? extends DataObject>) refTable.getDataClass(), value);
             if (refRecord != null) {
                 java.lang.reflect.Field refField = refFields.get(refTextKey);
@@ -77,7 +75,7 @@ public class Reference {
 
                 // TODO: 2020-02-11 Cast to the correct type; can be more than String!
                 String replacementValue = (String) refField.get(refRecord);
-                java.lang.reflect.Field replacementField = dataFields.get(shadowField);
+                java.lang.reflect.Field replacementField = dataFields.get(targetField);
                 replacementField.setAccessible(true);
                 replacementField.set(d, replacementValue);
             } // if refRecord...
@@ -88,6 +86,6 @@ public class Reference {
 
     @Override
     public String toString() {
-        return String.format("Reference: refTable=%s, key=%s, refKey=%s, refTextKey=%s, shadowField=%s", refTable, key, refKey, refTextKey, shadowField);
+        return String.format("\t\tReference: refTable=%s, key=%s, refKey=%s, refTextKey=%s, targetField=%s", refTable.getName(), key, refKey, refTextKey, targetField);
     } // toString
 } // class Reference

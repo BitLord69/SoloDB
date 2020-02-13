@@ -10,27 +10,21 @@ import com.janinc.annotations.*;
 
 @Table(name="disc")
 public class Disc extends DataObject {
+    public static final long serialVersionUID = 4242L;
+
     @StringField(maxlength = 300, uniquevalue = true)
     private String name;
 
-    @StringField(lookup=true, lookupTable=Manufacturer.class, lookupForeignKey="id", lookupForeignField="name", shadowField="brandShadow")
+    @StringField(lookup=true, lookupTable=Manufacturer.class, lookupForeignKey="id", lookupForeignField="name", targetField="brandShadow")
     private String brand;
-
     private transient String brandShadow;
 
     @IntField(minvalue = 140, maxvalue = 200, useValidation = true)
     private int weight;
-
     private float fade;
-
-//    @StringField()
     private String color;
-
-//    @StringField()
     private String plastic;
-
-    public Disc() {
-    }
+    private boolean brandNew = true;
 
     public Disc(String name, String brand, int weight, String color, String plastic, float fade) {
         this.name = name;
@@ -85,88 +79,13 @@ public class Disc extends DataObject {
 
     public void setFade(float fade) { this.fade = fade; }
 
+    public boolean isBrandNew() { return brandNew; }
+
+    public void setBrandNew(boolean brandNew) { this.brandNew = brandNew; }
+
     @Override
     public String toString() {
-        return String.format("%s, manufactured by: %s, weight: %d, color: %s, Plastic: %s, fade: %.1f, shadow: %s",
-                getName(), getBrand(), getWeight(), getColor(), getPlastic(), getFade(), getBrandShadow());
+        return String.format("%s, manufactured by: %s (%s), weight: %d, color: %s, Plastic: %s, fade: %.1f, new: %b",
+                getName(), getBrandShadow(), getBrand(), getWeight(), getColor(), getPlastic(), getFade(), isBrandNew());
     } // toString
 } // class Disc
-
-//    public Disc(String fileName) {
-//        super(fileName);
-//    }
-//
-//    public Disc(HashMap<String, String> hm){
-//        super("");
-//        setName(hm.get(NAME));
-//    } // User
-//
-//    public Disc(String name, String brand, String weight, String color, String plastic) {
-//        this("", name, brand, weight, color, plastic);
-//    }
-//
-//    public Disc(String fileName, String name, String brand, String weight, String color, String plastic) {
-//        super(fileName);
-//        setName(name);
-//        setBrand(brand);
-//        setWeight(weight);
-//        setColor(color);
-//        setPlastic(plastic);
-//    }
-//
-//    @Override
-//    public boolean load() {
-//        super.load();
-//        return true;
-//    } // load
-//
-//    @Override
-//    public String getFolderName() {
-//        return DiscTable.TABLE_NAME;
-//    } // getFolderName
-//
-//    public String getName() {
-//        return (String)getData().get(Disc.NAME);
-//    }
-//
-//    public void setName(String name) {
-//        getData().put(Disc.NAME, name);
-//    }
-//
-//    public String getBrand() {
-//        return (String)getData().get(Disc.BRAND);
-//    }
-//
-//    public void setBrand(String brand) {
-//        getData().put(Disc.BRAND, brand);
-//    }
-//
-//    public String getWeight() {
-//        return (String)getData().get(Disc.WEIGHT);
-//    }
-//
-//    public void setWeight(String weight) {
-//        getData().put(Disc.WEIGHT, weight);
-//    }
-//
-//    public String getColor() {
-//        return (String)getData().get(Disc.COLOR);
-//    }
-//
-//    public void setColor(String color) {
-//        getData().put(Disc.COLOR, color);
-//    }
-//
-//    public String getPlastic() {
-//        return (String)getData().get(Disc.PLASTIC);
-//    }
-//
-//    public void setPlastic(String plastic) {
-//        getData().put(Disc.PLASTIC, plastic);
-//    }
-//
-//    @Override
-//    public String toString() {
-//        return String.format("%s", getName());
-//    } // toString
-//} // class User

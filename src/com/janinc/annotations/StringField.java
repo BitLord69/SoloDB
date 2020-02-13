@@ -22,7 +22,7 @@ public @interface StringField {
     boolean lookup() default false;
     String lookupForeignKey() default "";
     String lookupForeignField() default "";
-    String shadowField() default "";
+    String targetField() default "";
     Class<? extends DataObject> lookupTable() default DataObject.class;
 
     boolean uniquevalue() default false;

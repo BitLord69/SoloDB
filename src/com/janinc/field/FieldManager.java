@@ -49,13 +49,14 @@ public class FieldManager {
 
     @Override
     public String toString() {
-        return String.format("FieldManager för tabell '%s' : antal fält: %d, fält:%n%s",
-                dataClass,
-                fields.size(),
+        String s = String.format("\t\t---------- FieldManager for table '%s' : number of  validation fields: %d ----------", dataClass.getSimpleName(), fields.size());
+        return String.format("%s%n%s%n\t\t%s",
+                s,
                 fields
                         .entrySet()
                         .stream()
-                        .map(o -> ((Field)o.getValue()).toString())
-                        .collect(Collectors.joining("\n")));
+                        .map(o -> "\t\t\t" + ((Field)o.getValue()).toString())
+                        .collect(Collectors.joining("\n")),
+                "-".repeat(s.length()));
     } // toString
 } // class FieldManager

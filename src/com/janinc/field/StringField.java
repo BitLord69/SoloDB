@@ -7,10 +7,9 @@ CopyLeft 2020 - JanInc
 */
 
 import com.janinc.DataObject;
-import com.janinc.ReflectionHelper;
+import com.janinc.util.ReflectionHelper;
 import com.janinc.exceptions.ValidationException;
 
-import java.util.List;
 import java.util.Map;
 
 public class StringField<T> extends Field<T>{
@@ -57,19 +56,24 @@ public class StringField<T> extends Field<T>{
                 value = (String) field.get(d);
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
-            }
+            } // catch
 
             // TODO: 2020-02-06 Handle check if field is unique... I.e. fix query engine first
             if (unique) {
                 ;
-            }
+            } // if unique...
 
             if (mandatory && (value.isEmpty() || value.isBlank()))
-                throw new ValidationException(getName(), "Field is mandatory, please provide a string!");
+                throw new ValidationException(getName(), "field is mandatory, please provide a string!");
 
             if (maxLength > 0 && value.length() > maxLength) {
-                throw new ValidationException(getName(), "Field too long, only [" + maxLength +  "] characters allowed!");
+                throw new ValidationException(getName(), "field too long, only [" + maxLength +  "] characters allowed!");
             } // if value...
         } // if useValidation...
     } // validate
+
+    @Override
+    public String toString() {
+        return String.format("StringField - maxLength: %d, mandatory: %b, useValidation: %b, unique: %b", maxLength, mandatory, useValidation, unique);
+    } // toString
 } // class StringField

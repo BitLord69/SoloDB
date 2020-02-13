@@ -39,21 +39,16 @@ public class IntField<D> extends Field<D>{
                 value = (int) field.get(d);
             } catch (NoSuchFieldException | IllegalAccessException e) {
                 e.printStackTrace();
-            }
+            } // catch
 
             if (value < minValue || value > maxValue) {
-                throw new ValidationException(getName(), this.toString());
-            }
+                throw new ValidationException(getName(), String.format("value has to be within [%d] and [%d], but is %d!", minValue, maxValue, value));
+            } // if value...
         } // if useValidation...
     } // validate
     
-//    @Override
-//    public String toString() {
-//        return "IntField{" +
-//                "minValue=" + minValue +
-//                ", maxValue=" + maxValue +
-//                ", useValidation=" + useValidation +
-//                ", unique=" + unique +
-//                '}';
-//    }
+    @Override
+    public String toString() {
+        return String.format("IntField - minValue: %d, maxValue: %d, useValidation: %b, unique: %b", minValue, maxValue, useValidation, unique);
+    } // toString
 } // class StringField

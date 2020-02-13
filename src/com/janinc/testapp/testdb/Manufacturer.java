@@ -13,6 +13,8 @@ import com.janinc.annotations.Table;
 
 @Table(name="manu")
 public class Manufacturer extends DataObject {
+    public static final long serialVersionUID = 42L;
+
     @StringField(name = "NAME", maxlength = 300, uniquevalue = true)
     private String name;
 

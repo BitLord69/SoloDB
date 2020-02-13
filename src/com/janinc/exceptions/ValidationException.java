@@ -9,7 +9,7 @@ CopyLeft 2020 - JanInc
 public class ValidationException extends Exception {
 
     public ValidationException(String field, String message) {
-        super(String.format("Validation error for field '%s', %s:", field, message));
+        super(String.format("Validation error for field '%s': %s", field, message));
     } // DBNotInitializedException
 } // class DBNotInitializedException
 

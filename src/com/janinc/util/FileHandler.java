@@ -1,4 +1,4 @@
-package com.janinc;
+package com.janinc.util;
 
 /*
 Programmerat av Jan-Erik "Janis" Karlsson 2020-02-10
