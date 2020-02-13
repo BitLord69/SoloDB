@@ -8,9 +8,10 @@ CopyLeft 2020 - JanInc
 
 public enum Operator {
     EQUALS ("equals"),
-    NOT_EQUALS ("noteuals"),
+    NOT_EQUALS ("notequals"),
     STARTS_WITH ("startswith"),
-    ENDS_WITH ("endswith");
+    ENDS_WITH ("endswith"),
+    CONTAINS ("contains");
 
     private String name;
 

@@ -6,26 +6,49 @@ Programmering i Java EMMJUH19, EC-Utbildning
 CopyLeft 2020 - JanInc
 */
 
-public class IntField<T> extends Field<T>{
+import com.janinc.DataObject;
+import com.janinc.exceptions.ValidationException;
 
-    private int minValue = 0;
-    private int maxValue = 0;
-    private boolean useMinMaxValue = false;
-//    private boolean useMaxValue = false;
+public class IntField<D> extends Field<D>{
+    private int minValue = Integer.MIN_VALUE;
+    private int maxValue = Integer.MAX_VALUE;
+    private boolean useValidation = false;
+    private boolean unique = false;
 
     public IntField(String name) {
         super(name, Type.INT);
     }
 
-    public IntField(String name, int minValue, int maxValue) {
+    public IntField(String name, com.janinc.annotations.IntField annotation) {
         this(name);
-        this.minValue = minValue;
-        this.maxValue = maxValue;
-        useMinMaxValue = true;
+        minValue = annotation.minvalue();
+        maxValue = annotation.maxvalue();
+        useValidation = annotation.useValidation();
+        unique = annotation.uniqueValue();
     }
 
     @Override
-    public <T> boolean validate(T t) {
-        return false;
+    public void validate(DataObject d) throws ValidationException {
+        int value = Integer.MIN_VALUE;
+        if (useValidation)
+        {
+            // TODO: 2020-02-06 Handle check if field is unique... I.e. fix query engine first  
+            try {
+                java.lang.reflect.Field field = d.getClass().getDeclaredField(getName());
+                field.setAccessible(true);
+                value = (int) field.get(d);
+            } catch (NoSuchFieldException | IllegalAccessException e) {
+                e.printStackTrace();
+            } // catch
+
+            if (value < minValue || value > maxValue) {
+                throw new ValidationException(getName(), String.format("value has to be within [%d] and [%d], but is %d!", minValue, maxValue, value));
+            } // if value...
+        } // if useValidation...
     } // validate
+    
+    @Override
+    public String toString() {
+        return String.format("IntField - minValue: %d, maxValue: %d, useValidation: %b, unique: %b", minValue, maxValue, useValidation, unique);
+    } // toString
 } // class StringField

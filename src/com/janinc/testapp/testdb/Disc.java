@@ -5,83 +5,87 @@ Programmerat av Jan-Erik "Janis" Karlsson 2020-02-01
 Programmering i Java EMMJUH19, EC-Utbildning
 CopyLeft 2020 - JanInc
 */
-import com.janinc.Data;
+import com.janinc.DataObject;
+import com.janinc.annotations.*;
 
-import java.util.HashMap;
+@Table(name="disc")
+public class Disc extends DataObject {
+    public static final long serialVersionUID = 4242L;
 
-public class Disc extends Data {
+    @StringField(maxlength = 300, uniquevalue = true)
+    private String name;
 
-    public static final String NAME = "name";
-    public static final String BRAND = "brand";
-    public static final String WEIGHT = "weight";
-    public static final String COLOR = "color";
+    @StringField(lookup=true, lookupTable=Manufacturer.class, lookupForeignKey="id", lookupForeignField="name", targetField="brandShadow")
+    private String brand;
+    private transient String brandShadow;
 
-    public Disc(String fileName) {
-        super(fileName);
+    @IntField(minvalue = 140, maxvalue = 200, useValidation = true)
+    private int weight;
+    private float fade;
+    private String color;
+    private String plastic;
+    private boolean brandNew = true;
+
+    public Disc(String name, String brand, int weight, String color, String plastic, float fade) {
+        this.name = name;
+        this.brand = brand;
+        this.weight = weight;
+        this.color = color;
+        this.plastic = plastic;
+        this.fade = fade;
     }
-
-    public Disc(HashMap<String, String> hm){
-        super("");
-        setName(hm.get(NAME));
-    } // User
-
-    public Disc(String name, String brand, String weight, String color) {
-        this("", name, brand, weight, color);
-    }
-
-    public Disc(String fileName, String name, String brand, String weight, String color) {
-        super(fileName);
-        setName(name);
-        setBrand(brand);
-        setWeight(weight);
-        setColor(color);
-    }
-
-    @Override
-    public boolean load() {
-        super.load();
-        return true;
-    } // load
-
-    @Override
-    public String getFolderName() {
-        return DiscTable.TABLE_NAME;
-    } // getFolderName
 
     public String getName() {
-        return (String)getData().get(Disc.NAME);
+        return name;
     }
 
-    public void setName(String name) {
-        getData().put(Disc.NAME, name);
-    }
+    public void setName(String name) { this.name = name; }
 
     public String getBrand() {
-        return (String)getData().get(Disc.BRAND);
+        return brand;
     }
 
     public void setBrand(String brand) {
-        getData().put(Disc.BRAND, brand);
+        this.brand = brand;
     }
 
-    public String getWeight() {
-        return (String)getData().get(Disc.WEIGHT);
+    public int getWeight() {
+        return weight;
     }
 
-    public void setWeight(String weight) {
-        getData().put(Disc.WEIGHT, weight);
+    public void setWeight(int weight) {
+        this.weight = weight;
     }
 
     public String getColor() {
-        return (String)getData().get(Disc.COLOR);
+        return color;
     }
 
     public void setColor(String color) {
-        getData().put(Disc.COLOR, color);
+        this.color = color;
     }
+
+    public String getPlastic() {
+        return plastic;
+    }
+
+    public void setPlastic(String plastic) {
+        this.plastic = plastic;
+    }
+
+    public String getBrandShadow() { return brandShadow; }
+
+    public float getFade() { return fade; }
+
+    public void setFade(float fade) { this.fade = fade; }
+
+    public boolean isBrandNew() { return brandNew; }
+
+    public void setBrandNew(boolean brandNew) { this.brandNew = brandNew; }
 
     @Override
     public String toString() {
-        return String.format("%s", getName());
+        return String.format("%s, manufactured by: %s (%s), weight: %d, color: %s, Plastic: %s, fade: %.1f, new: %b",
+                getName(), getBrandShadow(), getBrand(), getWeight(), getColor(), getPlastic(), getFade(), isBrandNew());
     } // toString
-} // class User
+} // class Disc

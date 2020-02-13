@@ -8,7 +8,7 @@ CopyLeft 2020 - JanInc
 
 public enum Type {
     STRING ("String"),
-    INT ("Int"),
+    INT ("int"),
     FLOAT ("float"),
     BOOLEAN ("boolean");
 

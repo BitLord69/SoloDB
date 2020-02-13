@@ -6,26 +6,42 @@ Programmering i Java EMMJUH19, EC-Utbildning
 CopyLeft 2020 - JanInc
 */
 
+import com.janinc.DataObject;
+import com.janinc.exceptions.ValidationException;
+
 public class FloatField<T> extends Field<T> {
 
-    private float minValue = 0;
-    private float maxValue = 0;
-    private boolean useMinMaxValue = false;
-//    private boolean useMaxValue = false;
+    private float minValue = Float.MIN_VALUE;
+    private float maxValue = Float.MAX_VALUE;
+    private boolean useValidation = false;
 
     public FloatField(String name) {
-        super(name, Type.INT);
+        super(name, Type.FLOAT);
     }
 
-    public FloatField(String name, float minValue, float maxValue) {
+    public FloatField(String name, com.janinc.annotations.FloatField annotation) {
         this(name);
-        this.minValue = minValue;
-        this.maxValue = maxValue;
-        useMinMaxValue = true;
+        minValue = annotation.minvalue();
+        maxValue = annotation.maxvalue();
+        useValidation = annotation.useValidation();
     }
 
     @Override
-    public <T> boolean validate(T t) {
-        return false;
+    public void validate(DataObject d) throws ValidationException {
+        float value = Float.MIN_VALUE;
+        if (useValidation)
+        {
+            try {
+                java.lang.reflect.Field field = d.getClass().getDeclaredField(getName());
+                field.setAccessible(true);
+                value = (float) field.get(d);
+            } catch (NoSuchFieldException | IllegalAccessException e) {
+                e.printStackTrace();
+            } // catch
+
+            if (value < minValue || value > maxValue) {
+                throw new ValidationException(getName(), String.format("value has to be within [%.2f] and [%.2f], but is %.2f!", minValue, maxValue, value));
+            } // if value...
+        } // if useValidation...
     } // validate
-} // class StringField
+} // class FloatField

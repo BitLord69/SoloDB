@@ -1,9 +1,14 @@
 package com.janinc;
 
+import com.janinc.annotations.*;
+import com.janinc.exceptions.ValidationException;
 import com.janinc.field.FieldManager;
+import com.janinc.util.FileHandler;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -11,42 +16,40 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-abstract public class Table<D> {
+public class Table<D extends DataObject> {
+    private final static String DATAFILE_EXTENSION = ".row";
+
+    private Class<?> dataClass;
     protected String name;
+    private FieldManager fieldManager;
     private HashMap<String, D> dataMap = new HashMap<>();
     private HashMap<String, Reference> references = new HashMap<>();
 
-    private FieldManager fieldManager = new FieldManager();
-
-    abstract public D createDataObject(String fileName);
-    abstract public D createDataObject(HashMap<String, String> hm);
-
-    public Table (String name){
+    public Table (String name, Class<?> dataClass){
         this.name = name;
-        checkCreateFolder();
+        this.dataClass = dataClass;
+        fieldManager = new FieldManager(dataClass);
 
-        // TODO: 2020-01-13 Om vi vill att den ska läsas automatiskt så ska det göras här.
-        loadRecords();
+        checkCreateFolder();
     } // Table:Table
 
     private void checkCreateFolder(){
         File folder = new File("./" + name);
         if (!folder.exists()){
             folder.mkdir();
-        } // if !folder...
+        } // if !folder.. .
     } // checkCreateFolder
 
-    private void loadRecords() {
+    public void loadRecords() {
         try (Stream<Path> walk = Files.walk(Paths.get("./" + name))) {
             List<String> result = walk.filter(Files::isRegularFile)
                     .map(Path::toString).collect(Collectors.toList());
 
             result.forEach(fileName -> {
-                    D data = createDataObject(fileName);
-                    ((Data)data).load();
-                    dataMap.put(((Data)data).getFileName(), data);
+                Object data = dataClass.cast(FileHandler.readFile("", fileName));
+                dataMap.put(((DataObject)data).getId(), (D) data);
+                resolveData((D)data);
             });
-
         } catch (IOException e) {
             e.printStackTrace();
         } // catch
@@ -56,75 +59,179 @@ abstract public class Table<D> {
         return fieldManager;
     } // getFieldManager
 
-   public boolean delete(){
-       File file = new File(name);
-       return file.delete();
+   public boolean deleteTable(){
+       return new File(name).delete();
    } // delete
 
-    public boolean deleteRecord(Data data){
-        dataMap.remove(data.getID());
-        return data.delete();
+    public boolean deleteRecord(DataObject data){
+        String id = data.getId();
+        dataMap.remove(id);
+        return new File(id).delete();
     } // deleteRecord
 
     public void deleteAll(){
-        dataMap.forEach((k, d) -> ((Data)d).delete());
+        dataMap.forEach((k, v) -> deleteRecord(v));
         dataMap.clear();
     } // deleteAll
 
-    public void saveAll(Data data){
-        dataMap.forEach((k, d) -> ((Data)d).save());
-    }
+    private void createUniqueId(DataObject data){
+        String fileName = String.format("%s/%d%s", name, System.currentTimeMillis(), DATAFILE_EXTENSION);
+        ((DataObject)data).setId(fileName);
+    } // createUniqueId
 
-    public boolean addRecord(D data){
-        ((Data)data).save();
-        dataMap.put(((Data)data).getFileName(), data);
+    public void save(DataObject data) throws ValidationException{
+        if(((DataObject)data).getId().equals("")){
+            createUniqueId(data);
+        } // if DataObject...
+
+        fieldManager.validateData(data);
+        resolveData((D)data);
+        FileHandler.writeFile("", ((DataObject)data).getId(), data);
+    } // save
+
+    public void saveAll() throws ValidationException {
+        for (Map.Entry<String, D> entry : dataMap.entrySet()) {
+            String k = entry.getKey();
+            D v = entry.getValue();
+                save(v);
+        } // for Map...
+    } // saveAll
+
+    public boolean addRecord(DataObject data) throws ValidationException {
+        save(data);
+        dataMap.put(data.getId(), (D) data);
         return true;
     }  // addRecord
 
-    public Set getKeys(){
-        if(dataMap.isEmpty()){
-            return null;
-        } // if dataMap...
-        else{
-            Map.Entry<String, D> entry = dataMap.entrySet().iterator().next();
-            D d = entry.getValue();
-            HashMap<String, String> h = ((Data)d).getData();
-            return h.keySet();
-        } // else
-    } // getKeys
-
-    public D getRecord(String id){
-        return dataMap.get(id);
-    }
+    public D getRecord(String id) {return dataMap.get(id); }
 
     public ArrayList<D> search(String key, String value){
-        ArrayList<D> result = new ArrayList<>();
-        dataMap.forEach((k, d) -> {
-           if (((Data)d).getData().containsKey(key))
-               if (((Data)d).getData().get(key).contains(value)){
-                   result.add(d);
-           }
-        });
-        return result;
+//        ArrayList<D> result = new ArrayList<>();
+//        dataMap.forEach((k, d) -> {
+//           if (((Data)d).getData().containsKey(key))
+//               if (((Data)d).getData().get(key).contains(value)){
+//                   result.add(d);
+//           }
+//        });
+//        return result;
+        return null;
     } // search
 
-    public void addReference(Reference ref){
-        references.put(ref.getKey(), ref);
-    }
+    public void addReference(Reference ref) { references.put(ref.getKey(), ref); }
 
-    public HashMap<String, D> getRecords(){
-        return dataMap;
-    }
+    public HashMap<String, D> getRecords() { return dataMap; }
 
-    public String getName() {
-        return name;
-    }
+    public String getName() { return name; }
 
-    public HashMap<String, String> getResolvedDataRaw(D data){
-        return ((Data)data).getResolvedDataHM(references);
+    public Class<?> getDataClass() { return dataClass; }
+
+    public long getNumberOfRecords() {
+        return dataMap.size();
+    } // getNumberOfRecords
+
+    private void checkClass(Class<?> aClass) {
+        Field[] fields = aClass.getDeclaredFields();
+
+        for (Field field: fields) {
+            AnnotationHandlerParams ahp = getAnnotationParams(field);
+
+            if (ahp != null) {
+                Annotation annotation = field.getAnnotation(ahp.getFieldClass());
+                if (annotation != null) {
+                    ahp.getHandler().accept(field, annotation);
+                } // if annotation...
+            } // if ahp...
+        } // for Field...
+    } // checkClass
+
+    public void populateFieldManager() {
+        Class<?> theClass = dataClass;
+        while (!(theClass.getName().equals(Object.class.getName()))) {
+            checkClass(theClass);
+            theClass = theClass.getSuperclass();
+        } // while...
+    } // populateFieldManager
+
+    private void handleIntField(Object field, Object annotation) {
+        Field theField = (Field)field;
+        fieldManager.addField(new com.janinc.field.IntField<D>(theField.getName(), (IntField)annotation));
+    } // handleIntField
+
+//        // TODO: 2020-02-06 Create fields for booleans???
+//    private void handleBooleanField(Object field, Object annotation) {
+//        Field theField = (Field)field;
+//        BooleanField myA = (BooleanField)annotation;
+//        String name = theField.getName();
+//
+//    } // handleBooleanField
+
+    private void handleFloatField(Object field, Object annotation) {
+        Field theField = (Field)field;
+        fieldManager.addField(new com.janinc.field.FloatField<D>(theField.getName(), (FloatField)annotation));
+    } // handleFloatField
+
+    private void handleStringField(Object field, Object annotation) {
+        Field theField = (Field)field;
+        String name = theField.getName();
+        StringField strAnn = (StringField)annotation;
+
+        com.janinc.field.StringField<D> stringField = new com.janinc.field.StringField<>(name, strAnn);
+        fieldManager.addField(stringField);
+
+        if (strAnn.lookup()) {
+            addReference(new Reference(theField.getName(), strAnn));
+        } // if strAnn...
+    } // handleStringField
+
+    private AnnotationHandlerParams getAnnotationParams(Field field) {
+        Object fieldClass = field.getType();
+        AnnotationHandlerParams ahp = new AnnotationHandlerParams();
+
+        System.out.println("I table.getAnnotationParams: namn="  + field.getName() + ", typ=" + field.getType());
+
+        if (Modifier.isStatic(field.getModifiers())){
+            System.out.println("Static field encountered, skipping...");
+            return null;
+        } // if Modifier...
+
+        if(field.getType().isAssignableFrom(String.class)) {
+            ahp.setFieldClass(StringField.class);
+            ahp.setHandler(this::handleStringField);
+            return ahp;
+        }
+        else if(field.getType().isAssignableFrom(Float.class)) {
+            ahp.setFieldClass(FloatField.class);
+            ahp.setHandler(this::handleFloatField);
+            return ahp;
+        }
+//        else if(field.getType().isAssignableFrom(Boolean.class)) {
+//            ahp.setFieldClass(BooleanField.class);
+//            ahp.setHandler(this::handleBooleanField);
+//            return ahp;
+//        }
+        else if (field.getType() == int.class) {
+            ahp.setFieldClass(IntField.class);
+            ahp.setHandler(this::handleIntField);
+            return ahp;
+        } // else if field...
+//        } else if (field.getType() == boolean.class) {
+//            ahp.setFieldClass(BooleanField.class);
+//            ahp.setHandler(this::handleBooleanField);
+//            return ahp;
+//        }
+
+        return null;
+    } // getAnnotationParams
+
+    public void resolveData(DataObject d) {
+        references.forEach((k, v) -> {
+            v.resolve(d);
+        });
     } // getResolvedData
 
-    public D getResolvedData(D data){
-        return (D) createDataObject(getResolvedDataRaw(data));
-    } // getResolvedData
+    @Override
+    public String toString() {
+        String refs = this.references.values().stream().map(Reference::toString).collect(Collectors.joining("\n"));
+        return String.format("Table: '%s', number of records: %d, number of references: %d%n%s%n%s", name, dataMap.size(), references.size(), refs, fieldManager);
+    } // toString
 } // class Table

@@ -6,13 +6,13 @@ Programmering i Java EMMJUH19, EC-Utbildning
 CopyLeft 2020 - JanInc
 */
 
-import com.janinc.Data;
+import com.janinc.DataObject;
 import com.janinc.Database;
 import com.janinc.Table;
 import com.janinc.exceptions.FieldNotFoundException;
 import com.janinc.exceptions.TableNotFoundException;
 import com.janinc.field.FieldManager;
-import com.janinc.testapp.testdb.TestDB;
+import com.janinc.testapp.testdb.DiscDB;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,26 +41,18 @@ public class Query {
         return this;
     } // where
 
-    public ArrayList<Data> execute() throws QueryException {
-        if (fields.equals(""))
-            throw new QueryException("From table not set!");
+    public ArrayList<DataObject> execute() throws QueryException, FieldNotFoundException {
+        if (fields.equals("")) throw new QueryException("From table not set!");
+        if (clauses.size() == 0) throw new QueryException("No Where-clauses present!");
 
-        if (clauses.size() == 0)
-            throw new QueryException("No Where-clauses present!");
-
-        try {
-            checkField(fields);
-            checkField((String[]) clauses.toArray());
-        } catch (FieldNotFoundException e) {
-            e.printStackTrace();
-            return null;
-        } // catch
+        checkField(fields);
+        checkField(clauses.stream().map(c -> c.getFieldName()).toArray(String[]::new));
 
         return null;
     } // execute
 
     private void checkField(String[] fields) throws FieldNotFoundException {
-        Table t = TestDB.getInstance().getTable(fromTable);
+        Table t = DiscDB.getInstance().getTable(fromTable);
         FieldManager fm = t.getFieldManager();
 
         for (int i = 0; i < fields.length; i++) {

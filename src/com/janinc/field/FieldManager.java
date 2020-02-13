@@ -6,13 +6,20 @@ Programmering i Java EMMJUH19, EC-Utbildning
 CopyLeft 2020 - JanInc
 */
 
-import com.janinc.Data;
+import com.janinc.DataObject;
+import com.janinc.exceptions.ValidationException;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.HashMap;
+import java.util.stream.Collectors;
 
 public class FieldManager {
     private Map<String, Field> fields = new HashMap<>();
+    private Class<?> dataClass;
+
+    public FieldManager(Class<?> dataClass) {
+        this.dataClass = dataClass;
+    }
 
     public void addField(Field field) {
         fields.put(field.getName(), field);
@@ -34,19 +41,22 @@ public class FieldManager {
         return fields;
     } // getFields
 
-    public boolean validateData(Data data) {
-        // TODO: 2020-01-30 Maybe replace the 'return false' with a custom exception to signal what went wrong
-        for (String key : data.getData().keySet()) {
-            if (fields.containsKey(key)) {
-                // TODO: 2020-01-30 Need to pass in the data to validate, but how? Should the Data class have the fields instead, which will contain the values as well?
-                if (!fields.get(key).validate(data.getData().get(key))) {
-                    return false;
-                }
-            } // if fields...
-            else
-                return false;
-        } // for key...
-
-        return true;
+    public void validateData(DataObject data) throws ValidationException {
+        for (Field f : fields.values()) {
+            f.validate(data);
+        } // for f...
     } // validateData
+
+    @Override
+    public String toString() {
+        String s = String.format("\t\t---------- FieldManager for table '%s' : number of  validation fields: %d ----------", dataClass.getSimpleName(), fields.size());
+        return String.format("%s%n%s%n\t\t%s",
+                s,
+                fields
+                        .entrySet()
+                        .stream()
+                        .map(o -> "\t\t\t" + ((Field)o.getValue()).toString())
+                        .collect(Collectors.joining("\n")),
+                "-".repeat(s.length()));
+    } // toString
 } // class FieldManager
