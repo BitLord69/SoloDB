@@ -7,21 +7,18 @@ CopyLeft 2020 - JanInc
 */
 
 import com.janinc.DataObject;
-import com.janinc.Table;
-import com.janinc.exceptions.ValidationException;
+import com.janinc.Database;
+import com.janinc.exceptions.*;
+import com.janinc.query.*;
 import com.janinc.testapp.testdb.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class TestApp {
-    public static void main(String[] args) {
-        DiscDB.getInstance().initializeDB();
-
+    private static void printDBStatus() {
         DiscDB db = DiscDB.getInstance();
-
-        TestDataFactory.createTestRecordsIfNone();
-
         System.out.printf("%n%s%n", db);
 
         System.out.println("\nRecords in manufacturer:");
@@ -29,9 +26,12 @@ public class TestApp {
 
         System.out.println("\nRecords in disc:");
         db.getRecords("disc").forEach((k, v) -> System.out.println("Id: " + k + " values: " + v));
+    } // printDBStatus
 
+    private static void testValidation() {
+        DiscDB db = DiscDB.getInstance();
 
-        HashMap hm =  db.getRecords("disc");
+        HashMap<String, DataObject> hm =  db.getRecords("disc");
         Map.Entry<String, DataObject> entry = (Map.Entry<String, DataObject>) hm.entrySet().iterator().next();
         DataObject value = entry.getValue();
 
@@ -51,29 +51,47 @@ public class TestApp {
         hm =  db.getRecords("disc");
         hm.forEach((k, v) -> System.out.println("Key: " + k + " v:" + v));
 
-//        Query q = new Query();
-//        System.out.println("QueryDB: " + q.getQDB());
-
-//        try {
-//            q = q.from("Hej");
-//        } catch (TableNotFoundException e) {
-//            e.printStackTrace();
-//        }
-
-//        ArrayList<Data> res;
-/*
+        d.setWeight(140 + (int)(Math.random() * 60));
         try {
-//            res = q.from(DiscTable.TABLE_NAME).select(Disc.NAME, Disc.BRAND).where(new WhereClause("Fel", Operator.EQUALS, "Champion Firebird")).execute();
-            res = q
-                    .from(DiscTable.TABLE_NAME)
-                    .select(Disc.NAME, Disc.BRAND)
-                    .where(
-                            Operator.equals(Disc.NAME, "Champion Firebird")
-                            new WhereClause(Disc.NAME, Operator.EQUALS, "Champion Firebird")
-                    ).execute();
-        } catch (QueryException | TableNotFoundException | FieldNotFoundException e) {
+            db.save(d);
+        } // try
+        catch (ValidationException e){
+            System.out.println(e.getMessage());
+            d.refresh();
+        } // catch
+        System.out.println("\nWeight after (hopefully) successful change: " + d + "\n");
+    } // testValidation
+
+    private static void testQueries() {
+        Query q = new Query();
+
+        try {
+            q = q.from("Hej");
+        } catch (TableNotFoundException e) {
             e.printStackTrace();
         } // catch
-*/
+
+        ArrayList<DataObject> res;
+
+        try {
+            q = new Query()
+                    .from(Disc.class)
+                    .select("name", "brandShadow", "tjenare")
+                    .where(new WhereClause("name", Operator.EQUALS, "Champion Firebird"));
+            res = q.execute();
+        } catch (TableNotFoundException | QueryException | FieldNotFoundException e) {
+            e.printStackTrace();
+        } // catch
+
+        System.out.println(q);
+    } // testQueries
+
+    public static void main(String[] args) {
+        DiscDB.getInstance().initializeDB();
+        TestDataFactory.createTestRecordsIfNone();
+
+        printDBStatus();
+        testValidation();
+        testQueries();
     } // main
 } // class TestApp

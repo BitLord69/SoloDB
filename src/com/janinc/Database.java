@@ -101,14 +101,20 @@ public class Database extends ISingletonDB {
     } // getTable
 
     public com.janinc.Table<? extends DataObject> getTable(Class<? extends DataObject> dataClass) {
-        var t = dataClassList.get(dataClass);
-        return tables.get(t);
+        return tables.get(dataClassList.get(dataClass));
     } // getTable
+
+    public String getTableName(Class<? extends DataObject> dataClass) {
+        return dataClassList.get(dataClass);
+    } // getTableName
 
     public boolean tableExists(String table) {
         return getTable(table) != null;
     } // tableExists
 
+    public boolean tableExists(Class<? extends DataObject> dataClass) {
+        return getTable(dataClassList.get(dataClass)) != null;
+    } // getTable
     public void save(DataObject data) throws ValidationException {
         String className = dataClassList.get(data.getClass());
         getTable(className).save(data);

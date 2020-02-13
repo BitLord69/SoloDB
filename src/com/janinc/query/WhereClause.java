@@ -28,4 +28,9 @@ public class WhereClause {
     public String getComparator() {
         return comparator;
     }
+
+    @Override
+    public String toString() {
+        return String.format("WhereClause: fieldName: '%s', operator: '%s', comparator: '%s'", fieldName, operator, comparator);
+    } // toString
 } // class WhereClause
