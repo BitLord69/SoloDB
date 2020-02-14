@@ -6,26 +6,22 @@ Programmering i Java EMMJUH19, EC-Utbildning
 CopyLeft 2020 - JanInc
 */
 
-import com.janinc.DataObject;
-import com.janinc.Database;
-import com.janinc.Table;
-import com.janinc.exceptions.FieldNotFoundException;
-import com.janinc.exceptions.TableNotFoundException;
-import com.janinc.field.FieldManager;
+import com.janinc.*;
+import com.janinc.exceptions.*;
+import com.janinc.query.clause.*;
 import com.janinc.testapp.testdb.DiscDB;
 import com.janinc.util.ReflectionHelper;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.lang.reflect.InvocationTargetException;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Query {
     private String fromTable;
     private List<String> fields = new ArrayList<>();
     private List<WhereClause> clauses = new ArrayList<>();
+    private BindingOperator bindingOperation = BindingOperator.AND;
 
     public Query select(String ... fields) {
         this.fields.addAll(Arrays.asList(fields));
@@ -51,29 +47,104 @@ public class Query {
         return this;
     } // from
 
+    public Query bindingOperator(BindingOperator op) {
+        bindingOperation = op;
+        return this;
+    } // bindingOperator
+
     public Query where(WhereClause clause) {
         clauses.add(clause);
         return this;
     } // where
 
-    public ArrayList<DataObject> execute() throws QueryException, FieldNotFoundException {
+    public Query where(String field, Operator operator, String comparator) {
+        clauses.add(new StringClause(field, operator, comparator));
+        return this;
+    } // where
+
+    public Query where(String field, String operator, String comparator) {
+        clauses.add(new StringClause(field, operator, comparator));
+        return this;
+    } // where
+
+    public Query where(String field, Operator operator, int comparator) {
+        clauses.add(new IntClause(field, operator, comparator));
+        return this;
+    } // where
+
+    public Query where(String field, String operator, int comparator) {
+        clauses.add(new IntClause(field, operator, comparator));
+        return this;
+    } // where
+
+    public Query where(String field, Operator operator, float comparator) {
+        clauses.add(new FloatClause(field, operator, comparator));
+        return this;
+    } // where
+
+    public Query where(String field, String operator, float comparator) {
+        clauses.add(new FloatClause(field, operator, comparator));
+        return this;
+    } // where
+
+    public Query where(String field, Operator operator, boolean comparator) {
+        clauses.add(new BooleanClause(field, operator, comparator));
+        return this;
+    } // where
+
+    public Query where(String field, String operator, boolean comparator) {
+        clauses.add(new BooleanClause(field, operator, comparator));
+        return this;
+    } // where
+
+    public ArrayList<HashMap<String, Object>> execute() throws QueryException, FieldNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
         if (fields.equals("")) throw new QueryException("From table not set!");
         if (clauses.size() == 0) throw new QueryException("No Where-clauses present!");
 
-        checkField(fields);
-        checkField(clauses.stream().map(WhereClause::getFieldName).collect(Collectors.toList()));
+        checkFields(fields);
+        checkFields(clauses.stream().map(WhereClause::getFieldName).collect(Collectors.toList()));
 
         System.out.println("In Query.execute - all fields checked OK!");
-        return null;
+
+        // Test with the first clause only
+        // TODO: 2020-02-15 Loop through all clauses and create a combined result 
+        WhereClause wc = clauses.get(0);
+        ArrayList<HashMap<String, Object>> result = new ArrayList<>();
+
+        DiscDB db = DiscDB.getInstance();
+
+        System.out.println("Antal poster i tabellen: " + db.getNumberOfRecords(fromTable));
+
+        Iterator<? extends Map.Entry<String, ? extends DataObject>> i = db.getIterator(fromTable);
+        while (i.hasNext()) {
+            DataObject d = (DataObject) (i.next()).getValue();
+            if (wc.compare(fromTable, d)) {
+                HashMap<String, Object> record = new HashMap<>();
+                fields.forEach(s-> {
+                    try {
+                        addResult(record, d, s);
+                    } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+                        e.printStackTrace();
+                    } // catch
+                });
+                result.add(record);
+            } // if wc...
+        } // while i...
+
+        return result;
     } // execute
 
-    private void checkField(List<String> l) throws FieldNotFoundException {
+    private void addResult(HashMap<String, Object> result, DataObject d, String fieldName) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+        result.put(fieldName, ReflectionHelper.getFieldValue(fromTable, d, fieldName));
+    } // addResult
+
+    private void checkFields(List<String> list) throws FieldNotFoundException {
         Table t = DiscDB.getInstance().getTable(fromTable);
         Map<String, Field> dataFields = ReflectionHelper.getAllFields(t.getDataClass());
 
-        for (String f : l) {
-            if (dataFields.get(f) == null) {
-                throw new FieldNotFoundException(f);
+        for (String fieldName : list) {
+            if (dataFields.get(fieldName) == null) {
+                throw new FieldNotFoundException(fieldName);
             } // if dataFields...
         } // for i...
     } // checkSelect

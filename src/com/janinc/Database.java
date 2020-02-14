@@ -1,13 +1,9 @@
 package com.janinc;
 import com.janinc.exceptions.ValidationException;
-import com.janinc.field.Field;
 import com.janinc.interfaces.ISingletonDB;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Database extends ISingletonDB {
@@ -134,13 +130,21 @@ public class Database extends ISingletonDB {
         return getTable(dataClass).getRecord(id);
     } // getRecord
 
-    public HashMap getRecords(String table) {
+    public HashMap<String, ? extends DataObject> getRecords(String table) {
         return getTable(table).getRecords();
     } // getRecords
 
-    public HashMap getRecords(Class<? extends DataObject> dataClass) {
+    public HashMap<String, ? extends DataObject> getRecords(Class<? extends DataObject> dataClass) {
         return getTable(dataClass).getRecords();
     } // getRecords
+
+    public Iterator<? extends Map.Entry<String,? extends DataObject>> getIterator(String table) {
+        return getTable(table).getIterator();
+    } // getIterator
+
+    public Iterator<? extends Map.Entry<String,? extends DataObject>> getIterator(Class<? extends DataObject> dataClass) {
+        return getTable(dataClass).getIterator();
+    } // getIterator
 
     public long getNumberOfRecords(String table) {
         return  getTable(table).getNumberOfRecords();

@@ -105,6 +105,10 @@ public class Table<D extends DataObject> {
 
     public D getRecord(String id) {return dataMap.get(id); }
 
+    public Iterator<? extends Map.Entry<String,? extends DataObject>> getIterator() {
+        return dataMap.entrySet().iterator();
+    } // getIterator
+
     public ArrayList<D> search(String key, String value){
 //        ArrayList<D> result = new ArrayList<>();
 //        dataMap.forEach((k, d) -> {

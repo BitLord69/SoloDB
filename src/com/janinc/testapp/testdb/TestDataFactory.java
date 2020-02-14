@@ -23,8 +23,8 @@ public class TestDataFactory {
 
     private static void createDiscs() {
         DiscDB db = DiscDB.getInstance();
-        HashMap<String, DataObject> hm = db.getRecords("manu");
-        Iterator<Map.Entry<String, DataObject>> i =  hm.entrySet().iterator();
+        HashMap<String, ? extends DataObject> hm = db.getRecords("manu");
+        Iterator<? extends Map.Entry<String, ? extends DataObject>> i =  hm.entrySet().iterator();
 
         System.out.println("No discs in database -> creating some discs...");
 

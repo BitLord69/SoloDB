@@ -7,10 +7,6 @@ CopyLeft 2020 - JanInc
 */
 
 import com.janinc.Database;
-import com.janinc.exceptions.TableNotFoundException;
-import com.janinc.query.Operator;
-import com.janinc.query.Query;
-import com.janinc.query.WhereClause;
 
 public class DiscDB extends Database {
     private final static String DBNAME = "TESTDB";

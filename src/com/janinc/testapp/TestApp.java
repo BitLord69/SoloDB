@@ -7,11 +7,11 @@ CopyLeft 2020 - JanInc
 */
 
 import com.janinc.DataObject;
-import com.janinc.Database;
 import com.janinc.exceptions.*;
 import com.janinc.query.*;
 import com.janinc.testapp.testdb.*;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -31,8 +31,8 @@ public class TestApp {
     private static void testValidation() {
         DiscDB db = DiscDB.getInstance();
 
-        HashMap<String, DataObject> hm =  db.getRecords("disc");
-        Map.Entry<String, DataObject> entry = (Map.Entry<String, DataObject>) hm.entrySet().iterator().next();
+        HashMap<String, ? extends DataObject> hm = db.getRecords("disc");
+        Map.Entry<String, ? extends DataObject> entry = (Map.Entry<String, ? extends DataObject>) hm.entrySet().iterator().next();
         DataObject value = entry.getValue();
 
         // Get the "first" disc and set the weight to an invalid value
@@ -48,7 +48,7 @@ public class TestApp {
         } // catch
 
         System.out.println("\nRecords in disc (all values still valid):");
-        hm =  db.getRecords("disc");
+        hm = (HashMap<String, ? extends DataObject>) db.getRecords("disc");
         hm.forEach((k, v) -> System.out.println("Key: " + k + " v:" + v));
 
         d.setWeight(140 + (int)(Math.random() * 60));
@@ -71,19 +71,25 @@ public class TestApp {
             e.printStackTrace();
         } // catch
 
-        ArrayList<DataObject> res;
+        ArrayList<HashMap<String, Object>> res = new ArrayList<>();
 
         try {
             q = new Query()
                     .from(Disc.class)
-                    .select("name", "brandShadow", "tjenare")
-                    .where(new WhereClause("name", Operator.EQUALS, "Champion Firebird"));
+                    .select("name", "weight", "brandShadow")
+                    .where("name", "!=", "Firebird")
+                    .where("weight", ">", 172);
+//                    .where("name", Operator.EQUALS, "Firebird");
+//                    .where("brandNew", "==", true);
+//                    .where(new WhereClause("name", "===", "Champion Firebird"));
             res = q.execute();
-        } catch (TableNotFoundException | QueryException | FieldNotFoundException e) {
+        } catch (TableNotFoundException | QueryException | FieldNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         } // catch
 
         System.out.println(q);
+        System.out.println("Records in result: " + res.size());
+        res.forEach(System.out::println);
     } // testQueries
 
     public static void main(String[] args) {

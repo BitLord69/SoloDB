@@ -73,7 +73,7 @@ public class Disc extends DataObject {
         this.plastic = plastic;
     }
 
-    public String getBrandShadow() { return brandShadow; }
+    public String getBrandshadow() { return brandShadow; }
 
     public float getFade() { return fade; }
 
@@ -86,6 +86,6 @@ public class Disc extends DataObject {
     @Override
     public String toString() {
         return String.format("%s, manufactured by: %s (%s), weight: %d, color: %s, Plastic: %s, fade: %.1f, new: %b",
-                getName(), getBrandShadow(), getBrand(), getWeight(), getColor(), getPlastic(), getFade(), isBrandNew());
+                getName(), getBrandshadow(), getBrand(), getWeight(), getColor(), getPlastic(), getFade(), isBrandNew());
     } // toString
 } // class Disc

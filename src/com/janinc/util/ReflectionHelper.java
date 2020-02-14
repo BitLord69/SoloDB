@@ -6,7 +6,13 @@ Programmering i Java EMMJUH19, EC-Utbildning
 CopyLeft 2020 - JanInc
 */
 
+import com.janinc.DataObject;
+import com.janinc.Table;
+import com.janinc.testapp.testdb.DiscDB;
+
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,4 +33,22 @@ public class ReflectionHelper {
 
         return fields;
     } // getAllFields
+
+    public static Field getField(String table, DataObject d, String fieldName) {
+        Table<? extends DataObject> t = DiscDB.getInstance().getTable(table);
+        Map<String, Field> dataFields = getAllFields(t.getDataClass());
+        return dataFields.get(fieldName);
+    } // getField
+
+    public static Object runGetter(Field field, DataObject d) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        String name  = field.getName();
+        name = "get" + name.substring(0,1).toUpperCase() + name.substring(1).toLowerCase();
+        Method m = d.getClass().getDeclaredMethod(name);
+        m.setAccessible(true);
+        return m.invoke(d);
+    } // runGetter
+
+    public static Object getFieldValue(String table, DataObject d, String fieldName) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+        return runGetter(getField(table, d, fieldName), d);
+    } // getFieldValue
 } // class ReflectionHelper
