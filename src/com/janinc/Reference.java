@@ -7,9 +7,20 @@ CopyLeft 2020 - JanInc
 */
 
 import com.janinc.annotations.StringField;
+import com.janinc.exceptions.FieldNotFoundException;
+import com.janinc.exceptions.TableNotFoundException;
+import com.janinc.query.Query;
+import com.janinc.query.QueryException;
+import com.janinc.query.clause.FloatClause;
+import com.janinc.query.clause.IntClause;
+import com.janinc.query.clause.StringClause;
+import com.janinc.query.clause.WhereClause;
 import com.janinc.util.ReflectionHelper;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 public class Reference {
@@ -62,20 +73,24 @@ public class Reference {
         Map<String, Field> dataFields = ReflectionHelper.getAllFields(d.getClass());
         Map<String, Field> refFields = ReflectionHelper.getAllFields(refTable.getDataClass());
 
-        java.lang.reflect.Field sourceField = dataFields.get(key);
+        Field sourceField = dataFields.get(key);
         sourceField.setAccessible(true);
         try {
-            String value = (String) sourceField.get(d);
+            Object value = sourceField.get(d);
+            Class<?> sourceClass = sourceField.getType();
+            ArrayList<HashMap<String, Object>> res = new ArrayList<>();
 
-            // TODO: 2020-02-11 Do a proper search on the refKey later on; for now just look for the id
-            DataObject refRecord = db.getRecord((Class<? extends DataObject>) refTable.getDataClass(), value);
-            if (refRecord != null) {
-                java.lang.reflect.Field refField = refFields.get(refTextKey);
-                refField.setAccessible(true);
+            try {
+                WhereClause wc = createWhereClause(refKey, sourceClass, value);
+                Query q = new Query().from(refTable.getName()).select(refTextKey).where(wc);
+                res = q.execute();
+            } catch (TableNotFoundException | QueryException | FieldNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+                e.printStackTrace();
+            } // catch
 
-                // TODO: 2020-02-11 Cast to the correct type; can be more than String!
-                String replacementValue = (String) refField.get(refRecord);
-                java.lang.reflect.Field replacementField = dataFields.get(targetField);
+            if (res.size() > 0) {
+                Object replacementValue = res.get(0).get(refTextKey);
+                Field replacementField = dataFields.get(targetField);
                 replacementField.setAccessible(true);
                 replacementField.set(d, replacementValue);
             } // if refRecord...
@@ -83,6 +98,22 @@ public class Reference {
             e.printStackTrace();
         } // catch
     } // resolve
+
+    private WhereClause createWhereClause(String refKey, Class<?> sourceClass, Object value) {
+        WhereClause wc = null;
+
+        if (sourceClass == int.class) {
+            wc = new IntClause(refKey, "==", (int)value);
+        }
+        else if (sourceClass == float.class) {
+            wc = new FloatClause(refKey, "==", (float)value);
+        }
+        else if (sourceClass == String.class) {
+            wc = new StringClause(refKey, "==", (String)value);
+        }
+
+        return wc;
+    } // createWhereClause
 
     @Override
     public String toString() {

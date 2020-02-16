@@ -18,23 +18,29 @@ public class Manufacturer extends DataObject {
     @StringField(name = "NAME", maxlength = 300, uniquevalue = true)
     private String name;
 
+    @StringField(maxlength = 3, uniquevalue = true)
+    private String abbreviation;
+
     public Manufacturer() {
     }
 
-    public Manufacturer(String name) {
+    public Manufacturer(String name, String abbreviation)
+    {
         this.name = name;
+        this.abbreviation = abbreviation;
     }
 
     public String getName() {
         return name;
     }
-
     public void setName(String name) {
         this.name = name;
     }
+    public String getAbbreviation() { return abbreviation; }
+    public void setAbbreviation(String abbreviation) { this.abbreviation = abbreviation; }
 
     @Override
     public String toString() {
-        return name;
-    }
+        return name + " " + abbreviation;
+    } // toString
 } // class User

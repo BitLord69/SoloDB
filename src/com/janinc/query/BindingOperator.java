@@ -14,15 +14,11 @@ public enum BindingOperator {
     AND ("and", BindingOperator::and),
     OR ("or", BindingOperator::or);
 
-    private String operator;
     BiPredicate function;
 
     private static Map<String, Operator> stringValues = new HashMap<>();
 
-    private static boolean and(Object op1, Object op2) {
-        return (boolean)op1 && (boolean)op2;
-    } // and
-
+    private static boolean and(Object op1, Object op2) { return (boolean)op1 && (boolean)op2; } // and
     private static boolean or(Object op1, Object op2) {
         return (boolean)op1 || (boolean)op2;
     } // or
@@ -36,7 +32,6 @@ public enum BindingOperator {
     public static Operator get(String operator) { return stringValues.get(operator); }
 
     BindingOperator(String operator, BiPredicate function) {
-        this.operator = operator;
         this.function = function;
     } //BindingOperator:BindingOperator
 } // class BindingOperator

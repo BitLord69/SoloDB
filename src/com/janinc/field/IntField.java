@@ -7,7 +7,19 @@ CopyLeft 2020 - JanInc
 */
 
 import com.janinc.DataObject;
+import com.janinc.Database;
+import com.janinc.exceptions.FieldNotFoundException;
+import com.janinc.exceptions.TableNotFoundException;
 import com.janinc.exceptions.ValidationException;
+import com.janinc.query.Query;
+import com.janinc.query.QueryException;
+import com.janinc.query.clause.IntClause;
+import com.janinc.query.clause.StringClause;
+import com.janinc.query.clause.WhereClause;
+
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class IntField<D> extends Field<D>{
     private int minValue = Integer.MIN_VALUE;
@@ -34,7 +46,6 @@ public class IntField<D> extends Field<D>{
     public void validate(DataObject d) throws ValidationException {
         int value = Integer.MIN_VALUE;
         if (useValidation) {
-            // TODO: 2020-02-06 Handle check if field is unique... I.e. fix query engine first  
             try {
                 java.lang.reflect.Field field = d.getClass().getDeclaredField(getName());
                 field.setAccessible(true);
@@ -42,6 +53,21 @@ public class IntField<D> extends Field<D>{
             } catch (NoSuchFieldException | IllegalAccessException e) {
                 e.printStackTrace();
             } // catch
+
+            if (unique) {
+                ArrayList<HashMap<String, Object>> res = new ArrayList<>();
+
+                try {
+                    WhereClause wc = new IntClause(getName(), "==", (int)value);
+                    Query q = new Query().from(Database.getInstance().getTableName(d.getClass())).select(getName()).where(wc);
+                    res = q.execute();
+                } catch (TableNotFoundException | QueryException | FieldNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+                    e.printStackTrace();
+                } // catch
+
+                if (res.size() > 0)
+                    throw new ValidationException(getName(), String.format("field is unique, and the value [%d] has already been entered!", value));
+            } // if unique...
 
             if (value < minValue || value > maxValue) {
                 throw new ValidationException(getName(), String.format("value has to be within [%d] and [%d], but is %d!", minValue, maxValue, value));
