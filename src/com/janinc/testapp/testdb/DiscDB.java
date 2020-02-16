@@ -14,7 +14,9 @@ public class DiscDB extends Database {
     private DiscDB(String name) {
         super(name);
 
+        addClass(Category.class);
         addClass(Manufacturer.class);
+        addClass(Plastic.class);
         addClass(Disc.class);
     } // TestDB:TestDB
 

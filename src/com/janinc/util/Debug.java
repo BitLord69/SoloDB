@@ -8,5 +8,6 @@ CopyLeft 2020 - JanInc
 
 public final class Debug {
     //set to false to allow compiler to identify and eliminate unreachable code
-    public static final boolean ON = true;
+//    public static final boolean ON = true;
+    public static final boolean ON = false;
 } // class Debug

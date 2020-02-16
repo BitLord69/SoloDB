@@ -7,9 +7,19 @@ CopyLeft 2020 - JanInc
 */
 
 import com.janinc.DataObject;
+import com.janinc.Database;
+import com.janinc.exceptions.FieldNotFoundException;
+import com.janinc.exceptions.TableNotFoundException;
+import com.janinc.query.Query;
+import com.janinc.query.QueryException;
+import com.janinc.query.clause.StringClause;
+import com.janinc.query.clause.WhereClause;
 import com.janinc.util.ReflectionHelper;
 import com.janinc.exceptions.ValidationException;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 public class StringField<T> extends Field<T>{
@@ -58,9 +68,19 @@ public class StringField<T> extends Field<T>{
                 e.printStackTrace();
             } // catch
 
-            // TODO: 2020-02-06 Handle check if field is unique... I.e. fix query engine first
             if (unique) {
-                ;
+                ArrayList<HashMap<String, Object>> res = new ArrayList<>();
+
+                try {
+                    WhereClause wc = new StringClause(getName(), "==", (String)value);
+                    Query q = new Query().from(Database.getInstance().getTableName(d.getClass())).select(getName()).where(wc);
+                    res = q.execute();
+                } catch (TableNotFoundException | QueryException | FieldNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+                    e.printStackTrace();
+                } // catch
+
+                if (res.size() > 0)
+                    throw new ValidationException(getName(), String.format("field is unique, and the value [%s] has already been entered!", value));
             } // if unique...
 
             if (mandatory && (value.isEmpty() || value.isBlank()))
@@ -74,6 +94,6 @@ public class StringField<T> extends Field<T>{
 
     @Override
     public String toString() {
-        return String.format("StringField - maxLength: %d, mandatory: %b, useValidation: %b, unique: %b", maxLength, mandatory, useValidation, unique);
+        return String.format("StringField - name: %s, maxLength: %d, mandatory: %b, useValidation: %b, unique: %b", getName(), maxLength, mandatory, useValidation, unique);
     } // toString
 } // class StringField

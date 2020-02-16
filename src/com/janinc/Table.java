@@ -201,7 +201,7 @@ public class Table<D extends DataObject> {
         references.forEach((k, v) -> {
             v.resolve(d);
         });
-    } // getResolvedData
+    } // resolveData
 
     @Override
     public String toString() {

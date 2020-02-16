@@ -19,13 +19,13 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class Query {
-    private String fromTable;
-    private List<String> fields = new ArrayList<>();
+    private String fromTable = "";
+    private List<String> fieldsToRetrieve = new ArrayList<>();
     private List<WhereClause> clauses = new ArrayList<>();
     private BindingOperator bindingOperation = BindingOperator.AND;
 
     public Query select(String ... fields) {
-        this.fields.addAll(Arrays.asList(fields));
+        this.fieldsToRetrieve.addAll(Arrays.asList(fields));
         return this;
     } // select
 
@@ -99,20 +99,20 @@ public class Query {
     } // where
 
     public ArrayList<HashMap<String, Object>> execute() throws QueryException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-        if (fields.equals("")) throw new QueryException("From table not set!");
+        if (fromTable.equals("")) throw new QueryException("From table has not been set!");
+        if (fieldsToRetrieve.equals("")) throw new QueryException("No call to select() has been made!");
         if (clauses.size() == 0) throw new QueryException("No Where-clauses present!");
 
-        checkFields(fields);
+        checkFields(fieldsToRetrieve);
         checkFields(clauses.stream().map(WhereClause::getFieldName).collect(Collectors.toList()));
 
         if (Debug.ON) System.out.println("In Query.execute - all fields checked OK!");
 
         DiscDB db = DiscDB.getInstance();
         ArrayList<HashMap<String, Object>> result = new ArrayList<>();
-
-        if (Debug.ON) System.out.println("Antal poster i tabellen: " + db.getNumberOfRecords(fromTable));
-
         Iterator<? extends Map.Entry<String, ? extends DataObject>> i = db.getIterator(fromTable);
+
+        // TODO: 2020-02-16 Stop iterating if the field is unique and a record has been found
         while (i.hasNext()) {
             boolean totResult = false;
             DataObject d = (DataObject)(i.next()).getValue();
@@ -131,17 +131,20 @@ public class Query {
 
             if (totResult) {
                 HashMap<String, Object> record = new HashMap<>();
-                fields.forEach(s -> {
+                fieldsToRetrieve.forEach(fieldName -> {
                     try {
-                        addResult(record, d, s);
+                        addResult(record, d, fieldName);
                     } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
                         e.printStackTrace();
                     } // catch
                 });
                 result.add(record);
+
+                // TODO: 2020-02-16 Check if unique field - no need to look for more hits 
             } // if totResult...
         } // while i...
 
+        if (Debug.ON) System.out.printf("Fråga: %s, Antal poster i resultat: %d%n", this, result.size());
         return result;
     } // execute
 
@@ -162,6 +165,6 @@ public class Query {
 
     @Override
     public String toString() {
-        return String.format("Query: fromTable='%s', fields: %s, clauses: %s", fromTable, fields, clauses.stream().map(WhereClause::toString).collect(Collectors.joining(", ")));
+        return String.format("Query: fromTable='%s', fields: %s, clauses: %s", fromTable, fieldsToRetrieve, clauses.stream().map(WhereClause::toString).collect(Collectors.joining(", ")));
     } // toString
 } // class Query

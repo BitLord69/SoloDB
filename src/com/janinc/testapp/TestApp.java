@@ -7,6 +7,7 @@ CopyLeft 2020 - JanInc
 */
 
 import com.janinc.DataObject;
+import com.janinc.Table;
 import com.janinc.exceptions.*;
 import com.janinc.query.*;
 import com.janinc.testapp.testdb.*;
@@ -21,17 +22,21 @@ public class TestApp {
         DiscDB db = DiscDB.getInstance();
         System.out.printf("%n%s%n", db);
 
-        System.out.println("\nRecords in manufacturer:");
-        db.getRecords(Manufacturer.class).forEach((k, v) -> System.out.println("Id: " + k + " values: " + v));
-
-        System.out.println("\nRecords in disc:");
-        db.getRecords("disc").forEach((k, v) -> System.out.println("Id: " + k + " values: " + v));
+        db.getTables().forEach((k, v)-> {
+            System.out.println("\nRecords in " + v.getName() + " :");
+            ((Table)v).getRecords().forEach((kk, vv) -> System.out.println("Id: " + kk + " values: " + vv));
+        });
     } // printDBStatus
 
     private static void testValidation() {
         DiscDB db = DiscDB.getInstance();
 
         HashMap<String, ? extends DataObject> hm = db.getRecords("disc");
+        if (hm.size() == 0){
+            System.out.println("No records in the disc-table :(\n");
+            return;
+        } // if hm...
+
         Map.Entry<String, ? extends DataObject> entry = hm.entrySet().iterator().next();
         DataObject value = entry.getValue();
 
@@ -48,7 +53,7 @@ public class TestApp {
         } // catch
 
         System.out.println("\nRecords in disc (all values still valid):");
-        hm = (HashMap<String, ? extends DataObject>) db.getRecords("disc");
+        hm = db.getRecords("disc");
         hm.forEach((k, v) -> System.out.println("Key: " + k + " v:" + v));
 
         d.setWeight(140 + (int)(Math.random() * 60));
@@ -93,7 +98,7 @@ public class TestApp {
         res.forEach(System.out::println);
     } // testQueries
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ValidationException {
         DiscDB.getInstance().initializeDB();
         TestDataFactory.createTestRecordsIfNone();
 

@@ -1,0 +1,1000 @@
+ultricies eu,163,Khaki,5,1,-4,4
+sapien,152,Green,1,2,-4,2
+odio,188,Khaki,14,4,1,2
+lacinia sapien quis,168,Orange,11,1,-3,2
+arcu,182,Crimson,10,2,1,2
+proin,161,Pink,2,7,0,2
+quis,164,Puce,4,2,-4,1
+ipsum primis in,175,Puce,8,4,-4,3
+sed,155,Violet,13,7,2,5
+vestibulum,153,Yellow,5,6,1,0
+eget,174,Teal,2,2,-3,3
+sit,151,Indigo,1,1,-4,1
+nibh in lectus,173,Pink,3,1,1,3
+nec molestie,173,Purple,7,2,-4,5
+nascetur,180,Pink,8,2,-1,5
+velit,178,Khaki,12,2,0,1
+mi in porttitor,164,Orange,15,6,1,5
+facilisi cras non,173,Khaki,13,2,2,1
+arcu,154,Maroon,6,4,-5,5
+eleifend,170,Mauv,6,3,2,2
+erat quisque erat,189,Red,8,7,-3,3
+parturient,182,Violet,10,5,-4,0
+velit,157,Teal,15,5,-2,2
+auctor sed tristique,162,Goldenrod,11,7,2,4
+lobortis est phasellus,186,Pink,8,7,2,1
+ac consequat metus,176,Mauv,12,2,2,1
+condimentum neque,164,Pink,12,4,-5,2
+vestibulum ante ipsum,169,Yellow,6,4,2,5
+mollis,155,Indigo,12,4,1,5
+vestibulum ac,161,Fuscia,3,3,-1,3
+tellus,171,Goldenrod,1,7,-4,4
+sed,166,Puce,2,5,-1,4
+justo in blandit,164,Fuscia,9,5,1,2
+eu magna vulputate,167,Puce,2,5,-5,5
+nisl,183,Green,8,6,1,3
+mattis odio,187,Violet,8,6,-3,1
+ornare imperdiet,185,Goldenrod,13,3,2,4
+et,151,Orange,7,4,1,2
+turpis eget,168,Puce,9,6,0,0
+interdum,184,Yellow,1,2,-5,2
+quis,190,Green,1,4,2,5
+tellus semper interdum,187,Khaki,9,6,1,0
+lacus at,187,Red,3,6,-1,2
+consectetuer,181,Goldenrod,3,2,1,4
+porttitor pede justo,150,Khaki,2,6,-5,1
+nulla mollis,181,Violet,12,1,-1,0
+dolor sit,152,Purple,4,3,-3,5
+in consequat ut,175,Khaki,13,2,2,3
+ipsum primis,156,Green,7,3,0,1
+accumsan felis,184,Indigo,5,2,-3,4
+lectus,190,Teal,3,2,-5,5
+porttitor id consequat,181,Indigo,13,7,-2,5
+vestibulum,163,Purple,3,6,0,5
+massa volutpat,154,Purple,8,7,2,4
+ac enim in,164,Aquamarine,7,6,-5,1
+primis in faucibus,177,Indigo,14,5,-5,5
+pede,157,Crimson,14,4,0,0
+nisi venenatis,179,Orange,4,6,1,0
+blandit,187,Maroon,8,1,2,2
+molestie,171,Orange,8,2,-2,5
+primis in faucibus,190,Pink,2,3,1,5
+sollicitudin,184,Pink,11,6,-4,2
+integer ac neque,159,Yellow,15,4,-3,5
+vitae,151,Red,3,6,-4,5
+est risus,165,Pink,5,1,-1,3
+enim,176,Aquamarine,11,7,-4,1
+primis in faucibus,175,Pink,11,3,0,2
+semper,186,Goldenrod,2,2,-5,2
+blandit ultrices enim,155,Teal,7,1,-3,0
+curae,157,Blue,12,7,0,2
+suspendisse ornare consequat,177,Orange,4,2,-4,5
+mi nulla ac,170,Puce,14,2,-3,4
+aliquam convallis,172,Pink,11,2,-3,1
+consectetuer adipiscing,166,Teal,2,6,-2,4
+in,185,Green,7,1,-5,0
+odio consequat varius,173,Blue,10,7,-5,4
+augue vel accumsan,158,Maroon,1,6,0,0
+convallis nunc,161,Puce,5,2,0,2
+convallis,186,Khaki,11,3,1,2
+cubilia curae nulla,158,Aquamarine,10,6,-2,5
+in tempus,170,Aquamarine,9,2,-1,3
+nulla,164,Teal,3,1,-4,5
+et ultrices,187,Puce,12,6,0,3
+platea dictumst etiam,166,Turquoise,10,3,-5,2
+magna bibendum imperdiet,161,Turquoise,1,3,-4,5
+vestibulum quam sapien,163,Mauv,3,6,1,1
+nisl duis,166,Crimson,10,1,-2,3
+vehicula condimentum curabitur,185,Aquamarine,14,6,-3,0
+cubilia,167,Violet,14,3,-2,4
+elementum in,166,Crimson,12,5,-2,4
+non interdum,164,Aquamarine,5,3,-3,0
+cras,168,Indigo,13,5,1,0
+rhoncus sed vestibulum,182,Puce,6,1,-4,4
+dis parturient montes,182,Indigo,15,5,-3,3
+quam sollicitudin,190,Teal,5,5,-2,1
+a,178,Yellow,10,6,0,1
+sapien,168,Goldenrod,4,1,-4,2
+ut volutpat sapien,158,Red,3,5,-1,2
+maecenas pulvinar lobortis,190,Fuscia,4,4,-4,3
+leo maecenas,160,Fuscia,2,7,-5,4
+eros elementum pellentesque,174,Maroon,6,7,2,1
+tellus,150,Mauv,1,5,-5,4
+vestibulum quam,161,Puce,5,3,-4,4
+erat,157,Khaki,15,2,-5,2
+nam nulla integer,152,Maroon,4,5,0,5
+in libero,154,Goldenrod,10,6,0,4
+augue vel accumsan,165,Violet,14,1,2,0
+lectus vestibulum,185,Indigo,13,4,2,3
+ultrices posuere cubilia,169,Aquamarine,8,7,-3,2
+elit,186,Puce,12,5,-4,4
+metus aenean fermentum,180,Pink,11,1,-4,5
+felis fusce,182,Puce,2,5,-2,5
+donec posuere metus,177,Violet,5,3,0,1
+sapien urna,180,Blue,4,2,-1,3
+posuere felis sed,161,Yellow,13,4,-2,0
+erat quisque erat,185,Pink,9,4,-1,4
+bibendum morbi,159,Teal,4,4,1,5
+nulla,166,Indigo,1,5,1,3
+nibh,186,Teal,13,3,-4,4
+dis parturient montes,159,Puce,2,5,-1,4
+vel ipsum praesent,169,Aquamarine,4,5,-2,2
+ultrices erat,183,Teal,4,3,2,5
+nullam,152,Blue,8,7,-4,1
+nunc rhoncus dui,179,Teal,12,7,2,3
+congue eget semper,164,Aquamarine,12,7,0,5
+pretium quis,168,Purple,4,5,-2,2
+eleifend pede,180,Teal,14,2,-3,4
+ac leo,157,Yellow,15,4,0,3
+libero,174,Fuscia,12,4,-1,0
+pede posuere nonummy,173,Turquoise,15,6,1,4
+quam pharetra magna,185,Indigo,9,6,-3,5
+volutpat,157,Aquamarine,11,4,-3,4
+in,187,Green,7,4,-1,1
+adipiscing elit proin,162,Aquamarine,15,2,-4,2
+elementum pellentesque quisque,185,Puce,6,5,-1,1
+mus etiam vel,152,Green,2,1,-3,4
+curabitur,154,Crimson,3,5,-1,0
+rhoncus aliquam lacus,182,Khaki,1,5,-1,4
+eros,156,Yellow,15,7,-1,2
+at,155,Green,1,5,-3,0
+arcu adipiscing,186,Blue,3,6,-2,4
+adipiscing,169,Blue,13,3,-5,1
+pede ac,181,Maroon,14,6,1,1
+id sapien,156,Khaki,13,7,-4,0
+porttitor id consequat,158,Turquoise,14,7,2,2
+blandit,160,Indigo,2,3,1,4
+pulvinar,188,Teal,1,1,1,0
+placerat,159,Yellow,4,7,2,4
+dolor,177,Violet,9,7,-2,3
+felis sed,157,Maroon,6,1,0,5
+iaculis,179,Khaki,7,5,-2,5
+etiam faucibus cursus,175,Blue,14,1,0,2
+et,189,Turquoise,8,5,0,3
+porta volutpat,150,Khaki,4,1,-3,0
+lectus suspendisse,190,Aquamarine,2,1,-2,3
+arcu,155,Pink,1,1,-5,3
+mus vivamus,170,Pink,5,4,-3,2
+neque libero,176,Aquamarine,9,6,-1,2
+placerat ante nulla,184,Puce,14,2,2,5
+pede lobortis,152,Goldenrod,15,1,-1,1
+vel,169,Violet,1,5,-3,0
+libero,166,Khaki,9,6,-4,4
+sed magna at,167,Green,9,4,-3,1
+ut blandit,170,Khaki,12,4,-2,5
+tortor risus dapibus,176,Violet,5,4,-1,2
+massa,181,Aquamarine,7,1,-3,3
+potenti in,183,Crimson,8,3,0,0
+posuere,182,Yellow,2,5,-4,5
+vestibulum,170,Teal,11,2,-4,2
+felis sed interdum,157,Maroon,15,2,2,0
+in lectus pellentesque,173,Orange,15,5,1,0
+ac nibh fusce,176,Green,6,4,1,3
+non lectus aliquam,162,Orange,12,3,-4,3
+dapibus,163,Fuscia,9,5,-3,0
+eget,183,Mauv,2,3,1,3
+fusce congue diam,170,Blue,1,2,-2,5
+risus,170,Blue,12,2,-4,3
+mauris enim leo,161,Turquoise,9,7,-3,4
+nulla ut,186,Puce,4,5,-3,3
+nec nisi,179,Puce,7,6,-2,3
+pede lobortis ligula,157,Crimson,2,3,1,5
+duis bibendum felis,170,Green,14,7,-1,0
+pede ac,153,Puce,11,1,1,3
+cubilia,162,Khaki,13,5,1,1
+ante ipsum primis,178,Yellow,9,6,2,2
+blandit mi,151,Turquoise,3,2,-1,0
+sapien varius,155,Aquamarine,13,5,-5,4
+ipsum praesent,159,Puce,8,4,-4,2
+est phasellus,156,Green,10,1,-5,1
+amet,171,Maroon,13,6,-1,5
+nulla suscipit ligula,181,Khaki,1,7,1,5
+pede lobortis ligula,152,Turquoise,10,5,-3,3
+vestibulum,175,Green,9,3,-1,0
+parturient montes,157,Mauv,15,2,-1,3
+cursus urna,163,Indigo,15,1,-3,0
+cubilia curae nulla,169,Violet,11,7,-5,3
+tortor risus,154,Khaki,6,5,-3,3
+ut,161,Indigo,7,3,-1,5
+justo lacinia eget,163,Red,14,7,-4,2
+non velit,183,Aquamarine,15,1,-4,3
+vel augue,174,Maroon,4,5,-3,2
+ligula,163,Turquoise,1,1,-3,0
+ut rhoncus,153,Aquamarine,14,4,-5,0
+accumsan,178,Turquoise,4,3,1,4
+pharetra,188,Purple,14,6,0,4
+ante ipsum primis,188,Goldenrod,15,7,-2,4
+rhoncus aliquet,180,Turquoise,6,7,-1,4
+turpis adipiscing lorem,153,Pink,2,2,-2,5
+sapien iaculis congue,152,Red,13,4,-3,1
+luctus,155,Pink,7,2,1,1
+a,184,Violet,6,2,2,2
+convallis,156,Maroon,14,3,-1,3
+ut,156,Orange,8,6,-1,5
+tempus sit,188,Aquamarine,10,6,-2,5
+quis,190,Fuscia,6,2,2,0
+morbi non lectus,154,Maroon,13,2,-3,0
+at feugiat,173,Purple,12,7,-2,0
+lobortis est phasellus,169,Khaki,6,3,0,2
+faucibus orci,166,Puce,14,4,1,1
+justo,164,Orange,11,6,-1,2
+arcu adipiscing,164,Red,13,3,-3,3
+orci,161,Goldenrod,4,6,2,4
+augue luctus tincidunt,150,Puce,10,6,-1,5
+justo etiam pretium,174,Green,2,4,-2,4
+sapien,164,Fuscia,6,7,1,3
+accumsan odio curabitur,187,Indigo,2,1,-3,2
+nisi venenatis tristique,165,Red,2,5,2,1
+dapibus,184,Violet,10,5,-2,4
+metus aenean,187,Green,4,4,2,4
+sapien arcu,170,Violet,6,1,-3,5
+semper rutrum,167,Yellow,11,3,-1,5
+velit nec nisi,174,Turquoise,14,4,2,3
+porttitor,164,Indigo,8,6,1,2
+odio cras,179,Purple,15,3,2,2
+dapibus nulla suscipit,157,Crimson,15,3,1,0
+tempus,171,Green,1,5,0,5
+purus,180,Blue,8,3,1,0
+amet lobortis sapien,168,Teal,1,5,2,2
+mi,168,Orange,7,3,-1,5
+iaculis,153,Red,3,6,-4,4
+sit,175,Turquoise,5,3,-3,2
+integer tincidunt,169,Crimson,15,5,-3,3
+dui luctus,155,Indigo,4,5,2,3
+nisi eu orci,181,Aquamarine,3,1,2,1
+vivamus vestibulum sagittis,182,Red,9,6,-2,1
+ut erat curabitur,175,Green,1,2,-4,5
+ultrices,188,Pink,12,1,-4,2
+diam,166,Turquoise,12,1,-3,4
+ut blandit,185,Teal,10,4,1,0
+a nibh,174,Violet,11,6,-5,5
+habitasse platea dictumst,158,Aquamarine,3,4,-2,0
+auctor,156,Pink,8,6,-3,0
+purus,176,Teal,11,7,-1,1
+porta,189,Aquamarine,5,3,-5,0
+pulvinar sed nisl,151,Puce,3,1,-2,3
+ipsum primis,181,Turquoise,10,3,2,4
+duis bibendum,158,Crimson,8,4,2,1
+ultrices vel augue,190,Khaki,12,5,-2,0
+odio,183,Pink,11,3,-3,5
+a,173,Puce,12,6,-2,2
+ut,162,Fuscia,12,2,-1,1
+odio consequat varius,164,Orange,8,2,-1,2
+dui,183,Goldenrod,3,2,-1,5
+amet eleifend pede,185,Maroon,2,4,-1,1
+vestibulum ante,152,Crimson,8,7,1,1
+sed,177,Pink,2,3,-4,4
+aliquam augue quam,166,Orange,13,5,-3,4
+sapien ut,151,Yellow,11,4,-1,2
+interdum mauris,173,Purple,12,5,-3,0
+mus etiam vel,180,Indigo,5,4,2,0
+ut,160,Pink,12,2,-2,4
+nascetur ridiculus,190,Teal,6,4,-1,3
+dis,179,Orange,7,4,-2,0
+diam nam,170,Violet,4,3,-4,2
+libero,173,Violet,12,1,-4,1
+est lacinia nisi,163,Goldenrod,12,5,-1,4
+aliquam,168,Yellow,2,3,0,2
+eros elementum pellentesque,190,Goldenrod,4,6,-1,4
+velit id,172,Maroon,9,2,-5,1
+mi,167,Purple,14,2,-5,3
+amet,187,Mauv,13,3,-5,5
+lorem quisque,183,Yellow,15,2,-1,0
+id,189,Maroon,6,7,-3,0
+eget tempus,156,Puce,3,2,-1,3
+odio justo sollicitudin,185,Pink,5,2,-5,1
+consectetuer,176,Teal,3,1,-3,2
+aliquam quis turpis,162,Goldenrod,4,5,2,2
+odio donec vitae,169,Fuscia,9,1,-4,1
+dui luctus,169,Indigo,3,3,0,4
+sed,173,Pink,7,4,-4,2
+luctus tincidunt nulla,184,Turquoise,6,5,-5,1
+ac,181,Violet,1,4,-1,5
+in,181,Yellow,1,6,-1,3
+eros vestibulum ac,166,Fuscia,2,3,-2,4
+tincidunt,150,Maroon,14,6,-3,5
+bibendum,175,Yellow,9,4,-3,1
+erat,174,Teal,9,1,-1,0
+nec condimentum neque,187,Fuscia,7,3,0,1
+semper est quam,174,Green,1,6,-4,5
+nulla,166,Yellow,14,5,1,5
+elit ac,152,Purple,5,5,1,3
+eu felis,168,Orange,10,1,-5,3
+interdum,174,Indigo,15,7,0,1
+nisl ut,189,Indigo,2,4,-3,0
+duis consequat dui,179,Aquamarine,2,7,1,2
+tortor id nulla,177,Pink,8,4,-2,2
+vestibulum ante,175,Purple,3,6,-4,1
+lobortis ligula sit,170,Aquamarine,15,4,-2,2
+morbi non,162,Maroon,2,3,-5,0
+magnis dis parturient,165,Khaki,14,4,2,3
+ac diam cras,164,Green,6,4,1,1
+turpis,160,Blue,13,1,-4,5
+eu massa donec,176,Purple,8,5,-2,0
+sapien iaculis congue,176,Maroon,6,2,-5,3
+faucibus cursus urna,190,Red,13,2,1,1
+ipsum,150,Indigo,13,1,-4,1
+interdum venenatis turpis,176,Goldenrod,8,3,-1,3
+neque sapien,185,Teal,5,2,0,3
+venenatis,170,Purple,13,6,-4,1
+maecenas ut massa,155,Orange,14,4,0,3
+consequat morbi,167,Turquoise,13,3,2,3
+morbi,153,Goldenrod,12,2,0,0
+nunc vestibulum,189,Teal,9,1,-2,5
+et magnis dis,158,Red,15,7,-3,4
+lectus suspendisse potenti,183,Teal,7,4,0,3
+sit,151,Orange,2,1,0,3
+eu felis,171,Crimson,3,4,1,2
+orci luctus et,175,Aquamarine,11,6,-2,2
+scelerisque,185,Khaki,15,7,-1,5
+elementum in,173,Crimson,2,2,2,4
+nulla pede ullamcorper,165,Red,8,3,0,0
+donec ut,152,Violet,3,6,-1,0
+hendrerit at vulputate,169,Puce,1,6,2,1
+vulputate elementum,186,Green,15,3,-2,0
+ut,174,Crimson,5,4,-1,0
+lacus morbi,175,Yellow,9,4,2,1
+quis,186,Green,2,5,-3,3
+ipsum ac,186,Blue,5,6,2,2
+integer non,156,Orange,2,4,-5,0
+ante,180,Aquamarine,3,2,1,0
+vestibulum aliquet,189,Maroon,7,2,-3,4
+sit,181,Goldenrod,4,2,2,4
+erat curabitur,188,Orange,14,4,0,3
+aliquet,189,Khaki,4,1,-1,5
+non,181,Puce,11,2,-3,0
+in congue etiam,183,Turquoise,12,2,0,3
+platea dictumst etiam,185,Blue,11,5,-5,5
+vestibulum,168,Crimson,1,1,-4,0
+convallis duis,169,Goldenrod,14,6,1,0
+fringilla,162,Crimson,9,5,-2,2
+blandit non,160,Teal,13,6,1,1
+vestibulum rutrum rutrum,167,Indigo,6,7,-1,0
+porttitor id consequat,158,Teal,12,3,2,4
+tempus vivamus in,164,Fuscia,12,3,-3,4
+enim,150,Blue,3,6,-2,0
+dictumst,173,Yellow,5,3,-5,0
+suspendisse,160,Khaki,11,2,-3,1
+morbi vel lectus,163,Indigo,2,4,2,4
+volutpat,152,Aquamarine,7,1,-5,1
+morbi,188,Violet,15,4,0,1
+auctor sed tristique,183,Orange,4,3,-2,2
+in,166,Orange,3,3,0,3
+vestibulum,151,Violet,14,2,-5,4
+faucibus accumsan,152,Orange,1,1,2,0
+ligula,179,Red,1,3,1,4
+donec dapibus duis,181,Red,5,6,-4,3
+in quam fringilla,157,Violet,12,6,-2,2
+mattis odio,179,Green,7,4,-3,1
+eros suspendisse accumsan,159,Crimson,4,3,-1,5
+sed,174,Aquamarine,14,4,-3,2
+mauris,150,Crimson,15,7,-2,4
+metus arcu,161,Goldenrod,10,4,-2,1
+quam suspendisse,170,Puce,15,7,-5,4
+diam vitae quam,187,Violet,13,3,-1,2
+tincidunt,167,Khaki,15,2,-4,1
+consequat lectus in,165,Pink,5,2,2,3
+ut blandit non,176,Violet,6,2,1,1
+et commodo,170,Crimson,4,4,1,5
+volutpat in congue,179,Fuscia,15,1,-5,0
+donec odio,150,Turquoise,5,7,-4,5
+ante ipsum,181,Khaki,4,4,-3,1
+sapien,179,Yellow,9,1,-2,0
+tortor duis mattis,179,Puce,1,7,-2,5
+aliquet pulvinar,182,Violet,5,2,-5,2
+curae,171,Goldenrod,2,2,-1,0
+tristique in tempus,189,Orange,14,6,-4,0
+mauris sit,179,Fuscia,14,4,-1,4
+fusce lacus purus,179,Turquoise,7,7,-3,1
+et commodo vulputate,177,Orange,8,7,0,3
+tristique fusce,155,Maroon,1,2,-4,0
+id turpis integer,150,Yellow,11,3,1,5
+erat tortor sollicitudin,171,Mauv,15,2,-2,5
+justo morbi,174,Puce,1,4,-5,1
+non interdum in,176,Pink,11,5,2,5
+curae nulla,186,Goldenrod,15,3,-2,0
+iaculis congue vivamus,150,Aquamarine,2,6,2,0
+ac,153,Mauv,12,7,-5,4
+dolor vel,179,Mauv,5,1,-3,3
+eu est congue,180,Pink,8,5,-5,2
+amet sapien dignissim,158,Puce,12,3,-5,5
+curabitur in,180,Orange,13,5,0,4
+diam erat,155,Aquamarine,14,2,-5,3
+non ligula pellentesque,173,Violet,4,3,1,5
+suscipit ligula in,165,Teal,12,6,2,3
+tincidunt,182,Red,8,2,0,5
+rutrum,163,Yellow,1,6,2,4
+platea dictumst aliquam,181,Yellow,7,1,-1,5
+id,184,Violet,9,5,1,3
+quam sapien,167,Crimson,12,1,1,0
+est,168,Blue,15,4,-5,4
+nulla,167,Crimson,4,6,-4,5
+in sapien iaculis,187,Teal,10,1,0,4
+vitae,151,Teal,4,5,-4,3
+curabitur,172,Mauv,10,3,-3,0
+amet,185,Yellow,3,2,-4,3
+morbi,182,Pink,8,1,-3,2
+parturient montes nascetur,160,Indigo,7,1,-4,4
+odio porttitor,167,Puce,5,4,1,5
+porttitor pede,165,Maroon,7,1,-5,3
+nulla nunc,157,Red,2,7,-1,5
+vulputate elementum,150,Maroon,1,6,-3,4
+diam in,165,Crimson,9,7,1,0
+convallis nulla neque,170,Purple,8,6,-2,3
+nec molestie sed,165,Indigo,3,2,-2,1
+magnis dis parturient,165,Red,13,1,1,5
+vel nisl,166,Green,3,2,-3,4
+sollicitudin,152,Orange,10,4,2,1
+et magnis dis,186,Blue,12,5,-4,0
+non,151,Crimson,3,3,2,2
+in tempus sit,172,Orange,13,7,-5,2
+sapien,154,Turquoise,3,1,2,2
+vivamus vestibulum sagittis,157,Green,13,2,1,1
+non,184,Maroon,8,6,-2,0
+porttitor,190,Purple,10,6,-2,1
+diam neque vestibulum,181,Crimson,8,4,-2,3
+magna bibendum imperdiet,168,Mauv,11,6,2,5
+tortor id nulla,183,Indigo,2,6,-2,2
+et,167,Purple,14,7,-1,1
+rhoncus mauris enim,163,Turquoise,10,1,-5,1
+purus sit amet,165,Khaki,8,2,-4,0
+gravida nisi,188,Crimson,6,5,-4,5
+vivamus tortor,189,Violet,10,2,-2,4
+lectus,181,Aquamarine,15,6,-3,4
+eu orci,155,Purple,6,7,-3,2
+rutrum,165,Red,6,1,-4,3
+non velit donec,167,Orange,6,7,-4,3
+in,184,Maroon,1,2,0,3
+dolor sit,182,Aquamarine,10,5,-1,5
+nisi vulputate nonummy,180,Fuscia,1,7,-1,5
+a feugiat,152,Fuscia,12,1,2,5
+diam erat,174,Crimson,13,7,-1,4
+magna,176,Turquoise,15,5,-5,1
+vivamus in,180,Puce,5,2,1,2
+nulla pede ullamcorper,153,Purple,1,5,-5,5
+scelerisque quam,170,Purple,2,4,0,0
+aenean,170,Fuscia,3,3,-1,5
+penatibus et magnis,171,Green,13,1,0,4
+ipsum integer,151,Green,14,7,-3,0
+aliquet,158,Puce,9,4,1,4
+id sapien,184,Teal,1,1,-2,3
+non velit donec,183,Yellow,6,1,-4,5
+aliquam quis turpis,168,Goldenrod,11,7,1,3
+sem fusce consequat,151,Green,3,1,-4,4
+erat quisque erat,190,Orange,2,3,2,5
+quam,161,Pink,13,6,1,4
+mollis,182,Purple,2,5,-4,5
+mauris non,168,Puce,11,5,-1,5
+eu,180,Teal,7,3,0,0
+sapien iaculis,157,Aquamarine,8,5,-1,0
+sit amet,161,Red,7,1,1,4
+lacinia sapien,183,Indigo,5,2,0,0
+sociis natoque penatibus,168,Purple,10,6,-2,1
+sem,176,Pink,9,3,-1,4
+consequat,159,Purple,6,5,-3,2
+aliquam,188,Goldenrod,12,7,1,2
+rutrum,157,Indigo,1,1,-1,2
+scelerisque,156,Khaki,5,4,2,3
+dignissim vestibulum,152,Aquamarine,3,1,2,5
+ultricies eu,188,Mauv,6,4,2,3
+phasellus,168,Orange,4,7,2,5
+donec,160,Crimson,8,3,-4,4
+nascetur ridiculus mus,152,Teal,7,4,-5,0
+amet cursus id,152,Aquamarine,6,1,-3,1
+vulputate ut ultrices,150,Goldenrod,3,7,1,3
+nec sem duis,150,Purple,12,3,-1,4
+tellus in sagittis,185,Pink,4,5,2,5
+in hac,160,Khaki,11,6,-2,0
+cum,158,Teal,14,5,0,2
+sed nisl nunc,176,Fuscia,13,7,0,5
+libero quis orci,169,Red,13,3,-1,4
+luctus,166,Turquoise,6,4,-2,5
+elementum in,168,Pink,12,4,-4,3
+id ligula suspendisse,187,Puce,10,3,-4,5
+mauris non,180,Yellow,2,3,-1,3
+et,165,Goldenrod,4,4,-5,4
+lectus in quam,166,Violet,12,2,0,3
+eget nunc donec,155,Aquamarine,7,7,-3,1
+fusce posuere,186,Crimson,1,3,-3,0
+vel,159,Puce,1,3,0,0
+eget,187,Indigo,8,4,-1,1
+duis bibendum felis,155,Puce,1,6,-5,4
+donec posuere,164,Violet,12,6,-1,1
+in magna bibendum,178,Yellow,13,4,2,1
+vestibulum,178,Indigo,7,1,-3,3
+suscipit ligula,160,Mauv,2,4,-5,2
+facilisi cras non,168,Fuscia,15,4,-5,4
+eget orci vehicula,172,Maroon,12,2,0,5
+pellentesque,155,Maroon,6,4,-4,1
+magna,156,Khaki,8,1,-4,4
+quis,151,Khaki,3,3,-4,0
+pede justo eu,169,Orange,9,1,-5,1
+suscipit,187,Aquamarine,6,2,-1,1
+donec semper,157,Red,1,6,-1,1
+suspendisse ornare consequat,175,Orange,4,2,1,2
+sapien non,155,Khaki,11,4,0,1
+mattis nibh ligula,174,Orange,5,6,-3,2
+phasellus in felis,186,Aquamarine,5,7,-3,3
+nulla tellus,157,Turquoise,13,1,2,4
+duis mattis egestas,153,Goldenrod,4,3,-1,1
+ligula suspendisse,155,Violet,6,6,-2,3
+magnis dis parturient,167,Yellow,2,7,-2,3
+purus,158,Aquamarine,12,3,-1,5
+dis parturient montes,185,Yellow,14,3,-5,2
+tortor,182,Green,4,2,-2,4
+duis mattis,173,Yellow,1,6,-3,5
+et ultrices posuere,165,Blue,14,6,2,4
+diam erat,178,Red,10,3,1,5
+posuere,154,Purple,3,5,2,0
+convallis nulla neque,187,Goldenrod,10,2,2,5
+eget orci vehicula,176,Aquamarine,5,4,-3,3
+pede,158,Red,1,1,-5,1
+pellentesque quisque,153,Khaki,7,7,1,2
+lacinia nisi,185,Pink,2,2,-2,4
+sed,153,Mauv,13,2,1,5
+proin at,156,Blue,9,7,-1,5
+in,156,Green,15,4,-2,5
+nullam porttitor lacus,176,Teal,15,2,2,4
+aenean auctor gravida,157,Crimson,5,7,2,0
+non quam nec,170,Red,13,7,-3,0
+nec sem,154,Mauv,15,4,-5,0
+aliquam non mauris,154,Mauv,2,4,-4,0
+morbi quis tortor,187,Teal,7,3,-3,1
+interdum mauris ullamcorper,179,Purple,2,4,-2,1
+sit,155,Orange,11,3,-5,4
+quis,168,Green,8,6,-4,4
+in congue,167,Orange,5,5,-1,1
+a feugiat et,162,Red,10,5,-3,4
+nibh,176,Khaki,9,5,-4,4
+mauris eget,188,Maroon,7,3,-5,4
+eget rutrum,155,Turquoise,6,1,-5,5
+diam vitae,181,Red,9,7,-4,4
+ac,162,Goldenrod,7,5,-1,2
+dolor vel est,172,Aquamarine,6,5,-3,2
+felis,160,Puce,7,6,1,2
+nullam porttitor lacus,177,Yellow,14,5,0,0
+dolor sit,175,Puce,13,6,-2,0
+scelerisque quam turpis,154,Fuscia,10,2,-1,1
+eu interdum,185,Green,12,3,0,0
+mauris enim,176,Maroon,13,2,0,0
+leo pellentesque,178,Mauv,8,3,0,1
+convallis duis,166,Mauv,15,4,2,1
+et ultrices,185,Blue,6,7,-5,1
+nulla tellus in,178,Crimson,1,2,-3,3
+diam,171,Khaki,3,2,1,0
+cubilia curae,177,Maroon,2,6,-3,5
+convallis duis consequat,179,Yellow,14,4,0,0
+sollicitudin,190,Mauv,10,5,1,0
+quam pharetra,158,Purple,15,5,-5,4
+sem,171,Red,10,1,1,0
+donec vitae nisi,163,Mauv,14,7,-1,3
+quis augue,161,Green,12,2,-1,5
+tortor,153,Blue,12,7,-3,3
+non mattis pulvinar,151,Indigo,7,1,-2,3
+vel dapibus,159,Red,5,3,-5,3
+tincidunt eu felis,176,Mauv,12,6,2,2
+lacus curabitur,166,Blue,3,5,1,2
+elit ac,167,Crimson,1,6,-1,2
+imperdiet et,161,Puce,10,6,-4,3
+nullam,165,Purple,9,4,1,0
+ante,172,Blue,3,5,-1,2
+cursus,187,Green,7,1,-4,5
+semper porta volutpat,162,Pink,13,5,1,0
+amet justo morbi,164,Crimson,1,1,-2,3
+est congue elementum,187,Maroon,9,6,-4,3
+dictumst etiam,161,Red,6,1,2,5
+convallis,171,Crimson,6,6,0,3
+morbi,171,Khaki,9,6,1,4
+ipsum,179,Yellow,15,5,1,4
+vel enim,160,Purple,14,2,-2,3
+aenean auctor,171,Mauv,11,1,2,4
+nonummy,175,Puce,13,3,-1,5
+consequat nulla,170,Maroon,10,3,-1,2
+platea,183,Puce,13,2,-3,3
+nunc viverra dapibus,182,Fuscia,3,5,-5,0
+felis,178,Red,2,5,-5,5
+in,180,Orange,12,4,-1,1
+volutpat eleifend donec,162,Aquamarine,3,5,-2,3
+non mi integer,162,Khaki,5,2,-1,1
+risus,152,Aquamarine,9,1,-1,5
+in hac,164,Crimson,14,7,-5,4
+sem praesent,152,Purple,4,5,-2,1
+vel enim sit,160,Crimson,13,5,0,4
+fusce consequat nulla,166,Blue,6,6,-4,4
+pretium iaculis diam,182,Mauv,11,6,1,0
+eget,186,Maroon,11,1,2,0
+nibh,183,Pink,5,1,2,5
+neque duis,184,Aquamarine,14,1,-4,1
+elit proin,164,Green,14,2,-5,5
+est,171,Yellow,14,2,1,3
+tortor,150,Turquoise,3,3,-3,4
+convallis,176,Turquoise,6,7,1,1
+metus vitae,174,Mauv,13,2,-2,1
+turpis eget,167,Turquoise,1,5,1,3
+nibh,182,Khaki,2,4,2,0
+ante ipsum,183,Goldenrod,14,7,-5,5
+eget rutrum,177,Aquamarine,5,2,-5,5
+tempor convallis nulla,172,Puce,5,4,-2,0
+nec sem duis,186,Goldenrod,2,4,2,4
+venenatis non sodales,169,Maroon,7,2,1,0
+dictumst maecenas,165,Khaki,11,4,-4,0
+leo odio porttitor,150,Pink,9,6,-4,3
+at velit,182,Indigo,7,3,-5,0
+ultrices libero,183,Teal,15,6,-1,5
+praesent blandit,185,Teal,10,2,-5,2
+sit,168,Turquoise,15,5,1,3
+quisque porta volutpat,188,Crimson,7,2,-1,1
+vestibulum,166,Violet,4,6,-4,3
+dictumst,175,Mauv,14,4,2,5
+integer,155,Purple,4,6,-2,0
+nunc rhoncus,172,Green,2,7,-2,2
+eros elementum pellentesque,159,Violet,15,4,-5,5
+tortor id nulla,157,Pink,13,3,-1,3
+quam turpis adipiscing,159,Blue,6,4,-2,2
+accumsan odio curabitur,190,Green,5,3,0,4
+lacus morbi,162,Puce,5,2,-2,5
+consequat,167,Puce,4,4,-3,1
+vel lectus,158,Puce,1,2,1,1
+nonummy maecenas tincidunt,189,Violet,11,1,2,0
+nisl duis,151,Aquamarine,8,5,0,3
+eget,158,Khaki,12,1,-2,4
+id luctus nec,186,Khaki,2,4,-4,4
+justo,156,Puce,14,5,-2,5
+habitasse platea dictumst,166,Aquamarine,14,4,-1,4
+est et,174,Indigo,13,5,0,1
+nec dui luctus,170,Maroon,7,5,-3,1
+in faucibus orci,158,Indigo,14,4,2,0
+dapibus dolor,186,Maroon,5,1,2,4
+risus auctor sed,179,Goldenrod,3,6,2,1
+at turpis,154,Blue,7,1,-5,4
+sollicitudin,172,Crimson,3,4,-4,5
+lacus,164,Indigo,8,1,-3,0
+adipiscing elit,155,Blue,3,5,1,0
+diam vitae quam,184,Mauv,3,4,-3,2
+lorem vitae mattis,180,Goldenrod,14,7,-2,0
+diam in,156,Goldenrod,11,4,2,5
+augue,162,Indigo,8,5,-5,5
+eu est congue,152,Teal,13,3,2,5
+ligula in,177,Indigo,13,7,1,3
+consequat metus,175,Khaki,9,4,-4,5
+augue vel,179,Fuscia,1,6,0,5
+ac neque,175,Orange,9,4,2,4
+luctus cum,169,Puce,7,2,-5,3
+convallis eget,158,Mauv,13,4,2,3
+libero nam,187,Blue,6,7,2,2
+amet,172,Puce,15,4,1,5
+amet turpis,189,Blue,14,6,0,3
+mauris enim leo,161,Aquamarine,13,6,-3,0
+porttitor,160,Violet,2,1,-2,2
+diam vitae,190,Purple,6,7,-3,3
+euismod scelerisque quam,159,Goldenrod,7,1,-1,2
+nulla eget,181,Violet,3,5,2,5
+posuere,161,Goldenrod,1,1,0,2
+venenatis turpis,183,Crimson,9,3,-1,0
+et,155,Maroon,3,1,-5,4
+quis orci nullam,152,Orange,8,2,-1,2
+duis,162,Violet,10,4,-2,3
+justo in hac,171,Goldenrod,8,4,2,3
+aliquet,190,Mauv,3,5,1,4
+nascetur,154,Mauv,9,2,2,3
+parturient montes,176,Crimson,1,4,-5,5
+sed magna,186,Purple,14,3,2,0
+sit amet,170,Maroon,12,1,-2,5
+ut,190,Mauv,7,3,1,2
+quam pharetra,177,Green,13,5,-3,0
+in,181,Goldenrod,15,6,0,2
+leo,167,Aquamarine,10,5,-5,0
+tempus,186,Yellow,10,1,-4,2
+pede malesuada in,168,Turquoise,6,3,-2,4
+quam,162,Fuscia,1,1,-5,5
+blandit ultrices enim,157,Maroon,1,4,-2,5
+tristique,170,Yellow,9,5,1,1
+tortor,168,Green,1,6,-4,4
+parturient,177,Violet,1,5,-5,5
+justo,165,Indigo,1,1,-5,2
+turpis eget elit,189,Aquamarine,1,1,1,3
+tortor id,174,Pink,2,5,2,1
+neque sapien,154,Indigo,1,2,-4,3
+urna,189,Khaki,5,6,2,2
+augue quam,183,Fuscia,14,4,1,0
+diam vitae,151,Blue,4,1,-4,4
+id nulla,152,Crimson,14,2,-2,3
+nisl duis bibendum,165,Puce,7,4,1,4
+dolor sit amet,168,Teal,5,7,-3,0
+non mauris,179,Violet,15,7,-2,3
+nec,154,Orange,7,4,-5,3
+posuere cubilia curae,167,Goldenrod,8,7,2,5
+pharetra magna,169,Crimson,7,2,2,3
+molestie,183,Green,1,6,-2,2
+erat volutpat in,167,Aquamarine,7,4,-4,2
+ullamcorper augue,157,Maroon,2,5,2,5
+aliquet at feugiat,184,Teal,3,7,0,3
+dui proin,156,Yellow,3,3,-3,1
+velit eu,159,Purple,11,3,-5,4
+habitasse,155,Indigo,3,6,-3,2
+mauris viverra diam,171,Indigo,2,5,0,5
+sed lacus,165,Orange,6,4,1,1
+tellus semper interdum,167,Goldenrod,2,1,-5,3
+orci nullam,157,Purple,14,5,1,4
+nulla sed,190,Green,5,4,-4,0
+libero nam,166,Pink,11,1,-2,0
+amet,156,Blue,8,1,-2,3
+quam sollicitudin vitae,183,Indigo,9,4,1,1
+justo eu massa,172,Red,3,4,0,3
+turpis,154,Mauv,15,6,2,3
+mi,187,Fuscia,8,2,-1,3
+consequat morbi,183,Fuscia,3,1,0,0
+maecenas tristique,184,Fuscia,5,5,-4,5
+accumsan felis ut,176,Pink,11,3,-1,3
+porta,182,Purple,8,4,-4,4
+justo eu massa,169,Yellow,15,1,-5,2
+elementum,166,Maroon,2,4,-1,2
+tincidunt lacus,160,Indigo,14,6,-3,1
+ut massa volutpat,161,Khaki,2,1,-2,2
+pellentesque,180,Yellow,15,4,2,1
+at turpis donec,187,Turquoise,13,1,-5,5
+curabitur at,153,Violet,3,4,-1,0
+parturient montes,170,Green,4,4,-1,2
+tellus in,183,Purple,3,1,-3,0
+velit,174,Puce,15,7,-5,0
+turpis nec euismod,167,Crimson,10,7,-4,1
+pretium,187,Maroon,6,6,-2,0
+eget,184,Aquamarine,1,5,0,4
+dictumst aliquam augue,182,Goldenrod,12,4,2,1
+volutpat eleifend donec,187,Green,1,2,-5,5
+id ligula suspendisse,150,Mauv,2,4,-1,5
+auctor gravida,171,Puce,15,4,-4,2
+ultrices mattis,167,Red,2,3,2,3
+praesent id,187,Indigo,12,1,-4,5
+consectetuer,176,Orange,11,2,-3,0
+ligula suspendisse ornare,176,Pink,14,7,1,2
+phasellus in,170,Turquoise,2,3,-2,5
+mi sit amet,162,Turquoise,15,6,-5,1
+nibh,182,Crimson,8,6,0,1
+metus aenean fermentum,187,Mauv,6,6,2,3
+integer tincidunt,189,Maroon,13,1,-5,5
+eget semper rutrum,176,Yellow,15,4,1,5
+vestibulum ante,179,Mauv,2,5,-3,0
+suspendisse,155,Maroon,7,1,2,3
+ornare consequat,178,Mauv,10,5,2,1
+tincidunt in leo,157,Purple,10,1,1,5
+primis in faucibus,188,Turquoise,4,4,-5,3
+viverra pede ac,174,Aquamarine,3,5,-4,3
+nam,187,Indigo,1,7,0,1
+dolor,161,Indigo,5,7,-4,1
+tellus nisi,150,Indigo,7,2,-4,3
+eu pede,160,Crimson,4,3,-2,1
+primis in faucibus,189,Maroon,7,2,-4,2
+tempus semper est,152,Blue,4,7,0,5
+habitasse platea dictumst,167,Crimson,2,3,-2,4
+quis,171,Maroon,13,2,-5,2
+sagittis,180,Yellow,14,1,-4,3
+quis turpis,171,Teal,2,2,1,2
+massa tempor,189,Violet,6,1,-4,2
+rutrum rutrum neque,161,Violet,6,2,-4,5
+in,176,Indigo,14,2,0,5
+eleifend luctus ultricies,169,Puce,2,3,-4,1
+purus sit,161,Puce,4,4,-4,1
+blandit,185,Yellow,4,7,-4,3
+libero rutrum,176,Puce,4,5,-1,3
+quis,164,Pink,14,6,-1,0
+lobortis vel,160,Violet,2,6,-3,0
+aliquam sit,162,Turquoise,2,7,-3,3
+odio cras,153,Orange,8,7,2,5
+lacus,169,Teal,6,4,0,4
+leo pellentesque,181,Indigo,6,1,1,5
+eget,168,Crimson,13,1,0,3
+at turpis a,166,Turquoise,8,3,-5,3
+est quam pharetra,154,Purple,2,6,1,1
+nullam porttitor lacus,186,Mauv,12,3,-3,1
+vehicula condimentum curabitur,155,Violet,9,3,1,2
+quisque porta volutpat,185,Aquamarine,8,4,1,3
+aliquet ultrices,161,Green,9,4,-1,0
+duis at,189,Crimson,2,7,-2,5
+aliquet,168,Blue,11,3,-5,1
+ipsum,169,Turquoise,12,2,-2,3
+pellentesque eget nunc,159,Red,12,3,-2,0
+ut nunc,184,Khaki,1,6,2,3
+in lectus pellentesque,153,Purple,1,6,-3,4
+lectus vestibulum quam,181,Red,9,3,2,3
+tristique,156,Mauv,5,2,-3,4
+mauris lacinia sapien,178,Teal,13,3,1,2
+amet,167,Blue,10,5,2,4
+nulla,177,Khaki,11,6,-3,1
+nulla suspendisse,157,Blue,3,3,-4,0
+maecenas ut,185,Crimson,13,7,-4,5
+ut,160,Yellow,12,4,-2,2
+mattis,173,Puce,4,6,2,1
+curabitur in libero,179,Blue,14,4,-2,4
+et,177,Khaki,10,4,2,5
+tortor,172,Pink,12,3,-1,0
+pretium nisl ut,163,Pink,14,3,-2,2
+primis,173,Indigo,15,6,0,0
+semper sapien a,166,Crimson,5,2,2,2
+amet,151,Purple,9,1,-2,3
+nulla quisque,160,Teal,15,3,0,4
+purus,152,Purple,10,7,-5,5
+leo odio condimentum,161,Red,2,3,-5,4
+lacus purus,150,Crimson,15,4,1,4
+vestibulum sagittis,185,Aquamarine,7,6,-1,0
+suspendisse accumsan,159,Green,6,2,1,3
+ipsum,167,Violet,2,1,-2,2
+est,185,Fuscia,11,1,0,0
+consequat in consequat,175,Puce,5,6,0,3
+porttitor pede justo,165,Yellow,1,5,2,1
+tempor turpis nec,156,Violet,13,3,2,1
+odio,161,Puce,2,3,0,2
+erat,157,Yellow,15,5,-2,2
+eget tempus,156,Maroon,10,3,-3,5
+pellentesque,188,Violet,6,4,-5,3
+non,154,Pink,8,5,-4,5
+platea dictumst,166,Green,9,6,-3,3
+bibendum felis,153,Goldenrod,15,5,-3,4
+ut rhoncus aliquet,176,Violet,11,4,-2,1
+convallis nunc proin,182,Pink,10,4,-4,0
+praesent,155,Khaki,4,7,1,5
+habitasse,186,Khaki,9,3,-1,0
+curae,156,Puce,9,4,1,2
+amet consectetuer adipiscing,163,Green,14,2,0,5
+condimentum,172,Violet,10,4,-3,5
+sapien ut,164,Blue,9,3,-2,1
+molestie,179,Violet,8,6,-2,2
+est,177,Crimson,5,7,-5,0
+egestas metus,168,Goldenrod,10,7,2,4
+varius,150,Indigo,3,7,-1,0
+luctus nec molestie,154,Fuscia,14,3,-4,5
+consequat,158,Yellow,11,4,-2,2
+pretium,164,Red,15,7,-1,5
+sed,186,Blue,11,1,-3,3
+congue,152,Puce,7,6,-5,0
+nulla suscipit,158,Crimson,9,7,-5,2
+rutrum nulla nunc,173,Maroon,8,4,-5,2
+ut nulla sed,187,Purple,15,4,-1,5
+felis eu,185,Violet,9,1,-5,0
+convallis tortor risus,182,Aquamarine,14,7,0,4
+odio curabitur,152,Aquamarine,10,4,-5,2
+vel,181,Purple,12,6,2,0
+dui maecenas tristique,158,Goldenrod,12,5,-3,1
+non,164,Goldenrod,2,6,-1,1
+nec molestie sed,188,Blue,4,7,1,3
+semper est,158,Crimson,7,1,-2,4
+gravida,169,Maroon,14,1,-1,3
+enim sit amet,155,Fuscia,2,5,2,4
+velit,164,Red,4,2,2,5
+aliquam non mauris,154,Mauv,9,5,-3,0
+id turpis integer,155,Maroon,3,6,-3,5
+magna,184,Orange,4,1,-2,2
+in hac,171,Aquamarine,2,3,-2,0
+lectus in est,188,Purple,1,2,-2,3
+lectus aliquam sit,166,Indigo,8,7,0,5
+eu,190,Fuscia,3,2,-4,0
+nunc,172,Violet,12,5,-1,2
+ut,158,Violet,7,3,-2,0
+in sagittis dui,189,Mauv,4,5,-1,4
+ipsum primis in,158,Pink,11,6,-5,0
+duis bibendum morbi,186,Fuscia,12,7,1,0
+mattis pulvinar,166,Puce,1,2,-2,1
+suscipit ligula in,152,Indigo,5,7,-3,0
+pulvinar nulla,180,Red,15,2,2,0
+dui proin leo,160,Khaki,14,4,-2,1
+ac leo pellentesque,177,Blue,14,5,-1,0
+natoque penatibus,159,Goldenrod,12,4,-4,4
+et magnis,162,Turquoise,1,4,-5,3
+a nibh,187,Teal,10,7,-5,0
+nisi at nibh,157,Violet,13,7,-3,2
+non interdum,187,Fuscia,5,2,2,0
+eleifend quam,155,Violet,4,6,0,4
+convallis,161,Violet,3,2,-1,1
+ultrices vel augue,184,Aquamarine,14,1,1,2
+odio,182,Red,6,2,-2,0
+dignissim vestibulum vestibulum,165,Blue,8,5,0,4
+phasellus id sapien,157,Purple,3,3,-2,2
+dapibus at,167,Red,13,1,1,2
+elit ac nulla,178,Orange,4,3,-4,1
+morbi,162,Turquoise,12,5,-2,3
+id ornare imperdiet,170,Violet,7,7,-1,2
+dapibus augue vel,156,Mauv,11,1,0,4
+non ligula pellentesque,170,Green,1,4,2,0
+duis ac nibh,161,Turquoise,1,3,2,2
+ac,161,Orange,5,1,2,4
+vestibulum quam,150,Green,13,1,2,4
+tempus semper,176,Mauv,11,5,-2,5
+amet,160,Turquoise,10,6,-4,0
+ante vestibulum,187,Indigo,9,4,0,2
+volutpat,184,Crimson,14,7,1,2
+luctus et,172,Green,14,5,-3,0
+amet erat,168,Goldenrod,2,7,1,0
+faucibus orci luctus,159,Crimson,15,4,-5,1
+vel,172,Violet,9,7,1,4
+lorem integer,159,Green,6,5,0,3
+at vulputate vitae,185,Fuscia,5,2,-1,3
+ornare consequat lectus,151,Goldenrod,14,6,-3,1
+in quam fringilla,159,Goldenrod,4,7,-2,4
+in hac habitasse,175,Violet,7,4,0,3
+aenean fermentum donec,178,Teal,14,6,-3,0
+pede libero quis,166,Maroon,7,3,-3,1
+ultrices posuere,163,Maroon,5,6,-4,3
+libero rutrum,172,Green,15,4,1,2
+et,156,Turquoise,14,1,-2,1
+quis,167,Green,8,4,2,3
+urna ut,156,Turquoise,9,6,-2,1
+sagittis nam,172,Mauv,9,3,0,2
+integer pede justo,153,Puce,4,2,1,1
+est phasellus,155,Aquamarine,9,4,2,3
+id,159,Khaki,4,1,-3,1
+duis mattis egestas,170,Fuscia,5,3,-4,3
+eu,178,Red,4,3,-5,0
+enim blandit mi,169,Purple,15,2,-5,0
+ultrices aliquet,169,Pink,7,7,2,4
+convallis duis consequat,162,Goldenrod,1,2,-5,2
+dolor quis odio,173,Violet,8,7,-3,4
+nulla sed,179,Red,5,2,1,3
+orci luctus,151,Teal,3,2,1,0
+quisque porta,172,Violet,6,7,1,5
+mi,153,Green,2,5,-3,4
+praesent blandit lacinia,184,Puce,1,1,-1,4
+augue,185,Purple,7,4,-5,5
+et eros,157,Blue,13,3,-4,0
+duis consequat,155,Turquoise,8,3,-4,4
+lacus at velit,157,Fuscia,12,7,-2,3
+amet eros suspendisse,189,Crimson,11,2,2,4
+adipiscing elit proin,162,Yellow,4,2,-4,1
+pharetra magna vestibulum,151,Maroon,4,6,0,2
+nisi nam ultrices,173,Maroon,6,7,-4,5
+lobortis est phasellus,157,Blue,6,6,-5,4
+luctus,155,Green,13,3,-4,2
+magnis dis,182,Orange,13,6,1,4
+mattis pulvinar,173,Crimson,11,2,0,5
+nullam orci pede,175,Violet,1,2,-2,2
+nisl nunc,162,Khaki,10,7,-4,4
+semper,186,Goldenrod,11,5,-3,4
+rutrum neque aenean,158,Purple,5,3,2,5
+tempus,182,Violet,13,7,1,4
+amet,170,Teal,5,7,-5,5
+orci,173,Yellow,1,1,2,1
+eget tempus vel,174,Violet,9,6,-3,3
+ultrices posuere,159,Puce,5,1,-4,2
+libero,171,Aquamarine,7,7,2,3
+felis,162,Orange,14,7,-2,0
+a,182,Teal,1,2,0,3
+eros,153,Orange,4,7,-3,5
+non interdum,188,Purple,2,7,-5,3
+vivamus metus arcu,186,Mauv,5,7,2,4
+sodales,167,Pink,3,2,-1,2
+neque aenean auctor,169,Indigo,14,1,-2,0
+at vulputate vitae,160,Pink,3,2,-5,3
+lorem integer tincidunt,186,Crimson,6,7,-4,1
+ac leo pellentesque,171,Orange,5,7,1,1
+dapibus at diam,171,Pink,1,3,-5,1
+parturient,177,Teal,14,6,-4,0
+dapibus nulla suscipit,151,Goldenrod,1,4,0,3
+nulla,173,Maroon,9,2,-3,1
+potenti cras,170,Crimson,6,1,0,4
+maecenas tristique est,182,Purple,6,6,0,0
+integer a nibh,154,Aquamarine,10,2,2,4
+enim,168,Maroon,15,1,-1,0
+morbi porttitor lorem,162,Crimson,15,6,-5,5
+id mauris vulputate,154,Khaki,3,4,1,5
+ipsum integer,190,Aquamarine,6,3,-5,3
+vel ipsum,151,Puce,1,5,-2,2
+scelerisque quam,150,Green,7,7,-1,4
+et,156,Green,6,2,0,2
+justo maecenas rhoncus,175,Mauv,1,6,-4,3
+ut erat id,178,Teal,12,6,1,5
+leo odio condimentum,152,Violet,8,5,2,0
+nulla ultrices,155,Goldenrod,12,2,2,4
+mauris enim leo,168,Yellow,3,2,-4,3
+ut nunc,186,Goldenrod,7,7,1,4
+tempor,186,Yellow,7,1,-3,4
+rutrum,167,Purple,1,5,-2,0
+ut,153,Purple,3,4,1,4
+metus aenean fermentum,156,Goldenrod,3,1,-1,1
+ac est lacinia,186,Aquamarine,14,2,-1,4
+blandit non interdum,170,Turquoise,6,2,-5,5
+nec molestie sed,163,Mauv,7,1,-1,4
+ornare,185,Puce,6,4,-4,2
+neque sapien,165,Teal,6,3,-4,3
+facilisi cras,153,Purple,3,5,-2,5
+magna vulputate luctus,172,Mauv,15,7,-2,3
+vel,174,Blue,14,6,-4,3
+in felis,154,Indigo,4,7,-4,5
