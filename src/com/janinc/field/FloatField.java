@@ -29,8 +29,7 @@ public class FloatField<T> extends Field<T> {
     @Override
     public void validate(DataObject d) throws ValidationException {
         float value = Float.MIN_VALUE;
-        if (useValidation)
-        {
+        if (useValidation) {
             try {
                 java.lang.reflect.Field field = d.getClass().getDeclaredField(getName());
                 field.setAccessible(true);

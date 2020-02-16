@@ -27,11 +27,13 @@ public class IntField<D> extends Field<D>{
         unique = annotation.uniqueValue();
     }
 
+    protected boolean greaterThan(Object op1, Object op2) { return (int)op1 > (int)op2; } // greaterThan
+    protected boolean smallerThan(Object op1, Object op2) { return (int)op1 < (int)op2; } // smallerThan
+
     @Override
     public void validate(DataObject d) throws ValidationException {
         int value = Integer.MIN_VALUE;
-        if (useValidation)
-        {
+        if (useValidation) {
             // TODO: 2020-02-06 Handle check if field is unique... I.e. fix query engine first  
             try {
                 java.lang.reflect.Field field = d.getClass().getDeclaredField(getName());

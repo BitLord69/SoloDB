@@ -3,6 +3,7 @@ package com.janinc;
 import com.janinc.annotations.*;
 import com.janinc.exceptions.ValidationException;
 import com.janinc.field.FieldManager;
+import com.janinc.util.Debug;
 import com.janinc.util.FileHandler;
 
 import java.io.*;
@@ -47,7 +48,7 @@ public class Table<D extends DataObject> {
 
             result.forEach(fileName -> {
                 Object data = dataClass.cast(FileHandler.readFile("", fileName));
-                dataMap.put(((DataObject)data).getId(), (D) data);
+                dataMap.put(((DataObject)data).getId(), (D)data);
                 resolveData((D)data);
             });
         } catch (IOException e) {
@@ -97,10 +98,9 @@ public class Table<D extends DataObject> {
         } // for Map...
     } // saveAll
 
-    public boolean addRecord(DataObject data) throws ValidationException {
+    public void addRecord(DataObject data) throws ValidationException {
         save(data);
         dataMap.put(data.getId(), (D) data);
-        return true;
     }  // addRecord
 
     public D getRecord(String id) {return dataMap.get(id); }
@@ -108,18 +108,6 @@ public class Table<D extends DataObject> {
     public Iterator<? extends Map.Entry<String,? extends DataObject>> getIterator() {
         return dataMap.entrySet().iterator();
     } // getIterator
-
-    public ArrayList<D> search(String key, String value){
-//        ArrayList<D> result = new ArrayList<>();
-//        dataMap.forEach((k, d) -> {
-//           if (((Data)d).getData().containsKey(key))
-//               if (((Data)d).getData().get(key).contains(value)){
-//                   result.add(d);
-//           }
-//        });
-//        return result;
-        return null;
-    } // search
 
     public void addReference(Reference ref) { references.put(ref.getKey(), ref); }
 
@@ -161,14 +149,6 @@ public class Table<D extends DataObject> {
         fieldManager.addField(new com.janinc.field.IntField<D>(theField.getName(), (IntField)annotation));
     } // handleIntField
 
-//        // TODO: 2020-02-06 Create fields for booleans???
-//    private void handleBooleanField(Object field, Object annotation) {
-//        Field theField = (Field)field;
-//        BooleanField myA = (BooleanField)annotation;
-//        String name = theField.getName();
-//
-//    } // handleBooleanField
-
     private void handleFloatField(Object field, Object annotation) {
         Field theField = (Field)field;
         fieldManager.addField(new com.janinc.field.FloatField<D>(theField.getName(), (FloatField)annotation));
@@ -191,10 +171,10 @@ public class Table<D extends DataObject> {
         Object fieldClass = field.getType();
         AnnotationHandlerParams ahp = new AnnotationHandlerParams();
 
-        System.out.println("I table.getAnnotationParams: namn="  + field.getName() + ", typ=" + field.getType());
+        if (Debug.ON) System.out.println("I table.getAnnotationParams: namn="  + field.getName() + ", typ=" + field.getType());
 
         if (Modifier.isStatic(field.getModifiers())){
-            System.out.println("Static field encountered, skipping...");
+            if (Debug.ON) System.out.println("Static field encountered, skipping...");
             return null;
         } // if Modifier...
 
@@ -208,21 +188,11 @@ public class Table<D extends DataObject> {
             ahp.setHandler(this::handleFloatField);
             return ahp;
         }
-//        else if(field.getType().isAssignableFrom(Boolean.class)) {
-//            ahp.setFieldClass(BooleanField.class);
-//            ahp.setHandler(this::handleBooleanField);
-//            return ahp;
-//        }
         else if (field.getType() == int.class) {
             ahp.setFieldClass(IntField.class);
             ahp.setHandler(this::handleIntField);
             return ahp;
-        } // else if field...
-//        } else if (field.getType() == boolean.class) {
-//            ahp.setFieldClass(BooleanField.class);
-//            ahp.setHandler(this::handleBooleanField);
-//            return ahp;
-//        }
+        }
 
         return null;
     } // getAnnotationParams

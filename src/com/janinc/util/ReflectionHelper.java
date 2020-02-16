@@ -8,6 +8,7 @@ CopyLeft 2020 - JanInc
 
 import com.janinc.DataObject;
 import com.janinc.Table;
+import com.janinc.exceptions.DatabaseNotInitializedException;
 import com.janinc.testapp.testdb.DiscDB;
 
 import java.lang.reflect.Field;
@@ -34,12 +35,32 @@ public class ReflectionHelper {
         return fields;
     } // getAllFields
 
-    public static Field getField(String table, DataObject d, String fieldName) {
+    public static Map<String, Method> getAllMethods(Class<?> theClass) {
+        Map<String, java.lang.reflect.Method> methods = new HashMap<>();
+
+        while (!(theClass.getName().equals(Object.class.getName()))) {
+            Method[] ms = theClass.getDeclaredMethods();
+            for (Method m: ms) {
+                int mods = m.getModifiers();
+                if (!Modifier.isStatic(mods) && !Modifier.isFinal(mods)) methods.put(m.getName(), m);
+            } // for f...
+
+            theClass = theClass.getSuperclass();
+        } // while...
+
+        return methods;
+    } // getAllMethods
+
+    public static Field getField(String table, DataObject d, String fieldName) throws DatabaseNotInitializedException {
         Table<? extends DataObject> t = DiscDB.getInstance().getTable(table);
         Map<String, Field> dataFields = getAllFields(t.getDataClass());
         return dataFields.get(fieldName);
     } // getField
 
+    public static Method getMethod(Class<?> c, String methodName) throws DatabaseNotInitializedException {
+        Map<String, Method> dataFields = getAllMethods(c);
+        return dataFields.get(methodName);
+    } // getField
     public static Object runGetter(Field field, DataObject d) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         String name  = field.getName();
         name = "get" + name.substring(0,1).toUpperCase() + name.substring(1).toLowerCase();
@@ -48,7 +69,7 @@ public class ReflectionHelper {
         return m.invoke(d);
     } // runGetter
 
-    public static Object getFieldValue(String table, DataObject d, String fieldName) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+    public static Object getFieldValue(String table, DataObject d, String fieldName) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, DatabaseNotInitializedException {
         return runGetter(getField(table, d, fieldName), d);
     } // getFieldValue
 } // class ReflectionHelper

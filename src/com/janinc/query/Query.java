@@ -10,6 +10,7 @@ import com.janinc.*;
 import com.janinc.exceptions.*;
 import com.janinc.query.clause.*;
 import com.janinc.testapp.testdb.DiscDB;
+import com.janinc.util.Debug;
 import com.janinc.util.ReflectionHelper;
 
 import java.lang.reflect.Field;
@@ -28,7 +29,7 @@ public class Query {
         return this;
     } // select
 
-    public Query from(String table) throws TableNotFoundException {
+    public Query from(String table) {
         if (!Database.getInstance().tableExists(table)) {
             throw new TableNotFoundException(table);
         } // if !Database...
@@ -37,7 +38,7 @@ public class Query {
         return this;
     } // from
 
-    public Query from(Class<? extends DataObject> dataClass) throws TableNotFoundException {
+    public Query from(Class<? extends DataObject> dataClass)  {
         Database db = Database.getInstance();
         if (!db.tableExists(dataClass)) {
             throw new TableNotFoundException(dataClass.toString());
@@ -97,30 +98,40 @@ public class Query {
         return this;
     } // where
 
-    public ArrayList<HashMap<String, Object>> execute() throws QueryException, FieldNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+    public ArrayList<HashMap<String, Object>> execute() throws QueryException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
         if (fields.equals("")) throw new QueryException("From table not set!");
         if (clauses.size() == 0) throw new QueryException("No Where-clauses present!");
 
         checkFields(fields);
         checkFields(clauses.stream().map(WhereClause::getFieldName).collect(Collectors.toList()));
 
-        System.out.println("In Query.execute - all fields checked OK!");
-
-        // Test with the first clause only
-        // TODO: 2020-02-15 Loop through all clauses and create a combined result 
-        WhereClause wc = clauses.get(0);
-        ArrayList<HashMap<String, Object>> result = new ArrayList<>();
+        if (Debug.ON) System.out.println("In Query.execute - all fields checked OK!");
 
         DiscDB db = DiscDB.getInstance();
+        ArrayList<HashMap<String, Object>> result = new ArrayList<>();
 
-        System.out.println("Antal poster i tabellen: " + db.getNumberOfRecords(fromTable));
+        if (Debug.ON) System.out.println("Antal poster i tabellen: " + db.getNumberOfRecords(fromTable));
 
         Iterator<? extends Map.Entry<String, ? extends DataObject>> i = db.getIterator(fromTable);
         while (i.hasNext()) {
-            DataObject d = (DataObject) (i.next()).getValue();
-            if (wc.compare(fromTable, d)) {
+            boolean totResult = false;
+            DataObject d = (DataObject)(i.next()).getValue();
+            ArrayList<Boolean> partialResults = new ArrayList<>();
+
+            for (WhereClause c : clauses) {
+                partialResults.add(c.compare(fromTable, d));
+            } // for c...
+
+            totResult = partialResults.get(0);
+            if (partialResults.size() > 1) {
+                for (int j = 1; j < partialResults.size(); j++) {
+                    totResult = bindingOperation.function.test(totResult, partialResults.get(j));
+                } // for j...
+            } // if partialResults...
+
+            if (totResult) {
                 HashMap<String, Object> record = new HashMap<>();
-                fields.forEach(s-> {
+                fields.forEach(s -> {
                     try {
                         addResult(record, d, s);
                     } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
@@ -128,7 +139,7 @@ public class Query {
                     } // catch
                 });
                 result.add(record);
-            } // if wc...
+            } // if totResult...
         } // while i...
 
         return result;

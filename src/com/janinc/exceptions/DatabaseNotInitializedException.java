@@ -6,10 +6,10 @@ Programmering i Java EMMJUH19, EC-Utbildning
 CopyLeft 2020 - JanInc
 */
 
-public class FieldNotFoundException extends RuntimeException {
+public class DatabaseNotInitializedException extends RuntimeException {
 
-    public FieldNotFoundException(String table) {
-        super(String.format("Field '%s' not found!", table));
+    public DatabaseNotInitializedException() {
+        super(String.format("Database has not been initialized - please call initializeDB first!"));
     } // TableNotFoundException
 } // class TableNotFoundException
 

@@ -16,22 +16,7 @@ public class DiscDB extends Database {
 
         addClass(Manufacturer.class);
         addClass(Disc.class);
-
-        // Annotations for this as well???
-//        addTable(HobbyTable.TABLE_NAME, new HobbyTable());
-//        addTable(LocationTable.TABLE_NAME, new LocationTable());
-//        addTable(LikeTable.TABLE_NAME, new LikeTable());
-//
-//        getTable(UserTable.TABLE_NAME).addReference(new Reference(getTable(HobbyTable.TABLE_NAME), User.HOBBIES, Data.ID, Hobby.NAME));
-//        getTable(HobbyTable.TABLE_NAME).addReference(new Reference(getTable(LocationTable.TABLE_NAME), Hobby.LOCATIONS, Data.ID, Location.NAME));
     } // TestDB:TestDB
-
-//    public static DiscDB getInstance() {
-//        if (mInstance == null) {
-//            mInstance = new DiscDB(DBNAME);
-//        }
-//        return (DiscDB) mInstance;
-//    } // getInstance
 
     public static DiscDB getInstance() {
         if (mInstance == null) {

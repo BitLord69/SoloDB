@@ -6,7 +6,7 @@ Programmering i Java EMMJUH19, EC-Utbildning
 CopyLeft 2020 - JanInc
 */
 
-public class TableNotFoundException extends Exception {
+public class TableNotFoundException extends RuntimeException {
 
     public TableNotFoundException(String table) {
         super(String.format("Table '%s' not found!", table));

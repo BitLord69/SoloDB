@@ -8,18 +8,19 @@ CopyLeft 2020 - JanInc
 
 import com.janinc.DataObject;
 import com.janinc.query.Operator;
+import com.janinc.util.ReflectionHelper;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 public class IntClause extends WhereClause{
-    private int comparator;
-
     public IntClause(String fieldName, Operator operator, int comparator) {
-        super(fieldName, operator);
-        this.comparator = comparator;
+        super(fieldName, operator, comparator);
     } // IntClause
 
     public IntClause(String fieldName, String operator, int comparator) {
-        super(fieldName);
-        this.comparator = comparator;
+        super(fieldName, comparator);
         if (!Operator.contains(operator))
             throw new IllegalArgumentException("Operator '" + operator + "' not recognized!");
         this.operator = Operator.get(operator);
@@ -27,8 +28,7 @@ public class IntClause extends WhereClause{
             throw new IllegalArgumentException("Operator '" + operator + "' not not supported for integers!");
     } // IntClause
 
-    @Override
-    public boolean compare(String table, DataObject d) {
-        return false;
-    } // compare
+    private boolean greaterThan(Object op1, Object op2) { return (int)op1 > (int)op2; } // greaterThan
+
+    private boolean smallerThan(Object op1, Object op2) { return (int)op1 < (int)op2; } // smallerThan
 } // class IntClause

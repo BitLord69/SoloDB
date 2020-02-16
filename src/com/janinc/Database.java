@@ -1,4 +1,5 @@
 package com.janinc;
+import com.janinc.exceptions.DatabaseNotInitializedException;
 import com.janinc.exceptions.ValidationException;
 import com.janinc.interfaces.ISingletonDB;
 
@@ -8,6 +9,7 @@ import java.util.stream.Collectors;
 
 public class Database extends ISingletonDB {
     protected static Database mInstance = null;
+    protected boolean initialized = false;
 
     private String name = "";
     private String baseDir = "";
@@ -38,6 +40,7 @@ public class Database extends ISingletonDB {
     } // Database:Database
 
     public void initializeDB() {
+        initialized = true;
         createClasses();
     } // initializeDB
 
@@ -67,7 +70,8 @@ public class Database extends ISingletonDB {
         return baseDir;
     } // getBaseDir
 
-    public LinkedHashMap<String, Table<? extends DataObject>> getTables() {
+    public LinkedHashMap<String, Table<? extends DataObject>> getTables() throws DatabaseNotInitializedException {
+        if (!initialized) throw new DatabaseNotInitializedException();
         return (LinkedHashMap<String, Table<? extends DataObject>>) tables;
     } // getTables
 
@@ -83,6 +87,7 @@ public class Database extends ISingletonDB {
     } // addTable
 
     public void removeTable(String name) {
+        if (!initialized) throw new DatabaseNotInitializedException();
         tables.remove(name);
     } // removeTable
 
@@ -92,36 +97,39 @@ public class Database extends ISingletonDB {
         return t.deleteTable();
     } // dropTable
 
-    public com.janinc.Table<? extends DataObject> getTable(String table) {
+    public com.janinc.Table<? extends DataObject> getTable(String table) throws DatabaseNotInitializedException {
+        if (!initialized) throw new DatabaseNotInitializedException();
         return tables.get(table);
     } // getTable
 
-    public com.janinc.Table<? extends DataObject> getTable(Class<? extends DataObject> dataClass) {
+    public com.janinc.Table<? extends DataObject> getTable(Class<? extends DataObject> dataClass) throws DatabaseNotInitializedException {
+        if (!initialized) throw new DatabaseNotInitializedException();
         return tables.get(dataClassList.get(dataClass));
     } // getTable
 
     public String getTableName(Class<? extends DataObject> dataClass) {
+        if (!initialized) throw new DatabaseNotInitializedException();
         return dataClassList.get(dataClass);
     } // getTableName
 
-    public boolean tableExists(String table) {
+    public boolean tableExists(String table) throws DatabaseNotInitializedException {
         return getTable(table) != null;
     } // tableExists
 
-    public boolean tableExists(Class<? extends DataObject> dataClass) {
+    public boolean tableExists(Class<? extends DataObject> dataClass) throws DatabaseNotInitializedException {
         return getTable(dataClassList.get(dataClass)) != null;
     } // getTable
-    public void save(DataObject data) throws ValidationException {
+    public void save(DataObject data) throws ValidationException, DatabaseNotInitializedException {
         String className = dataClassList.get(data.getClass());
         getTable(className).save(data);
     } // save
 
-    public boolean addRecord(DataObject data) throws ValidationException {
+    public void addRecord(DataObject data) throws ValidationException, DatabaseNotInitializedException {
         String className = dataClassList.get(data.getClass());
-        return getTable(className).addRecord(data);
+        getTable(className).addRecord(data);
     } // addRecord
 
-    public boolean deleteRecord(DataObject data) {
+    public boolean deleteRecord(DataObject data) throws DatabaseNotInitializedException {
         String className = dataClassList.get(data.getClass());
         return getTable(className).deleteRecord(data);
     } // deleteRecord
@@ -130,7 +138,7 @@ public class Database extends ISingletonDB {
         return getTable(dataClass).getRecord(id);
     } // getRecord
 
-    public HashMap<String, ? extends DataObject> getRecords(String table) {
+    public HashMap<String, ? extends DataObject> getRecords(String table) throws DatabaseNotInitializedException {
         return getTable(table).getRecords();
     } // getRecords
 
@@ -138,7 +146,7 @@ public class Database extends ISingletonDB {
         return getTable(dataClass).getRecords();
     } // getRecords
 
-    public Iterator<? extends Map.Entry<String,? extends DataObject>> getIterator(String table) {
+    public Iterator<? extends Map.Entry<String,? extends DataObject>> getIterator(String table) throws DatabaseNotInitializedException {
         return getTable(table).getIterator();
     } // getIterator
 
@@ -146,18 +154,13 @@ public class Database extends ISingletonDB {
         return getTable(dataClass).getIterator();
     } // getIterator
 
-    public long getNumberOfRecords(String table) {
+    public long getNumberOfRecords(String table) throws DatabaseNotInitializedException {
         return  getTable(table).getNumberOfRecords();
     } // getNumberOfRecords
 
     public long getNumberOfRecords(Class<? extends DataObject> dataClass) {
         return getTable(dataClass).getNumberOfRecords();
     } // getNumberOfRecords
-
-    public ArrayList<DataObject> search(String table, String searchField, String searchTerm) {
-//        return getTable(table).search(searchField, searchTerm);
-        return null;
-    } // search
 
     @Override
     public String toString() {

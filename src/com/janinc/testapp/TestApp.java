@@ -32,7 +32,7 @@ public class TestApp {
         DiscDB db = DiscDB.getInstance();
 
         HashMap<String, ? extends DataObject> hm = db.getRecords("disc");
-        Map.Entry<String, ? extends DataObject> entry = (Map.Entry<String, ? extends DataObject>) hm.entrySet().iterator().next();
+        Map.Entry<String, ? extends DataObject> entry = hm.entrySet().iterator().next();
         DataObject value = entry.getValue();
 
         // Get the "first" disc and set the weight to an invalid value
@@ -77,8 +77,9 @@ public class TestApp {
             q = new Query()
                     .from(Disc.class)
                     .select("name", "weight", "brandShadow")
+                    .bindingOperator(BindingOperator.OR)
                     .where("name", "!=", "Firebird")
-                    .where("weight", ">", 172);
+                    .where("weight", ">", 173);
 //                    .where("name", Operator.EQUALS, "Firebird");
 //                    .where("brandNew", "==", true);
 //                    .where(new WhereClause("name", "===", "Champion Firebird"));
