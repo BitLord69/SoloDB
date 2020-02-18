@@ -9,6 +9,7 @@ import com.janinc.util.FileHandler;
 import java.io.*;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -49,6 +50,7 @@ public class Table<D extends DataObject> {
             result.forEach(fileName -> {
                 Object data = dataClass.cast(FileHandler.readFile("", fileName));
                 dataMap.put(((DataObject)data).getId(), (D)data);
+                fieldManager.updateDirtyFields((D)data);
                 resolveData((D)data);
             });
         } catch (IOException e) {
@@ -80,17 +82,23 @@ public class Table<D extends DataObject> {
         ((DataObject)data).setId(fileName);
     } // createUniqueId
 
-    public void save(DataObject data) throws ValidationException{
+    public void save(DataObject data) throws ValidationException, InvocationTargetException, IllegalAccessException {
+        fieldManager.validateData(data);
+
         if(((DataObject)data).getId().equals("")){
             createUniqueId(data);
         } // if DataObject...
 
-        fieldManager.validateData(data);
-        resolveData((D)data);
         FileHandler.writeFile("", ((DataObject)data).getId(), data);
+        resolveData((D)data);
     } // save
 
-    public void saveAll() throws ValidationException {
+    public void refresh(DataObject data) {
+        data.refresh();
+        fieldManager.updateDirtyFields((D)data);
+    } // refresh
+
+    public void saveAll() throws ValidationException, InvocationTargetException, IllegalAccessException {
         for (Map.Entry<String, D> entry : dataMap.entrySet()) {
             String k = entry.getKey();
             D v = entry.getValue();
@@ -98,7 +106,7 @@ public class Table<D extends DataObject> {
         } // for Map...
     } // saveAll
 
-    public void addRecord(DataObject data) throws ValidationException {
+    public void addRecord(DataObject data) throws ValidationException, InvocationTargetException, IllegalAccessException {
         save(data);
         dataMap.put(data.getId(), (D) data);
     }  // addRecord

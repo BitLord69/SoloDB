@@ -7,7 +7,6 @@ CopyLeft 2020 - JanInc
 */
 
 import com.janinc.DataObject;
-import com.janinc.annotations.IntField;
 import com.janinc.annotations.StringField;
 import com.janinc.annotations.Table;
 
@@ -15,10 +14,10 @@ import com.janinc.annotations.Table;
 public class Manufacturer extends DataObject {
     public static final long serialVersionUID = 42L;
 
-    @StringField(name = "NAME", maxlength = 300, uniquevalue = true)
+    @StringField(name = "NAME", maxlength = 300, unique = true)
     private String name;
 
-    @StringField(maxlength = 3, uniquevalue = true)
+    @StringField(maxlength = 3, unique = true)
     private String abbreviation;
 
     public Manufacturer() {

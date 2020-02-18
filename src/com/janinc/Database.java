@@ -1,9 +1,11 @@
 package com.janinc;
-import com.janinc.exceptions.DatabaseNotInitializedException;
-import com.janinc.exceptions.ValidationException;
+
+import com.janinc.exceptions.*;
+import com.janinc.field.FieldManager;
 import com.janinc.interfaces.ISingletonDB;
 
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -119,12 +121,17 @@ public class Database extends ISingletonDB {
     public boolean tableExists(Class<? extends DataObject> dataClass) throws DatabaseNotInitializedException {
         return getTable(dataClassList.get(dataClass)) != null;
     } // getTable
-    public void save(DataObject data) throws ValidationException, DatabaseNotInitializedException {
+    public void save(DataObject data) throws ValidationException, DatabaseNotInitializedException, InvocationTargetException, IllegalAccessException {
         String className = dataClassList.get(data.getClass());
         getTable(className).save(data);
     } // save
 
-    public void addRecord(DataObject data) throws ValidationException, DatabaseNotInitializedException {
+    public void refresh(DataObject data) {
+        String className = dataClassList.get(data.getClass());
+        getTable(className).refresh(data);
+    } // save
+
+    public void addRecord(DataObject data) throws ValidationException, DatabaseNotInitializedException, InvocationTargetException, IllegalAccessException {
         String className = dataClassList.get(data.getClass());
         getTable(className).addRecord(data);
     } // addRecord
@@ -161,6 +168,14 @@ public class Database extends ISingletonDB {
     public long getNumberOfRecords(Class<? extends DataObject> dataClass) {
         return getTable(dataClass).getNumberOfRecords();
     } // getNumberOfRecords
+
+    public FieldManager getFieldManager(String table) {
+        return getTable(table).getFieldManager();
+    } // getFieldManager
+
+    public FieldManager getFieldManager(Class<? extends DataObject> dataClass) {
+        return getTable(dataClass).getFieldManager();
+    } // getFieldManager
 
     @Override
     public String toString() {

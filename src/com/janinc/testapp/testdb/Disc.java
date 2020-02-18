@@ -12,7 +12,7 @@ import com.janinc.annotations.*;
 public class Disc extends DataObject {
     public static final long serialVersionUID = 4242L;
 
-    @StringField(maxlength = 300, uniquevalue = true)
+    @StringField(maxlength = 300, unique = true, mandatory = true)
     private String name;
 
     @StringField(lookup=true, lookupTable=Manufacturer.class, lookupForeignKey="abbreviation", lookupForeignField="name", targetField="brandShadow")
@@ -36,7 +36,7 @@ public class Disc extends DataObject {
     private String color;
     private boolean brandNew = true;
 
-    public Disc(String name, String brand, int weight, String color, String plastic, int speed, int turn, int glide, int fade) {
+    public Disc(String name, String brand, int weight, String color, String plastic, int speed, int turn, int glide, int fade, String category) {
         this.name = name;
         this.brand = brand;
         this.weight = weight;
@@ -46,6 +46,7 @@ public class Disc extends DataObject {
         this.turn = turn;
         this.glide = glide;
         this.fade = fade;
+        this.category = category;
     }
 
     public String getName() { return name; }
@@ -68,11 +69,17 @@ public class Disc extends DataObject {
     public int getFade() { return fade; }
     public void setFade(int fade) { this.fade = fade; }
     public boolean isBrandNew() { return brandNew; }
+    public boolean getBrandnew() { return brandNew; }
     public void setBrandNew(boolean brandNew) { this.brandNew = brandNew; }
+    public String getCategory() { return category; }
+    public void setCategory(String category) { this.category = category; }
+    public void setCategoryshadow(String categoryShadow) { this.categoryShadow = categoryShadow; }
+    private String getCategoryshadow() { return categoryShadow; }
+    private String getPlasticshadow() { return plasticShadow; }
 
     @Override
     public String toString() {
-        return String.format("%s, manufactured by: %s (%s), weight: %d, color: %s, Plastic: %s, fade: %d, new: %b",
-                getName(), getBrandshadow(), getBrand(), getWeight(), getColor(), getPlastic(), getFade(), isBrandNew());
+        return String.format("%s, manufactured by: %s (%s), weight: %d, color: %s, Plastic: %s, fade: %d, new: %b, Category: %s",
+                getName(), getBrandshadow(), getBrand(), getWeight(), getColor(), getPlastic(), getFade(), isBrandNew(), getCategoryshadow());
     } // toString
 } // class Disc

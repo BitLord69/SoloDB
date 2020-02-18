@@ -12,18 +12,20 @@ import com.janinc.util.ReflectionHelper;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.HashMap;
 import java.util.Map;
 
 public abstract class DataObject implements java.io.Serializable {
     public static final long serialVersionUID = 42424242L;
 
-    @StringField(name = "id", uniquevalue = true)
+    @StringField(name = "id", unique = true)
     private String id = "";
 
     public String getId() { return id; }
     protected  void setId(String id) { this.id = id; }
+    private transient HashMap<String, Object> dirtyFields;
 
-    public void copy(DataObject d) {
+    private void copy(DataObject d) {
         Map<String, Field> sourceFields = ReflectionHelper.getAllFields(d.getClass());
         Map<String, Field> targetFields = ReflectionHelper.getAllFields(getClass());
 
@@ -39,7 +41,17 @@ public abstract class DataObject implements java.io.Serializable {
         });
     } // copy
 
-    public void refresh(){
+    protected void refresh() {
         copy((DataObject) FileHandler.readFile("", getId()));
     } // refresh
+
+    public void setDirtyValue(String fieldName, Object value) {
+        if (dirtyFields == null) dirtyFields = new HashMap<>();
+        dirtyFields.put(fieldName, value);
+    } // setDirtyFields
+
+    public Object getDirtyValue(String fieldName) {
+        if (dirtyFields == null) dirtyFields = new HashMap<>();
+        return dirtyFields.get(fieldName);
+    } // getDirtyValue
 } // class DataObject

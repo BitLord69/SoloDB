@@ -17,32 +17,33 @@ import java.lang.reflect.Method;
 public abstract class WhereClause {
     private String fieldName;
     protected Operator operator;
-    protected Object comparator;
+    protected Object searchTerm;
 
     protected WhereClause(String fieldName) {
         this.fieldName = fieldName;
     }
 
-    protected WhereClause(String fieldName, Object comparator) {
+    protected WhereClause(String fieldName, Object searchTerm) {
         this(fieldName);
-        this.comparator = comparator;
+        this.searchTerm = searchTerm;
     }
 
-    protected WhereClause(String fieldName, Operator operator, Object comparator) {
-        this(fieldName, comparator);
+    protected WhereClause(String fieldName, Operator operator, Object searchTerm) {
+        this(fieldName, searchTerm);
         this.operator = operator;
     }
 
     public String getFieldName() { return fieldName; }
+    public Operator getOperator() { return operator; }
 
     public boolean compare(String table, DataObject d) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-        Field f = ReflectionHelper.getField(table, d, getFieldName());
+        Field f = ReflectionHelper.getField(d, getFieldName());
         Object value = ReflectionHelper.runGetter(f, d);
         Method m = ReflectionHelper.getMethod(this.getClass(), operator.getName());
         if (m == null) throw new NoSuchMethodException();
 
         m.setAccessible(true);
-        return (boolean) m.invoke(this, value, comparator);
+        return (boolean) m.invoke(this, value, searchTerm);
     } // compare
 
     protected boolean equals(Object op1, Object op2) { return op1 == op2; } // equals
@@ -50,6 +51,6 @@ public abstract class WhereClause {
 
     @Override
     public String toString() {
-        return String.format("[Type: %s, fieldName: '%s', operator: '%s']", getClass().getSimpleName(), fieldName, operator);
+        return String.format("[Type: %s, fieldName: '%s', operator: '%s', searchTerm: '%s']", getClass().getSimpleName(), fieldName, operator, searchTerm);
     } // toString
 } // class WhereClause

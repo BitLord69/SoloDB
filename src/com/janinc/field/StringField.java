@@ -6,26 +6,20 @@ Programmering i Java EMMJUH19, EC-Utbildning
 CopyLeft 2020 - JanInc
 */
 
-import com.janinc.DataObject;
 import com.janinc.Database;
-import com.janinc.exceptions.FieldNotFoundException;
-import com.janinc.exceptions.TableNotFoundException;
-import com.janinc.query.Query;
-import com.janinc.query.QueryException;
-import com.janinc.query.clause.StringClause;
-import com.janinc.query.clause.WhereClause;
+import com.janinc.DataObject;
+import com.janinc.exceptions.*;
+import com.janinc.query.*;
+import com.janinc.query.clause.*;
 import com.janinc.util.ReflectionHelper;
-import com.janinc.exceptions.ValidationException;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
-public class StringField<T> extends Field<T>{
+public class StringField<T> extends Field<T> {
     private int maxLength = 0;
     private boolean mandatory = false;
-    private boolean useValidation = false;
     private boolean unique = false;
 
     public StringField(String name) {
@@ -34,66 +28,71 @@ public class StringField<T> extends Field<T>{
 
     public StringField(String name, com.janinc.annotations.StringField annotation) {
         this(name);
-        this.unique = annotation.uniquevalue();
+        this.unique = annotation.unique();
         this.maxLength = annotation.maxlength();
         this.mandatory = annotation.mandatory();
-        this.useValidation = maxLength > 0 || mandatory || unique;
     }
 
     public int getMaxLength() {
         return maxLength;
     }
-
     public boolean isMandatory() {
         return mandatory;
     }
-
     public boolean isUnique() {
         return unique;
     }
 
     @Override
-    public void validate(DataObject d) throws ValidationException {
-        if (useValidation)
-        {
-            Map<String, java.lang.reflect.Field> fields = ReflectionHelper.getAllFields(d.getClass());
+    public void validate(DataObject d) throws ValidationException, InvocationTargetException, IllegalAccessException {
+        String value = (String) ReflectionHelper.getFieldValue(d, getName());
 
-            String value = "";
+        if (mandatory && (value == null || value.isEmpty() || value.isBlank()))
+            throw new ValidationException(getName(), "field is mandatory, please provide a value!");
+
+        if (maxLength > 0 && value.length() > maxLength) {
+            throw new ValidationException(getName(), "field too long, only [" + maxLength +  "] characters allowed!");
+        } // if value...
+
+        String dirtyValue = d.getDirtyValue(getName()) == null ? "" : (String) d.getDirtyValue(getName());
+        if (unique && !dirtyValue.equals(value)) {
+            ArrayList<HashMap<String, Object>> res = new ArrayList<>();
+
             try {
-                java.lang.reflect.Field field = fields.get(getName());
-                field.setAccessible(true);
-
-                value = (String) field.get(d);
-            } catch (IllegalAccessException e) {
+                WhereClause wc = new StringClause(getName(), "==", (String)value);
+                Query q = new Query().from(Database.getInstance().getTableName(d.getClass())).select(getName()).where(wc);
+                res = q.execute();
+            } catch (TableNotFoundException | QueryException | FieldNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
                 e.printStackTrace();
             } // catch
 
-            if (unique) {
-                ArrayList<HashMap<String, Object>> res = new ArrayList<>();
-
-                try {
-                    WhereClause wc = new StringClause(getName(), "==", (String)value);
-                    Query q = new Query().from(Database.getInstance().getTableName(d.getClass())).select(getName()).where(wc);
-                    res = q.execute();
-                } catch (TableNotFoundException | QueryException | FieldNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-                    e.printStackTrace();
-                } // catch
-
-                if (res.size() > 0)
-                    throw new ValidationException(getName(), String.format("field is unique, and the value [%s] has already been entered!", value));
-            } // if unique...
-
-            if (mandatory && (value.isEmpty() || value.isBlank()))
-                throw new ValidationException(getName(), "field is mandatory, please provide a string!");
-
-            if (maxLength > 0 && value.length() > maxLength) {
-                throw new ValidationException(getName(), "field too long, only [" + maxLength +  "] characters allowed!");
-            } // if value...
-        } // if useValidation...
+            if (res.size() > 0) {
+                throw new ValidationException(getName(), String.format("field is unique, and the value [%s] has already been entered!", value));
+            } // if res...
+        } // if unique...
     } // validate
 
     @Override
     public String toString() {
-        return String.format("StringField - name: %s, maxLength: %d, mandatory: %b, useValidation: %b, unique: %b", getName(), maxLength, mandatory, useValidation, unique);
+        return String.format("StringField - name: '%s', maxLength: %d, mandatory: %b, unique: %b", getName(), maxLength, mandatory, unique);
     } // toString
+
+    @Override
+    public void updateDirtyField(DataObject d) {
+        if (!unique) return;
+
+        String value = "";
+        try {
+            value = (String)ReflectionHelper.getFieldValue(d, getName());
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
+        }  // catch
+
+        d.setDirtyValue(getName(), value);
+    } // updateDirtyField
+
+    @Override
+    public boolean isUniqueField() {
+        return unique;
+    } // isUniqueField
 } // class StringField

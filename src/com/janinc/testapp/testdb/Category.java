@@ -14,10 +14,10 @@ import com.janinc.annotations.Table;
 public class Category extends DataObject {
     public static final long serialVersionUID = 42L;
 
-    @StringField(name = "NAME", maxlength = 50, uniquevalue = true)
+    @StringField(name = "NAME", maxlength = 50, unique = true)
     private String name;
 
-    @StringField(maxlength = 3, uniquevalue = true)
+    @StringField(maxlength = 3, unique = true)
     private String abbreviation;
 
     public Category() { }

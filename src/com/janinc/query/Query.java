@@ -8,8 +8,8 @@ CopyLeft 2020 - JanInc
 
 import com.janinc.*;
 import com.janinc.exceptions.*;
+import com.janinc.field.FieldManager;
 import com.janinc.query.clause.*;
-import com.janinc.testapp.testdb.DiscDB;
 import com.janinc.util.Debug;
 import com.janinc.util.ReflectionHelper;
 
@@ -24,7 +24,7 @@ public class Query {
     private List<WhereClause> clauses = new ArrayList<>();
     private BindingOperator bindingOperation = BindingOperator.AND;
 
-    public Query select(String ... fields) {
+    public Query select(String... fields) {
         this.fieldsToRetrieve.addAll(Arrays.asList(fields));
         return this;
     } // select
@@ -98,24 +98,47 @@ public class Query {
         return this;
     } // where
 
-    public ArrayList<HashMap<String, Object>> execute() throws QueryException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+    private void checkQueryParameters() throws QueryException {
         if (fromTable.equals("")) throw new QueryException("From table has not been set!");
-        if (fieldsToRetrieve.equals("")) throw new QueryException("No call to select() has been made!");
+        if (fieldsToRetrieve.size() == 0) throw new QueryException("No call to select() has been made!");
         if (clauses.size() == 0) throw new QueryException("No Where-clauses present!");
 
-        checkFields(fieldsToRetrieve);
+        if (fieldsToRetrieve.size() == 1 && fieldsToRetrieve.get(0).equals("*")) {
+            addAllFields();
+           } // if fieldsToRetrieve...
+        else {
+            checkFields(fieldsToRetrieve);
+        } // else
+
         checkFields(clauses.stream().map(WhereClause::getFieldName).collect(Collectors.toList()));
+    } // checkQueryParameters
+
+    private boolean checkSearchFieldUniqueness() {
+        FieldManager fm = Database.getInstance().getFieldManager(fromTable);
+        long numUniques = clauses.stream().filter(wc -> fm.isFieldUnique(wc.getFieldName()) && wc.getOperator() == Operator.EQUALS).count();
+        if (clauses.size() == 1)
+            return numUniques == 1;
+        else
+            return (bindingOperation == BindingOperator.AND && numUniques == clauses.size());
+    } // checkSearchFieldUniqueness
+
+    public ArrayList<HashMap<String, Object>> execute() throws QueryException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+        checkQueryParameters();
 
         if (Debug.ON) System.out.println("In Query.execute - all fields checked OK!");
 
-        DiscDB db = DiscDB.getInstance();
+        Database db = Database.getInstance();
         ArrayList<HashMap<String, Object>> result = new ArrayList<>();
         Iterator<? extends Map.Entry<String, ? extends DataObject>> i = db.getIterator(fromTable);
 
-        // TODO: 2020-02-16 Stop iterating if the field is unique and a record has been found
+        // TODO: 2020-02-18 Check if we are only using the id-field (or an index field when/if those are implemented), because then we can ask the hashmap for the value without the need to do a proper search
+
+        boolean allSearchFieldsAreUnique = checkSearchFieldUniqueness();
+//        allSearchFieldsAreUnique = false;
+
         while (i.hasNext()) {
-            boolean totResult = false;
-            DataObject d = (DataObject)(i.next()).getValue();
+            boolean totResult;
+            DataObject d = (i.next()).getValue();
             ArrayList<Boolean> partialResults = new ArrayList<>();
 
             for (WhereClause c : clauses) {
@@ -133,14 +156,15 @@ public class Query {
                 HashMap<String, Object> record = new HashMap<>();
                 fieldsToRetrieve.forEach(fieldName -> {
                     try {
-                        addResult(record, d, fieldName);
-                    } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+                        record.put(fieldName, ReflectionHelper.getFieldValue(d, fieldName));
+                    } catch (IllegalAccessException | InvocationTargetException e) {
                         e.printStackTrace();
                     } // catch
                 });
                 result.add(record);
 
-                // TODO: 2020-02-16 Check if unique field - no need to look for more hits 
+                if (allSearchFieldsAreUnique)
+                    return result;
             } // if totResult...
         } // while i...
 
@@ -148,12 +172,14 @@ public class Query {
         return result;
     } // execute
 
-    private void addResult(HashMap<String, Object> result, DataObject d, String fieldName) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-        result.put(fieldName, ReflectionHelper.getFieldValue(fromTable, d, fieldName));
-    } // addResult
+    private void addAllFields() {
+        Database db = Database.getInstance();
+        fieldsToRetrieve.remove(0);
+        ReflectionHelper.getAllFields(db.getTable(fromTable).getDataClass()).forEach((k , v) -> fieldsToRetrieve.add(v.getName()));
+    } // addAllFields
 
     private void checkFields(List<String> list) throws FieldNotFoundException {
-        Table t = DiscDB.getInstance().getTable(fromTable);
+        Table<?> t = Database.getInstance().getTable(fromTable);
         Map<String, Field> dataFields = ReflectionHelper.getAllFields(t.getDataClass());
 
         for (String fieldName : list) {

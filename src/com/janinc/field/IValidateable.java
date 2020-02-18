@@ -3,6 +3,8 @@ package com.janinc.field;
 import com.janinc.DataObject;
 import com.janinc.exceptions.ValidationException;
 
+import java.lang.reflect.InvocationTargetException;
+
 /*
 Programmerat av Jan-Erik "Janis" Karlsson 2020-01-31
 Programmering i Java EMMJUH19, EC-Utbildning
@@ -10,5 +12,5 @@ CopyLeft 2020 - JanInc
 */
 @FunctionalInterface
 public interface IValidateable {
-    void validate(DataObject d) throws ValidationException;
+    void validate(DataObject d) throws ValidationException, IllegalAccessException, InvocationTargetException;
 }

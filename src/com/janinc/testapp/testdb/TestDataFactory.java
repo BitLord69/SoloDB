@@ -10,6 +10,7 @@ import com.janinc.DataObject;
 import com.janinc.exceptions.ValidationException;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -29,7 +30,7 @@ public class TestDataFactory {
         if (db.getNumberOfRecords("disc") == 0) createDiscs();
     } // createDiscsIfNone
 
-    private static void createPlastic() throws ValidationException {
+    private static void createPlastic() {
         String regex = "[ ]{5}([\\w\\pS -]+)(\\[.{2,3}\\])";
         DiscDB db = DiscDB.getInstance();
 
@@ -48,7 +49,11 @@ public class TestDataFactory {
         Matcher m = p.matcher(wordsList.get(0));
         while(m.find()) {
             Plastic plastic = new Plastic(m.group(1).trim(), m.group(2).replace("[", "").replaceAll("]", "").trim());
-            db.addRecord(plastic);
+            try {
+                db.addRecord(plastic);
+            } catch (ValidationException | InvocationTargetException | IllegalAccessException e) {
+                e.printStackTrace();
+            }
             System.out.println(plastic);
         } // while m...
     } // createPlastic
@@ -63,7 +68,7 @@ public class TestDataFactory {
             db.addRecord(new Category("Midrange driver", "MD"));
             db.addRecord(new Category("Fairway driver", "FD"));
             db.addRecord(new Category("Distance driver", "DD"));
-        } catch (ValidationException e) {
+        } catch (ValidationException | InvocationTargetException | IllegalAccessException e) {
             e.printStackTrace();
         } // catch
     } // createCategories
@@ -86,7 +91,7 @@ public class TestDataFactory {
             db.addRecord(new Manufacturer("Legacy", "LD"));
             db.addRecord(new Manufacturer("Gateway", "GW"));
             db.addRecord(new Manufacturer("Millenium", "MN"));
-        } catch (ValidationException e) {
+        } catch (ValidationException | InvocationTargetException | IllegalAccessException e) {
             e.printStackTrace();
         } // catch
     } // createManufacturers
@@ -105,24 +110,27 @@ public class TestDataFactory {
             return;
         } // catch
 
-        Object[] values = db.getRecords("plastic").values().toArray();
+        Object[] plastics = db.getRecords("plastic").values().toArray();
+        Object[] categories = db.getRecords("cat").values().toArray();
 
         for (String s : wordsList) {
             String[] parts =  s.split(",");
             Random rand = new Random();
-            Plastic plastic = (Plastic)values[rand.nextInt(values.length)];
+            Plastic plastic = (Plastic)plastics[rand.nextInt(plastics.length)];
+            Category cat = (Category) categories[rand.nextInt(categories.length)];
             Disc disc = new Disc(parts[0],
                                 plastic.getManufacturer(),
                                 Integer.parseInt(parts[1]),
                                 parts[2],
-                                plastic.getName(),
+                                plastic.getId(),
                                 Integer.parseInt(parts[3]),
                                 Integer.parseInt(parts[4]),
                                 Integer.parseInt(parts[5]),
-                                Integer.parseInt(parts[6]));
+                                Integer.parseInt(parts[6]),
+                                cat.getAbbreviation());
             try {
                 db.addRecord(disc);
-            } catch (ValidationException e) {
+            } catch (ValidationException | InvocationTargetException | IllegalAccessException e) {
                 e.printStackTrace();
             }
             System.out.println(disc);

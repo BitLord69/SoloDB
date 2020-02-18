@@ -14,7 +14,7 @@ import com.janinc.annotations.Table;
 public class Plastic extends DataObject {
     public static final long serialVersionUID = 42L;
 
-    @StringField(name = "NAME", maxlength = 50, uniquevalue = true)
+    @StringField(name = "NAME", maxlength = 50, unique = true)
     private String name;
 
     @StringField(lookup=true, lookupTable=Manufacturer.class, lookupForeignKey="abbreviation", lookupForeignField="name", targetField="manuShadow")
