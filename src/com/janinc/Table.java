@@ -3,6 +3,7 @@ package com.janinc;
 import com.janinc.annotations.*;
 import com.janinc.exceptions.ValidationException;
 import com.janinc.field.FieldManager;
+import com.janinc.pubsub.*;
 import com.janinc.util.Debug;
 import com.janinc.util.FileHandler;
 
@@ -14,11 +15,14 @@ import java.lang.reflect.Modifier;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Instant;
+import java.time.temporal.ChronoField;
+import java.time.temporal.TemporalField;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class Table<D extends DataObject> {
+public class Table<D extends DataObject> implements Publisher {
     private final static String DATAFILE_EXTENSION = ".row";
 
     private Class<?> dataClass;
@@ -26,6 +30,7 @@ public class Table<D extends DataObject> {
     private FieldManager fieldManager;
     private HashMap<String, D> dataMap = new HashMap<>();
     private HashMap<String, Reference> references = new HashMap<>();
+    private PublisherService pubService = new PublisherService();
 
     public Table (String name, Class<?> dataClass){
         this.name = name;
@@ -69,6 +74,7 @@ public class Table<D extends DataObject> {
     public boolean deleteRecord(DataObject data){
         String id = data.getId();
         dataMap.remove(id);
+        publish(new Message(Channel.DELETE_RECORD, data));
         return new File(id).delete();
     } // deleteRecord
 
@@ -78,24 +84,29 @@ public class Table<D extends DataObject> {
     } // deleteAll
 
     private void createUniqueId(DataObject data){
-        String fileName = String.format("%s/%d%s", name, System.currentTimeMillis(), DATAFILE_EXTENSION);
+        String fileName = String.format("%s/%d%s", name, Instant.now().get(ChronoField.NANO_OF_SECOND), DATAFILE_EXTENSION);
         ((DataObject)data).setId(fileName);
     } // createUniqueId
 
     public void save(DataObject data) throws ValidationException, InvocationTargetException, IllegalAccessException {
+        boolean newData = false;
         fieldManager.validateData(data);
 
-        if(((DataObject)data).getId().equals("")){
+        if(data.getId().equals("")){
             createUniqueId(data);
+            newData= true;
         } // if DataObject...
 
-        FileHandler.writeFile("", ((DataObject)data).getId(), data);
+        FileHandler.writeFile("", data.getId(), data);
         resolveData((D)data);
+        fieldManager.updateDirtyFields((D)data);
+        publish(new Message(newData ? Channel.ADD_RECORD: Channel.EDIT_RECORD, data));
     } // save
 
     public void refresh(DataObject data) {
         data.refresh();
         fieldManager.updateDirtyFields((D)data);
+        publish(new Message(Channel.REFRESH, data));
     } // refresh
 
     public void saveAll() throws ValidationException, InvocationTargetException, IllegalAccessException {
@@ -118,11 +129,8 @@ public class Table<D extends DataObject> {
     } // getIterator
 
     public void addReference(Reference ref) { references.put(ref.getKey(), ref); }
-
     public HashMap<String, D> getRecords() { return dataMap; }
-
     public String getName() { return name; }
-
     public Class<?> getDataClass() { return dataClass; }
 
     public long getNumberOfRecords() {
@@ -210,6 +218,23 @@ public class Table<D extends DataObject> {
             v.resolve(d);
         });
     } // resolveData
+
+    @Override
+    public void publish(Message message) {
+        pubService.broadcast(message);
+    } // publish
+
+    @Override
+    public void subscribe(Channel channel, Subscriber subscriber) {
+        pubService.addSubscriber(channel, subscriber);
+    } // subscribe
+
+    public PublisherService getPublisherService() { return pubService; }
+
+    @Override
+    public void unsubscribe(Channel channel, Subscriber subscriber) {
+        pubService.removeSubscriber(channel, subscriber);
+    } // unsubscribe
 
     @Override
     public String toString() {

@@ -13,7 +13,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -60,21 +59,30 @@ public class ReflectionHelper {
         return dataFields.get(methodName);
     } // getField
     public static Object runGetter(Field field, DataObject d) throws InvocationTargetException, IllegalAccessException {
-//        String name = "";
-//        try {
-            String name = field.getName();
-//        } catch (NullPointerException ne)
-//        {
-//            System.out.println("ReflectionHelper.runGetter! field: '" + field + "', message:  " + ne.getMessage());
-//        }
+        String name = field.getName();
+        String prefix = field.getType() == boolean.class ? "is" : "get";
 
-        name = "get" + name.substring(0,1).toUpperCase() + name.substring(1).toLowerCase();
+        name = prefix + name.substring(0,1).toUpperCase() + name.substring(1).toLowerCase();
         Method m = getMethod(d.getClass(), name);
         m.setAccessible(true);
         return m.invoke(d);
     } // runGetter
 
+    public static Object runSetter(Field field, DataObject d, Object value) throws InvocationTargetException, IllegalAccessException {
+        String name = field.getName();
+
+        name = "set" + name.substring(0,1).toUpperCase() + name.substring(1).toLowerCase();
+        Method m = getMethod(d.getClass(), name);
+        m.setAccessible(true);
+        return m.invoke(d, value);
+    } // runSetter
+
+
     public static Object getFieldValue(DataObject d, String fieldName) throws IllegalAccessException, InvocationTargetException, DatabaseNotInitializedException {
         return runGetter(getField(d, fieldName), d);
+    } // getFieldValue
+
+    public static Object setFieldValue(DataObject d, String fieldName, Object value) throws IllegalAccessException, InvocationTargetException, DatabaseNotInitializedException {
+        return runSetter(getField(d, fieldName), d, value);
     } // getFieldValue
 } // class ReflectionHelper

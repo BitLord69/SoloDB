@@ -134,7 +134,7 @@ public class Query {
         // TODO: 2020-02-18 Check if we are only using the id-field (or an index field when/if those are implemented), because then we can ask the hashmap for the value without the need to do a proper search
 
         boolean allSearchFieldsAreUnique = checkSearchFieldUniqueness();
-//        allSearchFieldsAreUnique = false;
+//        allSearchFieldsAreUnique = false; // Uncomment this line to disable SSE (search shortcut evaluation)
 
         while (i.hasNext()) {
             boolean totResult;
@@ -153,7 +153,7 @@ public class Query {
             } // if partialResults...
 
             if (totResult) {
-                HashMap<String, Object> record = new HashMap<>();
+                HashMap<String, Object> record = new LinkedHashMap<>();
                 fieldsToRetrieve.forEach(fieldName -> {
                     try {
                         record.put(fieldName, ReflectionHelper.getFieldValue(d, fieldName));

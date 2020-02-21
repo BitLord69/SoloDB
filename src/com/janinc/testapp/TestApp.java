@@ -9,6 +9,9 @@ CopyLeft 2020 - JanInc
 import com.janinc.DataObject;
 import com.janinc.Table;
 import com.janinc.exceptions.*;
+import com.janinc.pubsub.Channel;
+import com.janinc.pubsub.Message;
+import com.janinc.pubsub.Subscriber;
 import com.janinc.query.*;
 import com.janinc.testapp.testdb.*;
 
@@ -16,9 +19,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
-public class TestApp {
-    private static void printDBStatus() {
+public class TestApp implements Subscriber {
+    private void printDBStatus() {
         DiscDB db = DiscDB.getInstance();
         System.out.printf("%n%s%n", db);
 
@@ -28,7 +32,35 @@ public class TestApp {
         });
     } // printDBStatus
 
-    private static void testValidation() {
+    private void saveDisc(Disc d) {
+        DiscDB db = DiscDB.getInstance();
+        try {
+            db.save(d);
+        } // try
+        catch (ValidationException e){
+            System.out.println(e.getMessage());
+            db.refresh(d);
+        } // catch
+        catch (IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
+        } // catch
+    } // saveDisc
+
+    public String generateRandomString () {
+        int leftLimit = 97; // letter 'a'
+        int rightLimit = 122; // letter 'z'
+        int targetStringLength = 10;
+        Random random = new Random();
+
+        String generatedString = random.ints(leftLimit, rightLimit + 1)
+                .limit(targetStringLength)
+                .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+                .toString();
+
+        return generatedString;
+    } // generateRandomString
+
+    private void testValidation() {
         DiscDB db = DiscDB.getInstance();
 
         System.out.println(String.format("%n%s Validation testing! %s%n", "-".repeat(50), "-".repeat(50)));
@@ -54,6 +86,11 @@ public class TestApp {
         saveDisc(d);
         System.out.println("Disc after illegal name: '" + d + "'");
 
+        System.out.println("\nTrying to set a random name for disc '" + d + "'");
+        d.setName(generateRandomString());
+        saveDisc(d);
+        System.out.println("Disc after name change: '" + d + "'");
+
         System.out.println("\nTrying to change the weight (randomly) for '" + d + "'...");
         d.setWeight(140 + (int)(Math.random() * 60));
         System.out.println("New proposed weight: " + d.getWeight());
@@ -69,21 +106,7 @@ public class TestApp {
         } // catch
     } // testValidation
 
-    private static void saveDisc(Disc d) {
-        DiscDB db = DiscDB.getInstance();
-        try {
-            db.save(d);
-        } // try
-        catch (ValidationException e){
-            System.out.println(e.getMessage());
-            db.refresh(d);
-        } // catch
-        catch (IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
-        } // catch
-    } // saveDisc
-
-    private static void testQueries() {
+    private void testQueries() {
         Query q = new Query();
 
         System.out.println(String.format("%s Testing the query engine! %s%n", "-".repeat(50), "-".repeat(50)));
@@ -120,7 +143,7 @@ public class TestApp {
         System.out.println("\nLooking for discs containing 'sed' or/and 'nulla' in the name... only unique field(s) used to search");
         try {
             q = new Query()
-                    .from(Disc.class)
+                    .from("disc")
 //                    .select("*")
                     .select("name", "plastic", "plasticShadow", "weight", "brandShadow")
                     .bindingOperator(BindingOperator.OR)
@@ -137,12 +160,53 @@ public class TestApp {
         res.forEach(System.out::println);
     } // testQueries
 
-    public static void main(String[] args) throws ValidationException {
+    private void subscribeToChangesInDb() {
+        DiscDB db = DiscDB.getInstance();
+
+        db.subscribe(Disc.class, Channel.ADD_RECORD, this);
+        db.subscribe(Disc.class, Channel.EDIT_RECORD, this);
+        db.subscribe(Manufacturer.class, Channel.ADD_RECORD, this);
+        db.subscribe(Manufacturer.class, Channel.EDIT_RECORD, this);
+        db.subscribe(Manufacturer.class, Channel.DELETE_RECORD, this);
+    } // subscribeToChangesInDb
+
+    private void testSubscriptions() {
+        DiscDB db = DiscDB.getInstance();
+
+        System.out.println(String.format("%s Testing the subscription service! %s%n", "-".repeat(50), "-".repeat(50)));
+
+        Manufacturer m = new Manufacturer("A new manufacturer!", "ANM");
+        try {
+            db.addRecord(m);
+        } catch (ValidationException | InvocationTargetException | IllegalAccessException e) {
+            e.printStackTrace();
+        } // catch
+
+        m.setName("Changing the name...");
+        try {
+            db.save(m);
+        } catch (ValidationException | InvocationTargetException | IllegalAccessException e) {
+            db.refresh(m);
+            e.printStackTrace();
+        } // catch
+
+        db.deleteRecord(m);
+    } // testSubscriptions
+
+    @Override
+    public void update(Message message) {
+        System.out.printf("%s%n", message);
+    } // update
+
+    public void run() throws ValidationException {
         DiscDB.getInstance().initializeDB();
         TestDataFactory.createTestRecordsIfNone();
 
         printDBStatus();
         testValidation();
         testQueries();
-    } // main
+
+        subscribeToChangesInDb();
+        testSubscriptions();
+    } // run
 } // class TestApp

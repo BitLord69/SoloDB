@@ -20,9 +20,6 @@ public class Manufacturer extends DataObject {
     @StringField(maxlength = 3, unique = true)
     private String abbreviation;
 
-    public Manufacturer() {
-    }
-
     public Manufacturer(String name, String abbreviation)
     {
         this.name = name;

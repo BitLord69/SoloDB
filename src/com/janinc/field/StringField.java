@@ -12,6 +12,7 @@ import com.janinc.exceptions.*;
 import com.janinc.query.*;
 import com.janinc.query.clause.*;
 import com.janinc.util.ReflectionHelper;
+import com.janinc.util.TextUtil;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -59,15 +60,22 @@ public class StringField<T> extends Field<T> {
             ArrayList<HashMap<String, Object>> res = new ArrayList<>();
 
             try {
+                // Set the old value temporarily, so we won't get the same record back in the search result
+                String tempValue = value;
+                ReflectionHelper.setFieldValue(d, getName(), dirtyValue);
+
                 WhereClause wc = new StringClause(getName(), "==", (String)value);
                 Query q = new Query().from(Database.getInstance().getTableName(d.getClass())).select(getName()).where(wc);
                 res = q.execute();
+
+                // Put the proper/actual value back
+                ReflectionHelper.setFieldValue(d, getName(), value);
             } catch (TableNotFoundException | QueryException | FieldNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
                 e.printStackTrace();
             } // catch
 
             if (res.size() > 0) {
-                throw new ValidationException(getName(), String.format("field is unique, and the value [%s] has already been entered!", value));
+                throw new ValidationException(getName(), String.format("field is unique, and the value [%s] has already been entered!", TextUtil.pimpString(value, TextUtil.LEVEL_STRESSED)));
             } // if res...
         } // if unique...
     } // validate

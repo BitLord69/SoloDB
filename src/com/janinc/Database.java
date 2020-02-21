@@ -3,6 +3,8 @@ package com.janinc;
 import com.janinc.exceptions.*;
 import com.janinc.field.FieldManager;
 import com.janinc.interfaces.ISingletonDB;
+import com.janinc.pubsub.Channel;
+import com.janinc.pubsub.Subscriber;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
@@ -176,6 +178,22 @@ public class Database extends ISingletonDB {
     public FieldManager getFieldManager(Class<? extends DataObject> dataClass) {
         return getTable(dataClass).getFieldManager();
     } // getFieldManager
+
+    public void subscribe(String table, Channel channel, Subscriber subscriber) {
+        getTable(table).getPublisherService().addSubscriber(channel, subscriber);
+    } // subscribe
+
+    public void subscribe(Class<? extends DataObject> dataClass, Channel channel, Subscriber subscriber) {
+        getTable(dataClass).getPublisherService().addSubscriber(channel, subscriber);
+    } // subscribe
+
+    public void unsubscribe(String table, Channel channel, Subscriber subscriber) {
+        getTable(table).getPublisherService().removeSubscriber(channel, subscriber);
+    } // unsubscribe
+
+    public void unsubscribe(Class<? extends DataObject> dataClass, Channel channel, Subscriber subscriber) {
+        getTable(dataClass).getPublisherService().removeSubscriber(channel, subscriber);
+    } // unsubscribe
 
     @Override
     public String toString() {
