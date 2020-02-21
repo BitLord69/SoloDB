@@ -34,7 +34,7 @@ public abstract class Field<T> implements IValidateable, IUniqueField {
         return "name='" + name + '\'' + ", type=" + type;
     }
 //    public abstract boolean validate(T t);
-    public boolean isUniqueField() {
+    public boolean isUnique() {
         return false;
     } // isUniqueField
 } // class Field

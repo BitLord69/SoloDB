@@ -62,7 +62,7 @@ public class ReflectionHelper {
         String name = field.getName();
         String prefix = field.getType() == boolean.class ? "is" : "get";
 
-        name = prefix + name.substring(0,1).toUpperCase() + name.substring(1).toLowerCase();
+        name = prefix + name.substring(0,1).toUpperCase() + name.substring(1); //.toLowerCase();
         Method m = getMethod(d.getClass(), name);
         m.setAccessible(true);
         return m.invoke(d);
@@ -77,12 +77,11 @@ public class ReflectionHelper {
         return m.invoke(d, value);
     } // runSetter
 
-
     public static Object getFieldValue(DataObject d, String fieldName) throws IllegalAccessException, InvocationTargetException, DatabaseNotInitializedException {
         return runGetter(getField(d, fieldName), d);
     } // getFieldValue
 
     public static Object setFieldValue(DataObject d, String fieldName, Object value) throws IllegalAccessException, InvocationTargetException, DatabaseNotInitializedException {
         return runSetter(getField(d, fieldName), d, value);
-    } // getFieldValue
+    } // setFieldValue
 } // class ReflectionHelper

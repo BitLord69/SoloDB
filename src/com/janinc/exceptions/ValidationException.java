@@ -8,7 +8,7 @@ CopyLeft 2020 - JanInc
 
 import com.janinc.util.TextUtil;
 
-public class ValidationException extends Exception {
+public class ValidationException extends RuntimeException {
 
     public ValidationException(String field, String message) {
         super(String.format("%s '%s': %s", TextUtil.pimpString("Validation error for field", TextUtil.LEVEL_WARNING),

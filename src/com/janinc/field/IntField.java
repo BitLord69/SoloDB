@@ -13,6 +13,7 @@ import com.janinc.exceptions.TableNotFoundException;
 import com.janinc.exceptions.ValidationException;
 import com.janinc.query.Query;
 import com.janinc.query.QueryException;
+import com.janinc.query.QueryResult;
 import com.janinc.query.clause.IntClause;
 import com.janinc.query.clause.WhereClause;
 import com.janinc.util.ReflectionHelper;
@@ -44,7 +45,8 @@ public class IntField<D> extends Field<D>{
     public void validate(DataObject d) throws ValidationException, InvocationTargetException, IllegalAccessException {
         int value = (int) ReflectionHelper.getFieldValue(d, getName());
         if (unique && ((int)d.getDirtyValue(getName())) != value) {
-            ArrayList<HashMap<String, Object>> res = new ArrayList<>();
+            QueryResult res = null;
+//            ArrayList<HashMap<String, Object>> res = new ArrayList<>();
 
             try {
                 WhereClause wc = new IntClause(getName(), "==", (int)value);
@@ -54,7 +56,8 @@ public class IntField<D> extends Field<D>{
                 e.printStackTrace();
             } // catch
 
-            if (res.size() > 0)
+            if (res.getNumberOfHits() > 0)
+//            if (res.size() > 0)
                 throw new ValidationException(getName(), String.format("field is unique, and the value [%d] has already been entered!", value));
         } // if unique...
 
@@ -78,7 +81,7 @@ public class IntField<D> extends Field<D>{
     } // updateDirtyField
 
     @Override
-    public boolean isUniqueField() {
+    public boolean isUnique() {
         return unique;
     } // isUniqueField
 

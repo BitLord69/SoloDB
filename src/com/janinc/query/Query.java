@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 
 public class Query {
     private String fromTable = "";
+    private String sortField = "";
     private List<String> fieldsToRetrieve = new ArrayList<>();
     private List<WhereClause> clauses = new ArrayList<>();
     private BindingOperator bindingOperation = BindingOperator.AND;
@@ -28,6 +29,11 @@ public class Query {
         this.fieldsToRetrieve.addAll(Arrays.asList(fields));
         return this;
     } // select
+
+    public Query sort(String sortField) {
+        this.sortField = sortField;
+        return this;
+    } // sort
 
     public Query from(String table) {
         if (!Database.getInstance().tableExists(table)) {
@@ -103,6 +109,14 @@ public class Query {
         if (fieldsToRetrieve.size() == 0) throw new QueryException("No call to select() has been made!");
         if (clauses.size() == 0) throw new QueryException("No Where-clauses present!");
 
+        if (sortField.equals("")) {
+            sortField = fieldsToRetrieve.get(0);
+        } else {
+            List<String> l = new ArrayList<>();
+            l.add(sortField);
+            checkFields(l);
+        } // else
+
         if (fieldsToRetrieve.size() == 1 && fieldsToRetrieve.get(0).equals("*")) {
             addAllFields();
            } // if fieldsToRetrieve...
@@ -122,16 +136,18 @@ public class Query {
             return (bindingOperation == BindingOperator.AND && numUniques == clauses.size());
     } // checkSearchFieldUniqueness
 
-    public ArrayList<HashMap<String, Object>> execute() throws QueryException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+    public QueryResult execute() throws QueryException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+//    public ArrayList<HashMap<String, Object>> execute() throws QueryException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
         checkQueryParameters();
 
         if (Debug.ON) System.out.println("In Query.execute - all fields checked OK!");
 
         Database db = Database.getInstance();
-        ArrayList<HashMap<String, Object>> result = new ArrayList<>();
+        QueryResult result = new QueryResult(sortField);
+//        ArrayList<HashMap<String, Object>> result = new ArrayList<>();
         Iterator<? extends Map.Entry<String, ? extends DataObject>> i = db.getIterator(fromTable);
 
-        // TODO: 2020-02-18 Check if we are only using the id-field (or an index field when/if those are implemented), because then we can ask the hashmap for the value without the need to do a proper search
+        // TODO: 2020-02-18 Check if we are only using the id-field (or an index field when/if those are implemented), since then we can ask the hashmap for the value without the need to do a proper search
 
         boolean allSearchFieldsAreUnique = checkSearchFieldUniqueness();
 //        allSearchFieldsAreUnique = false; // Uncomment this line to disable SSE (search shortcut evaluation)
@@ -147,9 +163,9 @@ public class Query {
 
             totResult = partialResults.get(0);
             if (partialResults.size() > 1) {
-                for (int j = 1; j < partialResults.size(); j++) {
+                // for j...
+                for (int j = 1; j < partialResults.size(); j++)
                     totResult = bindingOperation.function.test(totResult, partialResults.get(j));
-                } // for j...
             } // if partialResults...
 
             if (totResult) {
@@ -161,14 +177,15 @@ public class Query {
                         e.printStackTrace();
                     } // catch
                 });
-                result.add(record);
+//                result.add(record);
+                result.addResultRecord(record);
 
                 if (allSearchFieldsAreUnique)
                     return result;
             } // if totResult...
         } // while i...
 
-        if (Debug.ON) System.out.printf("Fråga: %s, Antal poster i resultat: %d%n", this, result.size());
+        if (Debug.ON) System.out.printf("Fråga: %s, Antal poster i resultat: %d%n", this, result.getNumberOfHits());
         return result;
     } // execute
 
@@ -191,6 +208,6 @@ public class Query {
 
     @Override
     public String toString() {
-        return String.format("Query: fromTable='%s', fields: %s, clauses: %s", fromTable, fieldsToRetrieve, clauses.stream().map(WhereClause::toString).collect(Collectors.joining(", ")));
+        return String.format("Query: fromTable='%s', fields: %s, sort order: %s, clauses: %s", fromTable, fieldsToRetrieve, sortField, clauses.stream().map(WhereClause::toString).collect(Collectors.joining(", ")));
     } // toString
 } // class Query

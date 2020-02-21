@@ -43,7 +43,8 @@ public class Database extends ISingletonDB {
             checkCreateFolder();
     } // Database:Database
 
-    public void initializeDB() {
+    public void initializeDB(Runnable initMethod) {
+        initMethod.run();
         initialized = true;
         createClasses();
     } // initializeDB

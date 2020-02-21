@@ -7,6 +7,7 @@ CopyLeft 2020 - JanInc
 */
 
 import com.janinc.DataObject;
+import com.janinc.Database;
 import com.janinc.Table;
 import com.janinc.exceptions.*;
 import com.janinc.pubsub.Channel;
@@ -15,15 +16,14 @@ import com.janinc.pubsub.Subscriber;
 import com.janinc.query.*;
 import com.janinc.testapp.testdb.*;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.HashMap;
+import java.lang.reflect.InvocationTargetException;
 
 public class TestApp implements Subscriber {
     private void printDBStatus() {
-        DiscDB db = DiscDB.getInstance();
+        Database db = Database.getInstance();
         System.out.printf("%n%s%n", db);
 
         db.getTables().forEach((k, v)-> {
@@ -33,7 +33,8 @@ public class TestApp implements Subscriber {
     } // printDBStatus
 
     private void saveDisc(Disc d) {
-        DiscDB db = DiscDB.getInstance();
+        // TODO: 2020-02-21 Taktiktips - kolla med Dennis om det blir bättre att ha refresh-koden i själva db.save-metoden
+        Database db = Database.getInstance();
         try {
             db.save(d);
         } // try
@@ -46,10 +47,9 @@ public class TestApp implements Subscriber {
         } // catch
     } // saveDisc
 
-    public String generateRandomString () {
+    public String generateRandomString (int targetStringLength) {
         int leftLimit = 97; // letter 'a'
         int rightLimit = 122; // letter 'z'
-        int targetStringLength = 10;
         Random random = new Random();
 
         String generatedString = random.ints(leftLimit, rightLimit + 1)
@@ -61,7 +61,7 @@ public class TestApp implements Subscriber {
     } // generateRandomString
 
     private void testValidation() {
-        DiscDB db = DiscDB.getInstance();
+        Database db = Database.getInstance();
 
         System.out.println(String.format("%n%s Validation testing! %s%n", "-".repeat(50), "-".repeat(50)));
 
@@ -87,7 +87,7 @@ public class TestApp implements Subscriber {
         System.out.println("Disc after illegal name: '" + d + "'");
 
         System.out.println("\nTrying to set a random name for disc '" + d + "'");
-        d.setName(generateRandomString());
+        d.setName(generateRandomString(10));
         saveDisc(d);
         System.out.println("Disc after name change: '" + d + "'");
 
@@ -97,12 +97,16 @@ public class TestApp implements Subscriber {
         saveDisc(d);
         System.out.println("Weight after (hopefully) successful change: " + d + "\n");
 
-        System.out.println("Testing a mandatory field, creating a disc without a name!");
+        System.out.println("Testing to set a too long name!");
+        d.setName(generateRandomString(305));
+        saveDisc(d);
+
+        System.out.println("\nTesting a mandatory field, creating a disc without a name!");
         d = new Disc("", "DC", 180, "", "", 2, 3, 4, 5, "PA");
         try {
             db.addRecord(d);
         } catch (ValidationException | InvocationTargetException | IllegalAccessException e) {
-            System.out.println("Error after trying to add a disc with an empty name....\n" + e.getMessage());
+            System.out.println("Error after trying to add a disc with an empty name...\n" + e.getMessage());
         } // catch
     } // testValidation
 
@@ -110,7 +114,7 @@ public class TestApp implements Subscriber {
         Query q = new Query();
 
         System.out.println(String.format("%s Testing the query engine! %s%n", "-".repeat(50), "-".repeat(50)));
-        System.out.println("Trying the add a non-existing table...");
+        System.out.println("Trying to add a non-existing table...");
 
         try {
             q = q.from("Hej");
@@ -118,12 +122,12 @@ public class TestApp implements Subscriber {
             System.out.println(e.getMessage());
         } // catch
 
-        ArrayList<HashMap<String, Object>> res = new ArrayList<>();
+        QueryResult res = null;
         System.out.println("\nLooking for discs named 'tellus semper interdum' or heavier than 189 grams - not only unique field(s) used to search");
-
         try {
             q = new Query()
                     .from(Disc.class)
+                    .sort("weight")
                     .select("name", "weight", "brandShadow")
                     .bindingOperator(BindingOperator.OR)
                     .where("name", "==", "tellus semper interdum")
@@ -132,20 +136,20 @@ public class TestApp implements Subscriber {
 //                    .where("brandNew", "==", true);
 
             res = q.execute();
-        } catch (TableNotFoundException | QueryException | FieldNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+        } catch (TableNotFoundException | FieldNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         } // catch
 
         System.out.println(q);
-        System.out.println("Records in result: " + res.size());
-        res.forEach(System.out::println);
+        System.out.println("Records in result: " + res.getNumberOfHits());
+        res.getResults().forEach(System.out::println);
 
         System.out.println("\nLooking for discs containing 'sed' or/and 'nulla' in the name... only unique field(s) used to search");
         try {
             q = new Query()
                     .from("disc")
 //                    .select("*")
-                    .select("name", "plastic", "plasticShadow", "weight", "brandShadow")
+                    .select("name", "plastic", "plasticShadow", "weight", "brandNew", "brandShadow")
                     .bindingOperator(BindingOperator.OR)
 //                    .bindingOperator(BindingOperator.AND)
                     .where("name", Operator.CONTAINS, "sed")
@@ -156,12 +160,12 @@ public class TestApp implements Subscriber {
         } // catch
 
         System.out.println(q);
-        System.out.println("Records in result: " + res.size());
-        res.forEach(System.out::println);
+        System.out.println("Records in result: " + res.getNumberOfHits());
+        res.getResults().forEach(System.out::println);
     } // testQueries
 
     private void subscribeToChangesInDb() {
-        DiscDB db = DiscDB.getInstance();
+        Database db = Database.getInstance();
 
         db.subscribe(Disc.class, Channel.ADD_RECORD, this);
         db.subscribe(Disc.class, Channel.EDIT_RECORD, this);
@@ -171,7 +175,7 @@ public class TestApp implements Subscriber {
     } // subscribeToChangesInDb
 
     private void testSubscriptions() {
-        DiscDB db = DiscDB.getInstance();
+        Database db = Database.getInstance();
 
         System.out.println(String.format("%s Testing the subscription service! %s%n", "-".repeat(50), "-".repeat(50)));
 
@@ -198,8 +202,16 @@ public class TestApp implements Subscriber {
         System.out.printf("%s%n", message);
     } // update
 
+    public void initDb() {
+        Database db =  Database.getInstance();
+        db.addClass(Category.class);
+        db.addClass(Manufacturer.class);
+        db.addClass(Plastic.class);
+        db.addClass(Disc.class);
+    } // initDB
+
     public void run() throws ValidationException {
-        DiscDB.getInstance().initializeDB();
+        Database.getInstance().initializeDB(this::initDb);
         TestDataFactory.createTestRecordsIfNone();
 
         printDBStatus();

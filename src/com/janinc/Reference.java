@@ -11,6 +11,7 @@ import com.janinc.exceptions.FieldNotFoundException;
 import com.janinc.exceptions.TableNotFoundException;
 import com.janinc.query.Query;
 import com.janinc.query.QueryException;
+import com.janinc.query.QueryResult;
 import com.janinc.query.clause.FloatClause;
 import com.janinc.query.clause.IntClause;
 import com.janinc.query.clause.StringClause;
@@ -78,7 +79,8 @@ public class Reference {
         try {
             Object value = sourceField.get(d);
             Class<?> sourceClass = sourceField.getType();
-            ArrayList<HashMap<String, Object>> res = new ArrayList<>();
+//            ArrayList<HashMap<String, Object>> res = new ArrayList<>();
+            QueryResult res = null;
 
             try {
                 WhereClause wc = createWhereClause(refKey, sourceClass, value);
@@ -88,8 +90,10 @@ public class Reference {
                 e.printStackTrace();
             } // catch
 
-            if (res.size() > 0) {
-                Object replacementValue = res.get(0).get(refTextKey);
+            if (res.getNumberOfHits() > 0) {
+//            if (res.size() > 0) {
+                Object replacementValue = res.getResults().get(0).get(refTextKey);
+//                Object replacementValue = res.get(0).get(refTextKey);
                 Field replacementField = dataFields.get(targetField);
                 replacementField.setAccessible(true);
                 replacementField.set(d, replacementValue);

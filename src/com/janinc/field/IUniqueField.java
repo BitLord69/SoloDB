@@ -9,6 +9,6 @@ CopyLeft 2020 - JanInc
 import com.janinc.DataObject;
 
 public interface IUniqueField {
-   boolean isUniqueField();
+   boolean isUnique();
    void updateDirtyField(DataObject d);
 }

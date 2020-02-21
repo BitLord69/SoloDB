@@ -43,7 +43,7 @@ public class FieldManager {
     } // getFields
 
     public boolean isFieldUnique(String field) {
-        return getField(field).isUniqueField();
+        return getField(field).isUnique();
     } // isFieldUnique
 
     public void updateDirtyFields(DataObject data) {

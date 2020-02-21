@@ -6,7 +6,7 @@ Programmering i Java EMMJUH19, EC-Utbildning
 CopyLeft 2020 - JanInc
 */
 
-import com.janinc.DataObject;
+import com.janinc.Database;
 import com.janinc.exceptions.ValidationException;
 
 import java.io.IOException;
@@ -14,15 +14,14 @@ import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.List;
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class TestDataFactory {
-    public static void createTestRecordsIfNone() throws ValidationException {
-        DiscDB db = DiscDB.getInstance();
+    public static void createTestRecordsIfNone() {
+        Database db = Database.getInstance();
 
         if (db.getNumberOfRecords(Plastic.class) == 0) createPlastic();
         if (db.getNumberOfRecords("cat") == 0) createCategories();
@@ -32,7 +31,7 @@ public class TestDataFactory {
 
     private static void createPlastic() {
         String regex = "[ ]{5}([\\w\\pS -]+)(\\[.{2,3}\\])";
-        DiscDB db = DiscDB.getInstance();
+        Database db = Database.getInstance();
 
         System.out.println("No plastic in the database, creating plastic...");
 
@@ -59,7 +58,7 @@ public class TestDataFactory {
     } // createPlastic
 
     private static void createCategories() {
-        DiscDB db = DiscDB.getInstance();
+        Database db = Database.getInstance();
 
         System.out.println("No categories in the database, creating categories...");
 
@@ -74,7 +73,7 @@ public class TestDataFactory {
     } // createCategories
 
     private static void createManufacturers() {
-        DiscDB db = DiscDB.getInstance();
+        Database db = Database.getInstance();
 
         System.out.println("No manufacturers in the database, creating manufacturers first...");
 
@@ -97,7 +96,7 @@ public class TestDataFactory {
     } // createManufacturers
 
     private static void createDiscs() {
-        DiscDB db = DiscDB.getInstance();
+        Database db = Database.getInstance();
 
         System.out.println("No plastic in the database, creating plastic...");
 
@@ -132,26 +131,8 @@ public class TestDataFactory {
                 db.addRecord(disc);
             } catch (ValidationException | InvocationTargetException | IllegalAccessException e) {
                 e.printStackTrace();
-            }
+            } // catch
             System.out.println(disc);
         } // for s...
-//        DiscDB db = DiscDB.getInstance();
-//        HashMap<String, ? extends DataObject> hm = db.getRecords("manu");
-//        Iterator<? extends Map.Entry<String, ? extends DataObject>> i =  hm.entrySet().iterator();
-//
-//        System.out.println("No discs in database -> creating some discs...");
-//
-//        try {
-//            DataObject value = (DataObject) (i.next()).getValue();
-//            db.addRecord((DataObject)new Disc("Reko", value.getId(), 172, "White translucent", "Glow", ));
-//
-//            value = (DataObject) (i.next()).getValue();
-//            db.addRecord((DataObject)new Disc("Reko", value.getId(), 174, "Lila", "K1", ));
-//
-//            value = (DataObject) (i.next()).getValue();
-//            db.addRecord((DataObject)new Disc("Firebird", value.getId(), 176, "Orange", "Champion", ));
-//        } catch (ValidationException e) {
-//            e.printStackTrace();
-//        } // catch
     } // createDiscs
 } // class DataFactory

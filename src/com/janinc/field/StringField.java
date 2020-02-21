@@ -40,9 +40,6 @@ public class StringField<T> extends Field<T> {
     public boolean isMandatory() {
         return mandatory;
     }
-    public boolean isUnique() {
-        return unique;
-    }
 
     @Override
     public void validate(DataObject d) throws ValidationException, InvocationTargetException, IllegalAccessException {
@@ -52,16 +49,16 @@ public class StringField<T> extends Field<T> {
             throw new ValidationException(getName(), "field is mandatory, please provide a value!");
 
         if (maxLength > 0 && value.length() > maxLength) {
-            throw new ValidationException(getName(), "field too long, only [" + maxLength +  "] characters allowed!");
+            throw new ValidationException(getName(), String.format("entered string is too long, only [%s] characters allowed!", TextUtil.pimpString(maxLength, TextUtil.LEVEL_STRESSED)));
         } // if value...
 
         String dirtyValue = d.getDirtyValue(getName()) == null ? "" : (String) d.getDirtyValue(getName());
         if (unique && !dirtyValue.equals(value)) {
-            ArrayList<HashMap<String, Object>> res = new ArrayList<>();
+            QueryResult res = null;
+//            ArrayList<HashMap<String, Object>> res = new ArrayList<>();
 
             try {
                 // Set the old value temporarily, so we won't get the same record back in the search result
-                String tempValue = value;
                 ReflectionHelper.setFieldValue(d, getName(), dirtyValue);
 
                 WhereClause wc = new StringClause(getName(), "==", (String)value);
@@ -74,16 +71,12 @@ public class StringField<T> extends Field<T> {
                 e.printStackTrace();
             } // catch
 
-            if (res.size() > 0) {
+            if (res.getNumberOfHits() > 0) {
+//            if (res.size() > 0) {
                 throw new ValidationException(getName(), String.format("field is unique, and the value [%s] has already been entered!", TextUtil.pimpString(value, TextUtil.LEVEL_STRESSED)));
             } // if res...
         } // if unique...
     } // validate
-
-    @Override
-    public String toString() {
-        return String.format("StringField - name: '%s', maxLength: %d, mandatory: %b, unique: %b", getName(), maxLength, mandatory, unique);
-    } // toString
 
     @Override
     public void updateDirtyField(DataObject d) {
@@ -100,7 +93,12 @@ public class StringField<T> extends Field<T> {
     } // updateDirtyField
 
     @Override
-    public boolean isUniqueField() {
+    public boolean isUnique() {
         return unique;
     } // isUniqueField
+
+    @Override
+    public String toString() {
+        return String.format("StringField - name: '%s', maxLength: %d, mandatory: %b, unique: %b", getName(), maxLength, mandatory, unique);
+    } // toString
 } // class StringField

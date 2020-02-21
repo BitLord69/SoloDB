@@ -59,7 +59,7 @@ public class Disc extends DataObject {
     public void setColor(String color) { this.color = color; }
     public String getPlastic() { return plastic; }
     public void setPlastic(String plastic) { this.plastic = plastic; }
-    public String getBrandshadow() { return brandShadow; }
+    public String getBrandShadow() { return brandShadow; }
     public int getSpeed() { return speed; }
     public void setSpeed(int speed) { this.speed = speed; }
     public int getGlide() { return glide; }
@@ -69,17 +69,16 @@ public class Disc extends DataObject {
     public int getFade() { return fade; }
     public void setFade(int fade) { this.fade = fade; }
     public boolean isBrandNew() { return brandNew; }
-    public boolean getBrandnew() { return brandNew; }
     public void setBrandNew(boolean brandNew) { this.brandNew = brandNew; }
     public String getCategory() { return category; }
     public void setCategory(String category) { this.category = category; }
-    public void setCategoryshadow(String categoryShadow) { this.categoryShadow = categoryShadow; }
-    private String getCategoryshadow() { return categoryShadow; }
-    private String getPlasticshadow() { return plasticShadow; }
+    public void setCategoryShadow(String categoryShadow) { this.categoryShadow = categoryShadow; }
+    private String getCategoryShadow() { return categoryShadow; }
+    private String getPlasticShadow() { return plasticShadow; }
 
     @Override
     public String toString() {
         return String.format("%s, manufactured by: %s (%s), weight: %d, color: %s, Plastic: %s, fade: %d, new: %b, Category: %s",
-                getName(), getBrandshadow(), getBrand(), getWeight(), getColor(), getPlastic(), getFade(), isBrandNew(), getCategoryshadow());
+                getName(), getBrandShadow(), getBrand(), getWeight(), getColor(), getPlastic(), getFade(), isBrandNew(), getCategoryShadow());
     } // toString
 } // class Disc

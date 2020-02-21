@@ -7,8 +7,6 @@ CopyLeft 2020 - JanInc
 */
 
 import com.janinc.exceptions.ValidationException;
-import com.janinc.testapp.testdb.DiscDB;
-import com.janinc.testapp.testdb.TestDataFactory;
 
 public class Main {
     public static void main(String[] args) throws ValidationException {
