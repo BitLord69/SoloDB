@@ -1,14 +1,11 @@
 package com.janinc;
 
-import com.janinc.annotations.AnnotationHandlerParams;
-import com.janinc.annotations.FloatField;
-import com.janinc.annotations.IntField;
-import com.janinc.annotations.StringField;
-import com.janinc.exceptions.ValidationException;
-import com.janinc.field.FieldManager;
+import com.janinc.util.*;
 import com.janinc.pubsub.*;
-import com.janinc.util.Debug;
-import com.janinc.util.FileHandler;
+import com.janinc.exceptions.*;
+import com.janinc.annotations.*;
+import com.janinc.field.FieldManager;
+import com.janinc.annotations.AnnotationHandlerParams;
 
 import java.io.File;
 import java.io.IOException;
@@ -148,7 +145,7 @@ public class Table<D extends DataObject> implements Publisher {
 
         for (Field field: fields) {
             AnnotationHandlerParams ahp = getAnnotationParams(field);
-
+            // TODO: 2020-02-23 Check for multiple annotations for the field - if Lookup, Unique (index?) should be an annotation of it's own
             if (ahp != null) {
                 Annotation annotation = field.getAnnotation(ahp.getFieldClass());
                 if (annotation != null) {
@@ -190,31 +187,30 @@ public class Table<D extends DataObject> implements Publisher {
     } // handleStringField
 
     private AnnotationHandlerParams getAnnotationParams(Field field) {
-        Object fieldClass = field.getType();
-        AnnotationHandlerParams ahp = new AnnotationHandlerParams();
-
         if (Debug.ON) System.out.println("I table.getAnnotationParams: namn="  + field.getName() + ", typ=" + field.getType());
-
         if (Modifier.isStatic(field.getModifiers())){
             if (Debug.ON) System.out.println("Static field encountered, skipping...");
             return null;
         } // if Modifier...
 
+//        Object fieldClass = field.getType();
+        AnnotationHandlerParams ahp = new AnnotationHandlerParams();
+
         if(field.getType().isAssignableFrom(String.class)) {
             ahp.setFieldClass(StringField.class);
             ahp.setHandler(this::handleStringField);
             return ahp;
-        }
+        } // String
         else if(field.getType().isAssignableFrom(Float.class)) {
             ahp.setFieldClass(FloatField.class);
             ahp.setHandler(this::handleFloatField);
             return ahp;
-        }
+        } // flaot
         else if (field.getType() == int.class) {
             ahp.setFieldClass(IntField.class);
             ahp.setHandler(this::handleIntField);
             return ahp;
-        }
+        } // int
 
         return null;
     } // getAnnotationParams
@@ -229,13 +225,12 @@ public class Table<D extends DataObject> implements Publisher {
     public void publish(Message message) {
         pubService.broadcast(message);
     } // publish
+    public PublisherService getPublisherService() { return pubService; }
 
     @Override
     public void subscribe(Channel channel, Subscriber subscriber) {
         pubService.addSubscriber(channel, subscriber);
     } // subscribe
-
-    public PublisherService getPublisherService() { return pubService; }
 
     @Override
     public void unsubscribe(Channel channel, Subscriber subscriber) {

@@ -20,8 +20,6 @@ import com.janinc.util.ReflectionHelper;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 public class Reference {
@@ -90,7 +88,7 @@ public class Reference {
                 e.printStackTrace();
             } // catch
 
-            if (res.getNumberOfHits() > 0) {
+            if (res.size() > 0) {
 //            if (res.size() > 0) {
                 Object replacementValue = res.getResults().get(0).get(refTextKey);
 //                Object replacementValue = res.get(0).get(refTextKey);

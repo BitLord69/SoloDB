@@ -15,8 +15,6 @@ import com.janinc.util.ReflectionHelper;
 import com.janinc.util.TextUtil;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 public class StringField<T> extends Field<T> {
     private int maxLength = 0;
@@ -55,14 +53,15 @@ public class StringField<T> extends Field<T> {
         String dirtyValue = d.getDirtyValue(getName()) == null ? "" : (String) d.getDirtyValue(getName());
         if (unique && !dirtyValue.equals(value)) {
             QueryResult res = null;
-//            ArrayList<HashMap<String, Object>> res = new ArrayList<>();
-
             try {
                 // Set the old value temporarily, so we won't get the same record back in the search result
                 ReflectionHelper.setFieldValue(d, getName(), dirtyValue);
 
                 WhereClause wc = new StringClause(getName(), "==", (String)value);
-                Query q = new Query().from(Database.getInstance().getTableName(d.getClass())).select(getName()).where(wc);
+                Query q = new Query().
+                        from(Database.getInstance().getTableName(d.getClass())).
+                        select(getName()).
+                        where(wc);
                 res = q.execute();
 
                 // Put the proper/actual value back
@@ -71,9 +70,10 @@ public class StringField<T> extends Field<T> {
                 e.printStackTrace();
             } // catch
 
-            if (res.getNumberOfHits() > 0) {
-//            if (res.size() > 0) {
-                throw new ValidationException(getName(), String.format("field is unique, and the value [%s] has already been entered!", TextUtil.pimpString(value, TextUtil.LEVEL_STRESSED)));
+            if (res.size() > 0) {
+                throw new ValidationException(getName(),
+                        String.format("field is unique, and the value [%s] has already been entered!",
+                                TextUtil.pimpString(value, TextUtil.LEVEL_STRESSED)));
             } // if res...
         } // if unique...
     } // validate
@@ -95,7 +95,7 @@ public class StringField<T> extends Field<T> {
     @Override
     public boolean isUnique() {
         return unique;
-    } // isUniqueField
+    } // isUnique
 
     @Override
     public String toString() {

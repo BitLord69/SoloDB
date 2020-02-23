@@ -13,17 +13,9 @@ public class AnnotationHandlerParams {
 
     private BiConsumer handler;
 
-    public AnnotationHandlerParams() {
-    }
-
-    public Class getFieldClass() {
-        return fieldClass;
-    }
-
-    public void setFieldClass(Class fieldClass) {
-        this.fieldClass = fieldClass;
-    }
-
+    public AnnotationHandlerParams() { }
+    public Class getFieldClass() { return fieldClass; }
+    public void setFieldClass(Class fieldClass) { this.fieldClass = fieldClass; }
     public BiConsumer getHandler() {
         return handler;
     }

@@ -59,7 +59,7 @@ public class TextUtil {
     } // pimpString
 
     public static String pimpString(double number, int level) {
-        return pimpString(String.format("%.5f", number), level);
+        return pimpString(String.format("%.2f", number), level);
     } // pimpString
 
 }

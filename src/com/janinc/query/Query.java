@@ -185,7 +185,7 @@ public class Query {
             } // if totResult...
         } // while i...
 
-        if (Debug.ON) System.out.printf("Fråga: %s, Antal poster i resultat: %d%n", this, result.getNumberOfHits());
+        if (Debug.ON) System.out.printf("Fråga: %s, Antal poster i resultat: %d%n", this, result.size());
         return result;
     } // execute
 

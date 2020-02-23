@@ -34,6 +34,6 @@ public class QueryResult {
         return (U) (value == null ? ""  : value);
     } // getFieldValue
 
-    public int getNumberOfHits() { return result.size(); } // getNumberOfHits
+    public int size() { return result.size(); } // size
     public boolean isEmpty() { return result.size()  == 0; } // isEmpty
 } // class QueryResult

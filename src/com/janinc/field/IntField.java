@@ -8,19 +8,14 @@ CopyLeft 2020 - JanInc
 
 import com.janinc.DataObject;
 import com.janinc.Database;
-import com.janinc.exceptions.FieldNotFoundException;
-import com.janinc.exceptions.TableNotFoundException;
-import com.janinc.exceptions.ValidationException;
-import com.janinc.query.Query;
-import com.janinc.query.QueryException;
-import com.janinc.query.QueryResult;
+import com.janinc.exceptions.*;
+import com.janinc.query.*;
 import com.janinc.query.clause.IntClause;
 import com.janinc.query.clause.WhereClause;
 import com.janinc.util.ReflectionHelper;
+import com.janinc.util.TextUtil;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 public class IntField<D> extends Field<D>{
     private int minValue = Integer.MIN_VALUE;
@@ -35,7 +30,7 @@ public class IntField<D> extends Field<D>{
         this(name);
         minValue = annotation.minvalue();
         maxValue = annotation.maxvalue();
-        unique = annotation.uniqueValue();
+        unique = annotation.unique();
     }
 
     protected boolean greaterThan(Object op1, Object op2) { return (int)op1 > (int)op2; } // greaterThan
@@ -46,23 +41,24 @@ public class IntField<D> extends Field<D>{
         int value = (int) ReflectionHelper.getFieldValue(d, getName());
         if (unique && ((int)d.getDirtyValue(getName())) != value) {
             QueryResult res = null;
-//            ArrayList<HashMap<String, Object>> res = new ArrayList<>();
 
             try {
-                WhereClause wc = new IntClause(getName(), "==", (int)value);
+                WhereClause wc = new IntClause(getName(), "==", value);
                 Query q = new Query().from(Database.getInstance().getTableName(d.getClass())).select(getName()).where(wc);
                 res = q.execute();
             } catch (TableNotFoundException | QueryException | FieldNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
                 e.printStackTrace();
             } // catch
 
-            if (res.getNumberOfHits() > 0)
-//            if (res.size() > 0)
-                throw new ValidationException(getName(), String.format("field is unique, and the value [%d] has already been entered!", value));
+            if (res.size() > 0)
+                throw new ValidationException(getName(), String.format("field is unique, and the value [%s] has already been entered!", TextUtil.pimpString(value, TextUtil.LEVEL_STRESSED)));
         } // if unique...
 
         if (value < minValue || value > maxValue) {
-            throw new ValidationException(getName(), String.format("value has to be within [%d] and [%d], but is %d!", minValue, maxValue, value));
+            throw new ValidationException(getName(), String.format("value has to be within [%s] and [%s], but is %s!",
+                    TextUtil.pimpString(minValue, TextUtil.LEVEL_INFO),
+                    TextUtil.pimpString(maxValue, TextUtil.LEVEL_INFO),
+                    TextUtil.pimpString(value, TextUtil.LEVEL_STRESSED)));
         } // if value...
     } // validate
 

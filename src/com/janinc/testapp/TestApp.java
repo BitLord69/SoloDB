@@ -141,7 +141,7 @@ public class TestApp implements Subscriber {
         } // catch
 
         System.out.println(q);
-        System.out.println("Records in result: " + res.getNumberOfHits());
+        System.out.println("Records in result: " + res.size());
         res.getResults().forEach(System.out::println);
 
         System.out.println("\nLooking for discs containing 'sed' or/and 'nulla' in the name... only unique field(s) used to search");
@@ -160,7 +160,7 @@ public class TestApp implements Subscriber {
         } // catch
 
         System.out.println(q);
-        System.out.println("Records in result: " + res.getNumberOfHits());
+        System.out.println("Records in result: " + res.size());
         res.getResults().forEach(System.out::println);
     } // testQueries
 

@@ -9,6 +9,7 @@ CopyLeft 2020 - JanInc
 import com.janinc.DataObject;
 import com.janinc.exceptions.ValidationException;
 import com.janinc.util.ReflectionHelper;
+import com.janinc.util.TextUtil;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -33,24 +34,23 @@ public class FloatField<T> extends Field<T> {
         float value = (float) ReflectionHelper.getFieldValue(d, getName());
 
         if (value < minValue || value > maxValue) {
-            throw new ValidationException(getName(), String.format("value has to be within [%.2f] and [%.2f], but is %.2f!", minValue, maxValue, value));
+            throw new ValidationException(getName(), String.format("value has to be within [%s] and [%s], but is %s!",
+                    TextUtil.pimpString(minValue, TextUtil.LEVEL_INFO),
+                    TextUtil.pimpString(maxValue, TextUtil.LEVEL_INFO),
+                    TextUtil.pimpString(value, TextUtil.LEVEL_STRESSED)));
         } // if value...
     } // validate
 
     @Override
     public void updateDirtyField(DataObject d) {
-        return;
-        // Keep for now in case I decide to give floats the possibility of unique value
-//        if (!unique) return;
-//
-//        float value = 0.0f;
-//        try {
-//            value = (float) ReflectionHelper.getFieldValue(d, getName());
-//        } catch (IllegalAccessException | InvocationTargetException e) {
-//            e.printStackTrace();
-//        }  // catch
-//
-//        d.setDirtyValue(getName(), value);
+        float value = 0.0f;
+        try {
+            value = (float)ReflectionHelper.getFieldValue(d, getName());
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
+        }  // catch
+
+        d.setDirtyValue(getName(), value);
     } // updateDirtyField
 
     @Override
