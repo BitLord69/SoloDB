@@ -10,5 +10,8 @@ public enum Channel {
     ADD_RECORD,
     DELETE_RECORD,
     EDIT_RECORD,
-    REFRESH;
+    REFRESH,
+    REFERRER_CHANGED,
+    REFERRER_DELETE,
+    CASCADE_DELETE;
 } // enum Channel

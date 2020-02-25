@@ -6,13 +6,17 @@ Programmering i Java EMMJUH19, EC-Utbildning
 CopyLeft 2020 - JanInc
 */
 
-import java.util.HashMap;
-import java.util.HashSet;
+import com.janinc.pubsub.iface.Subscriber;
+import com.janinc.pubsub.iface.AcknowledgeSubscriber;
+
 import java.util.Map;
 import java.util.Set;
+import java.util.HashMap;
+import java.util.HashSet;
 
 public class PublisherService {
     private Map<Channel, Set<Subscriber>> subscribersChannelMap = new HashMap<>();
+    private Map<Channel, Set<AcknowledgeSubscriber>> acknowledgeSubscribersChannelMap = new HashMap<>();
 
     public void addSubscriber(Channel channel, Subscriber subscriber){
 
@@ -27,6 +31,18 @@ public class PublisherService {
         } // else
     } // addSubscriber
 
+    public void addAcknowledgeSubscriber(Channel channel, AcknowledgeSubscriber subscriber){
+        if(acknowledgeSubscribersChannelMap.containsKey(channel)){
+            Set<AcknowledgeSubscriber> subscribers = acknowledgeSubscribersChannelMap.get(channel);
+            subscribers.add(subscriber);
+            acknowledgeSubscribersChannelMap.put(channel, subscribers);
+        } else {
+            Set<AcknowledgeSubscriber> subscribers = new HashSet<AcknowledgeSubscriber>();
+            subscribers.add(subscriber);
+            acknowledgeSubscribersChannelMap.put(channel, subscribers);
+        } // else
+    } // addAcknowledgeSubscriber
+
     public void removeSubscriber(Channel channel, Subscriber subscriber){
         if (subscribersChannelMap.containsKey(channel)){
             Set<Subscriber> subscribers = subscribersChannelMap.get(channel);
@@ -35,14 +51,35 @@ public class PublisherService {
         } // if subscribersChannelMap...
     } // removeSubscriber
 
+     public void removeAcknowledgeSubscriber(Channel channel, AcknowledgeSubscriber subscriber){
+        if (acknowledgeSubscribersChannelMap.containsKey(channel)){
+        Set<AcknowledgeSubscriber> subscribers = acknowledgeSubscribersChannelMap.get(channel);
+        subscribers.remove(subscriber);
+            acknowledgeSubscribersChannelMap.put(channel, subscribers);
+    } // if acknowledgeSubscribersChannelMap...
+} // removeAcknowledgeSubscriber
+
     public void broadcast(Message message){
         Channel channel = message.getChannel();
         Set<Subscriber> subscribersOfChannel = subscribersChannelMap.get(channel);
 
         if (subscribersOfChannel != null) {
             for (Subscriber subscriber : subscribersOfChannel) {
-                subscriber.update(message);
+                subscriber.receiveSubscription(message);
             } // for Subscriber...
         } // if subscribersOfChannel...
     } // broadcast
+
+    public boolean broadcastAndWait(Message message){
+        Channel channel = message.getChannel();
+        Set<AcknowledgeSubscriber> subscribersOfChannel = acknowledgeSubscribersChannelMap.get(channel);
+
+        if (subscribersOfChannel != null) {
+            for (AcknowledgeSubscriber subscriber : subscribersOfChannel) {
+                if (!subscriber.receiveSubscriptionAndAcknowledge(message)) return false;
+            } // for Subscriber...
+        } // if subscribersOfChannel...
+
+        return true;
+    } // broadcastAndWait
 } // class PublisherService

@@ -71,10 +71,16 @@ public class ReflectionHelper {
     public static Object runSetter(Field field, DataObject d, Object value) throws InvocationTargetException, IllegalAccessException {
         String name = field.getName();
 
-        name = "set" + name.substring(0,1).toUpperCase() + name.substring(1).toLowerCase();
+        name = "set" + name.substring(0,1).toUpperCase() + name.substring(1);//.toLowerCase();
         Method m = getMethod(d.getClass(), name);
-        m.setAccessible(true);
-        return m.invoke(d, value);
+        try {
+            m.setAccessible(true);
+            return m.invoke(d, value);
+        } catch (NullPointerException e) {
+            System.out.println("runSetter! name = " + name + " Messsage: "  + e.getMessage());
+            e.printStackTrace();
+            throw e;
+        } // catch
     } // runSetter
 
     public static Object getFieldValue(DataObject d, String fieldName) throws IllegalAccessException, InvocationTargetException, DatabaseNotInitializedException {

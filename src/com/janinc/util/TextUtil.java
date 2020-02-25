@@ -6,6 +6,9 @@ Programmering i Java EMMJUH19, EC-Utbildning
 CopyLeft 2020 - JanInc
 */
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 public class TextUtil {
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_BLACK = "\u001B[30m";
@@ -62,4 +65,18 @@ public class TextUtil {
         return pimpString(String.format("%.2f", number), level);
     } // pimpString
 
-}
+    public static String titleCase(String inputString) {
+        if (inputString == null || inputString.isEmpty()) {
+            return inputString;
+        } // if inputString...
+
+        return Arrays
+                .stream(inputString.split(" "))
+                .map(word -> word.isEmpty()
+                        ? word
+                        : Character.toTitleCase(word.charAt(0)) + word
+                        .substring(1)
+                        .toLowerCase())
+                .collect(Collectors.joining(" "));
+    } // titleCase
+} // class TExtUtil

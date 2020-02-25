@@ -3,34 +3,140 @@
   <ID>JAVA</ID>
   <OriginalElement>com.janinc</OriginalElement>
   <nodes>
-    <node x="201.0" y="0.0">com.janinc.DataObject</node>
-    <node x="166.0" y="301.0">com.janinc.util</node>
-    <node x="180.0" y="227.0">com.janinc.field</node>
-    <node x="0.0" y="375.0">com.janinc.Reference</node>
-    <node x="27.0" y="79.0">com.janinc.Database</node>
-    <node x="218.5" y="79.0">com.janinc.Table</node>
-    <node x="0.0" y="301.0">com.janinc.query</node>
-    <node x="0.0" y="0.0">com.janinc.interfaces</node>
-    <node x="0.0" y="153.0">com.janinc.annotations</node>
-    <node x="0.0" y="227.0">com.janinc.testapp</node>
-    <node x="208.0" y="153.0">com.janinc.exceptions</node>
+    <node x="396.5" y="412.0">com.janinc.interfaces.ISingletonDB</node>
+    <node x="995.0" y="1120.0">com.janinc.util.Debug</node>
+    <node x="558.0" y="1296.0">com.janinc.annotations.StringField</node>
+    <node x="419.0" y="34.0">com.janinc.pubsub.iface.Publisher</node>
+    <node x="0.0" y="1296.0">com.janinc.exceptions</node>
+    <node x="8.0" y="866.0">com.janinc.query.BindingOperator</node>
+    <node x="1031.125" y="198.0">com.janinc.field.IValidateable</node>
+    <node x="-10.0" y="431.0">com.janinc.query.Operator</node>
+    <node x="4.0" y="1022.0">com.janinc.field.Type</node>
+    <node x="-1.0" y="703.5">com.janinc.query.Query</node>
+    <node x="213.0" y="34.0">com.janinc.pubsub.iface.AcknowledgePublisher</node>
+    <node x="386.0" y="881.0">com.janinc.query.clause.BooleanClause</node>
+    <node x="659.0" y="150.0">com.janinc.field.FieldManager</node>
+    <node x="559.0" y="893.0">com.janinc.query.clause.IntClause</node>
+    <node x="0.0" y="34.0">com.janinc.pubsub.iface.AcknowledgeSubscriber</node>
+    <node x="1122.0" y="1119.0">com.janinc.util.TextUtil</node>
+    <node x="811.0" y="1193.0">com.janinc.util.ReflectionHelper</node>
+    <node x="201.0" y="1296.0">com.janinc.query.QueryException</node>
+    <node x="982.0" y="721.0">com.janinc.query.QueryResult</node>
+    <node x="714.0" y="990.0">com.janinc.pubsub.PublisherService</node>
+    <node x="684.0" y="0.0">com.janinc.DataObject</node>
+    <node x="-2.5" y="149.5">com.janinc.Reference</node>
+    <node x="324.0" y="147.0">com.janinc.Table</node>
+    <node x="962.0" y="402.0">com.janinc.field.IntField</node>
+    <node x="10.0" y="1190.0">com.janinc.annotations.AnnotationHandlerParams</node>
+    <node x="548.0" y="34.0">com.janinc.pubsub.iface.Subscriber</node>
+    <node x="810.0" y="1120.0">com.janinc.util.RandomEnum</node>
+    <node x="609.0" y="722.5">com.janinc.query.clause.WhereClause</node>
+    <node x="881.125" y="198.0">com.janinc.field.IUniqueField</node>
+    <node x="1110.0" y="413.0">com.janinc.field.FloatField</node>
+    <node x="984.0" y="1192.0">com.janinc.util.FileHandler</node>
+    <node x="435.0" y="990.0">com.janinc.pubsub.Message</node>
+    <node x="688.0" y="893.0">com.janinc.query.clause.FloatClause</node>
+    <node x="561.0" y="1173.0">com.janinc.annotations.Table</node>
+    <node x="288.0" y="491.0">com.janinc.Database</node>
+    <node x="559.0" y="1254.0">com.janinc.annotations.FloatField</node>
+    <node x="793.0" y="402.0">com.janinc.field.StringField</node>
+    <node x="971.5" y="277.0">com.janinc.field.Field</node>
+    <node x="831.0" y="893.0">com.janinc.query.clause.StringClause</node>
+    <node x="561.0" y="1215.0">com.janinc.annotations.IntField</node>
+    <node x="285.5" y="985.5">com.janinc.pubsub.Channel</node>
   </nodes>
   <notes />
   <edges>
-    <edge source="com.janinc.Table" target="com.janinc.DataObject">
-      <point x="0.0" y="-14.5" />
+    <edge source="com.janinc.Table" target="com.janinc.pubsub.iface.Publisher">
+      <point x="0.0" y="-103.5" />
       <point x="0.0" y="14.5" />
     </edge>
-    <edge source="com.janinc.Database" target="com.janinc.interfaces">
+    <edge source="com.janinc.field.IntField" target="com.janinc.field.Field">
+      <point x="0.0" y="-48.5" />
+      <point x="0.0" y="37.5" />
+    </edge>
+    <edge source="com.janinc.query.clause.FloatClause" target="com.janinc.query.clause.WhereClause">
       <point x="0.0" y="-14.5" />
+      <point x="749.5" y="861.0" />
+      <point x="699.5" y="861.0" />
+      <point x="18.0" y="48.5" />
+    </edge>
+    <edge source="com.janinc.field.Field" target="com.janinc.field.IValidateable">
+      <point x="27.25" y="-37.5" />
+      <point x="1053.25" y="252.0" />
+      <point x="1099.625" y="252.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="com.janinc.Table" target="com.janinc.pubsub.iface.AcknowledgeSubscriber">
+      <point x="-119.60000000000002" y="-103.5" />
+      <point x="353.9" y="127.0" />
+      <point x="96.5" y="127.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="com.janinc.Database" target="com.janinc.interfaces.ISingletonDB">
+      <point x="0.0" y="-81.5" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="com.janinc.Table" target="com.janinc.DataObject">
+      <point x="119.60000000000002" y="-103.5" />
+      <point x="593.1" y="127.0" />
+      <point x="804.5" y="127.0" />
+      <point x="0.0" y="48.5" />
+    </edge>
+    <edge source="com.janinc.field.FloatField" target="com.janinc.field.Field">
+      <point x="0.0" y="-37.5" />
+      <point x="1172.0" y="377.0" />
+      <point x="1062.3333333333335" y="377.0" />
+      <point x="36.33333333333334" y="37.5" />
+    </edge>
+    <edge source="com.janinc.field.StringField" target="com.janinc.field.Field">
+      <point x="0.0" y="-48.5" />
+      <point x="867.5" y="377.0" />
+      <point x="989.6666666666667" y="377.0" />
+      <point x="-36.33333333333334" y="37.5" />
+    </edge>
+    <edge source="com.janinc.query.clause.IntClause" target="com.janinc.query.clause.WhereClause">
+      <point x="0.0" y="-14.5" />
+      <point x="613.5" y="861.0" />
+      <point x="663.5" y="861.0" />
+      <point x="-18.0" y="48.5" />
+    </edge>
+    <edge source="com.janinc.Table" target="com.janinc.pubsub.iface.AcknowledgePublisher">
+      <point x="-59.80000000000007" y="-103.5" />
+      <point x="413.69999999999993" y="117.0" />
+      <point x="306.0" y="117.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="com.janinc.field.Field" target="com.janinc.field.IUniqueField">
+      <point x="-27.25" y="-37.5" />
+      <point x="998.75" y="252.0" />
+      <point x="946.125" y="252.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="com.janinc.query.clause.StringClause" target="com.janinc.query.clause.WhereClause">
+      <point x="0.0" y="-14.5" />
+      <point x="896.0" y="851.0" />
+      <point x="735.5" y="851.0" />
+      <point x="54.0" y="48.5" />
+    </edge>
+    <edge source="com.janinc.query.clause.BooleanClause" target="com.janinc.query.clause.WhereClause">
+      <point x="0.0" y="-26.5" />
+      <point x="462.5" y="851.0" />
+      <point x="627.5" y="851.0" />
+      <point x="-54.0" y="48.5" />
+    </edge>
+    <edge source="com.janinc.Table" target="com.janinc.pubsub.iface.Subscriber">
+      <point x="59.799999999999955" y="-103.5" />
+      <point x="533.3" y="117.0" />
+      <point x="606.0" y="117.0" />
       <point x="0.0" y="14.5" />
     </edge>
   </edges>
-  <settings layout="Hierarchic Group" zoom="0.6281179138321995" x="435.5" y="431.00000000000006" />
-  <SelectedNodes>
-    <node>com.janinc.Database</node>
-  </SelectedNodes>
-  <Categories />
+  <settings layout="Hierarchic Group" zoom="1.0" x="637.0" y="423.0" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Fields</Category>
+  </Categories>
   <SCOPE>All</SCOPE>
   <VISIBILITY>private</VISIBILITY>
 </Diagram>

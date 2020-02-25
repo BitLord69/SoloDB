@@ -8,6 +8,7 @@ CopyLeft 2020 - JanInc
 
 import com.janinc.Database;
 import com.janinc.exceptions.ValidationException;
+import com.janinc.util.TextUtil;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -52,7 +53,7 @@ public class TestDataFactory {
                 db.addRecord(plastic);
             } catch (ValidationException | InvocationTargetException | IllegalAccessException e) {
                 e.printStackTrace();
-            }
+            } // catch
             System.out.println(plastic);
         } // while m...
     } // createPlastic
@@ -117,7 +118,7 @@ public class TestDataFactory {
             Random rand = new Random();
             Plastic plastic = (Plastic)plastics[rand.nextInt(plastics.length)];
             Category cat = (Category) categories[rand.nextInt(categories.length)];
-            Disc disc = new Disc(parts[0],
+            Disc disc = new Disc(TextUtil.titleCase(parts[0]),
                                 plastic.getManufacturer(),
                                 Integer.parseInt(parts[1]),
                                 parts[2],

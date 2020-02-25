@@ -137,14 +137,12 @@ public class Query {
     } // checkSearchFieldUniqueness
 
     public QueryResult execute() throws QueryException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-//    public ArrayList<HashMap<String, Object>> execute() throws QueryException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
         checkQueryParameters();
 
         if (Debug.ON) System.out.println("In Query.execute - all fields checked OK!");
 
         Database db = Database.getInstance();
         QueryResult result = new QueryResult(sortField);
-//        ArrayList<HashMap<String, Object>> result = new ArrayList<>();
         Iterator<? extends Map.Entry<String, ? extends DataObject>> i = db.getIterator(fromTable);
 
         // TODO: 2020-02-18 Check if we are only using the id-field (or an index field when/if those are implemented), since then we can ask the hashmap for the value without the need to do a proper search
@@ -177,7 +175,6 @@ public class Query {
                         e.printStackTrace();
                     } // catch
                 });
-//                result.add(record);
                 result.addResultRecord(record);
 
                 if (allSearchFieldsAreUnique)
@@ -208,6 +205,10 @@ public class Query {
 
     @Override
     public String toString() {
-        return String.format("Query: fromTable='%s', fields: %s, sort order: %s, clauses: %s", fromTable, fieldsToRetrieve, sortField, clauses.stream().map(WhereClause::toString).collect(Collectors.joining(", ")));
+        return String.format("Query: fromTable='%s', fields: %s, sort order: %s, clauses: %s",
+                fromTable,
+                fieldsToRetrieve,
+                sortField,
+                clauses.stream().map(WhereClause::toString).collect(Collectors.joining(", ")));
     } // toString
 } // class Query

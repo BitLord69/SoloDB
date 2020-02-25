@@ -36,11 +36,11 @@ public class Plastic extends DataObject {
     }
     public String getManufacturer() { return manufacturer; }
     public void setManufacturer(String manufacturer) { this.manufacturer = manufacturer; }
-    public void setManushadow(String manushadow) { this.manuShadow = manuShadow; }
+    public void setManuShadow(String manuShadow) { this.manuShadow = manuShadow; }
 
     @Override
     public String toString() {
         String s = manufacturer.isBlank() ?  " -- Manufacturer empty! -- " : manufacturer;
-        return name + ", " + s + ", " + manuShadow;
+        return String.format("Name: '%s', Manufactured by: '%s' (%s)", name, manuShadow, s);
     } // toString
 } // class User

@@ -4,7 +4,8 @@ import com.janinc.exceptions.*;
 import com.janinc.field.FieldManager;
 import com.janinc.interfaces.ISingletonDB;
 import com.janinc.pubsub.Channel;
-import com.janinc.pubsub.Subscriber;
+import com.janinc.pubsub.iface.AcknowledgeSubscriber;
+import com.janinc.pubsub.iface.Subscriber;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
@@ -48,6 +49,14 @@ public class Database extends ISingletonDB {
         initialized = true;
         createClasses();
     } // initializeDB
+
+    public void setName(String name) {
+        this.name = name;
+    } // setName
+
+    public void setBaseDir(String baseDir) {
+        this.baseDir = baseDir;
+    } // setBaseDirs
 
     public void addClass(Class<? extends DataObject> dataClassName) {
         dataClassList.put(dataClassName, "");
@@ -96,7 +105,8 @@ public class Database extends ISingletonDB {
         tables.remove(name);
     } // removeTable
 
-    public boolean dropTable(String name) {
+    public boolean dropTable(String name) throws DatabaseNotInitializedException {
+        if (!initialized) throw new DatabaseNotInitializedException();
         com.janinc.Table<? extends DataObject> t = tables.get(name);
         removeTable(name);
         return t.deleteTable();
@@ -124,6 +134,7 @@ public class Database extends ISingletonDB {
     public boolean tableExists(Class<? extends DataObject> dataClass) throws DatabaseNotInitializedException {
         return getTable(dataClassList.get(dataClass)) != null;
     } // getTable
+
     public void save(DataObject data) throws ValidationException, DatabaseNotInitializedException, InvocationTargetException, IllegalAccessException {
         String className = dataClassList.get(data.getClass());
         getTable(className).save(data);
@@ -139,10 +150,15 @@ public class Database extends ISingletonDB {
         getTable(className).addRecord(data);
     } // addRecord
 
-    public boolean deleteRecord(DataObject data) throws DatabaseNotInitializedException {
+    public boolean deleteRecord(DataObject data) throws DatabaseNotInitializedException, ReferentialIntegrityError {
         String className = dataClassList.get(data.getClass());
         return getTable(className).deleteRecord(data);
     } // deleteRecord
+
+    public boolean cascadeDelete(DataObject d) {
+        String className = dataClassList.get(d.getClass());
+        return getTable(className).cascadeDelete(d);
+    } // casecadeDelete
 
     public DataObject getRecord(Class<? extends DataObject> dataClass, String id) {
         return getTable(dataClass).getRecord(id);
@@ -180,21 +196,37 @@ public class Database extends ISingletonDB {
         return getTable(dataClass).getFieldManager();
     } // getFieldManager
 
-    public void subscribe(String table, Channel channel, Subscriber subscriber) {
+    public void addSubscriber(String table, Channel channel, Subscriber subscriber) {
         getTable(table).getPublisherService().addSubscriber(channel, subscriber);
-    } // subscribe
+    } // addSubscriber
 
-    public void subscribe(Class<? extends DataObject> dataClass, Channel channel, Subscriber subscriber) {
+    public void addSubscriber(Class<? extends DataObject> dataClass, Channel channel, Subscriber subscriber) {
         getTable(dataClass).getPublisherService().addSubscriber(channel, subscriber);
-    } // subscribe
+    } // addSubscriber
 
-    public void unsubscribe(String table, Channel channel, Subscriber subscriber) {
+    public void removeSubscriber(String table, Channel channel, Subscriber subscriber) {
         getTable(table).getPublisherService().removeSubscriber(channel, subscriber);
-    } // unsubscribe
+    } // removeSubscriber
 
-    public void unsubscribe(Class<? extends DataObject> dataClass, Channel channel, Subscriber subscriber) {
+    public void removeSubscriber(Class<? extends DataObject> dataClass, Channel channel, Subscriber subscriber) {
         getTable(dataClass).getPublisherService().removeSubscriber(channel, subscriber);
-    } // unsubscribe
+    } // removeSubscriber
+
+    public void addAcknowledgeSubscriber(String table, Channel channel, AcknowledgeSubscriber subscriber) {
+        getTable(table).getPublisherService().addAcknowledgeSubscriber(channel, subscriber);
+    } // addAcknowledgeSubscriber
+
+    public void addAcknowledgeSubscriber(Class<? extends DataObject> dataClass, Channel channel, AcknowledgeSubscriber subscriber) {
+        getTable(dataClass).getPublisherService().addAcknowledgeSubscriber(channel, subscriber);
+    } // addAcknowledgeSubscriber
+
+    public void removeAcknowledgeSubscriber(String table, Channel channel, AcknowledgeSubscriber subscriber) {
+        getTable(table).getPublisherService().removeAcknowledgeSubscriber(channel, subscriber);
+    } // removeAcknowledgeSubscriber
+
+    public void removeAcknowledgeSubscriber(Class<? extends DataObject> dataClass, Channel channel, AcknowledgeSubscriber subscriber) {
+        getTable(dataClass).getPublisherService().removeAcknowledgeSubscriber(channel, subscriber);
+    } // removeAcknowledgeSubscriber
 
     @Override
     public String toString() {
