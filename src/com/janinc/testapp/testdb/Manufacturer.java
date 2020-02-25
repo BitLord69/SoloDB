@@ -7,7 +7,6 @@ CopyLeft 2020 - JanInc
 */
 
 import com.janinc.DataObject;
-import com.janinc.annotations.IntField;
 import com.janinc.annotations.StringField;
 import com.janinc.annotations.Table;
 
@@ -15,26 +14,29 @@ import com.janinc.annotations.Table;
 public class Manufacturer extends DataObject {
     public static final long serialVersionUID = 42L;
 
-    @StringField(name = "NAME", maxlength = 300, uniquevalue = true)
+    @StringField(name = "NAME", maxlength = 300, unique = true)
     private String name;
 
-    public Manufacturer() {
-    }
+    @StringField(maxlength = 3, unique = true)
+    private String abbreviation;
 
-    public Manufacturer(String name) {
+    public Manufacturer(String name, String abbreviation)
+    {
         this.name = name;
+        this.abbreviation = abbreviation;
     }
 
     public String getName() {
         return name;
     }
-
     public void setName(String name) {
         this.name = name;
     }
+    public String getAbbreviation() { return abbreviation; }
+    public void setAbbreviation(String abbreviation) { this.abbreviation = abbreviation; }
 
     @Override
     public String toString() {
-        return name;
-    }
+        return name + " " + abbreviation;
+    } // toString
 } // class User

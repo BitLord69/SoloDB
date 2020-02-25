@@ -1,0 +1,12 @@
+Jag har valt att strukturera min databas i olika "lådor", eller hanterare. På detta sätt blir det logiskt för mig, och det har också inneburit att det varit lättare att göra koden generell.
+Database innehåller alla tabeller (Table), Table innehåller alla dataposter (underklasser till DataObject), samt även en FieldManager, som i sin tur innehåller de fält som används för data-valideringar.
+Dessa valideringsfält sätts med hjälp av annotations, allt för att underlätta för applikationsprogrammeraren.
+Eftersom Database är en hanterare av tabellerna är mycket av koden i denna bara en vidarebefordring av anropen till den berörda tabellen. För att välja den tabell man vill göra anropet på kan man antingen använda en sträng med klassnamnet, eller en klassfil. Detta ökar valfriheten för applikationsprogrammeraren, men dubblar många funktioner eftersom de måste överlagras med bägge paramterarna. Internt används metoden för klassfilen eftersom det ska vara generellt.
+
+Reflection har använts extensivt i hela projektet, bland annat för att hämta värden för valideringsfälten och vid sökning i sökmotorn.
+
+Eftersom klassen Database är själva hjärtat i databasen och används på väldigt många ställen, hade det varit jobbigt att behöva skicka den till alla objekt där den behövs.
+Därför har jag istället har jag valt att göra denma klass till en Singleton.
+Till en början var man tvungen att subklassa denna klass för att använda den i ett projekt, men efter en hel del omstrukturering av kod är detta inte längre nödvändigt, vilket underlättar för applikationsprogrammeraren.
+För att säkerställa att klassen används på rätt sätt, måste man därför istället kalla på metoden initializeDB med en methodreferens till den rutin som lägger till de tabeller man önskar att ha. I annat fall får man exceptions.
+

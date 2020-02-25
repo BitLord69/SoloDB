@@ -25,7 +25,6 @@ public @interface StringField {
     String targetField() default "";
     Class<? extends DataObject> lookupTable() default DataObject.class;
 
-    boolean uniquevalue() default false;
+    boolean unique() default false;
     boolean mandatory() default false;
-    boolean usevalidation() default false;
 }

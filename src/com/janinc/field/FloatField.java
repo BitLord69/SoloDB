@@ -8,12 +8,15 @@ CopyLeft 2020 - JanInc
 
 import com.janinc.DataObject;
 import com.janinc.exceptions.ValidationException;
+import com.janinc.util.ReflectionHelper;
+import com.janinc.util.TextUtil;
+
+import java.lang.reflect.InvocationTargetException;
 
 public class FloatField<T> extends Field<T> {
 
     private float minValue = Float.MIN_VALUE;
     private float maxValue = Float.MAX_VALUE;
-    private boolean useValidation = false;
 
     public FloatField(String name) {
         super(name, Type.FLOAT);
@@ -23,25 +26,34 @@ public class FloatField<T> extends Field<T> {
         this(name);
         minValue = annotation.minvalue();
         maxValue = annotation.maxvalue();
-        useValidation = annotation.useValidation();
     }
 
     @Override
-    public void validate(DataObject d) throws ValidationException {
-        float value = Float.MIN_VALUE;
-        if (useValidation)
-        {
-            try {
-                java.lang.reflect.Field field = d.getClass().getDeclaredField(getName());
-                field.setAccessible(true);
-                value = (float) field.get(d);
-            } catch (NoSuchFieldException | IllegalAccessException e) {
-                e.printStackTrace();
-            } // catch
+    public void validate(DataObject d) throws ValidationException, IllegalAccessException, InvocationTargetException {
+        float value = (float) ReflectionHelper.getFieldValue(d, getName());
 
-            if (value < minValue || value > maxValue) {
-                throw new ValidationException(getName(), String.format("value has to be within [%.2f] and [%.2f], but is %.2f!", minValue, maxValue, value));
-            } // if value...
-        } // if useValidation...
+        if (value < minValue || value > maxValue) {
+            throw new ValidationException(getName(), String.format("value has to be within [%s] and [%s], but is %s!",
+                    TextUtil.pimpString(minValue, TextUtil.LEVEL_INFO),
+                    TextUtil.pimpString(maxValue, TextUtil.LEVEL_INFO),
+                    TextUtil.pimpString(value, TextUtil.LEVEL_STRESSED)));
+        } // if value...
     } // validate
+
+    @Override
+    public void updateDirtyField(DataObject d) {
+        float value = 0.0f;
+        try {
+            value = (float)ReflectionHelper.getFieldValue(d, getName());
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
+        }  // catch
+
+        d.setDirtyValue(getName(), value);
+    } // updateDirtyField
+
+    @Override
+    public String toString() {
+        return String.format("FloatField - name: '%s', minValue: %.2f, maxValue: %.2f", getName(), minValue, maxValue);
+    } // toString
 } // class FloatField

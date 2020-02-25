@@ -12,7 +12,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public abstract class Field<T> implements IValidateable {
+public abstract class Field<T> implements IValidateable, IUniqueField {
     private String name;
     private Type type;
 
@@ -34,4 +34,7 @@ public abstract class Field<T> implements IValidateable {
         return "name='" + name + '\'' + ", type=" + type;
     }
 //    public abstract boolean validate(T t);
+    public boolean isUnique() {
+        return false;
+    } // isUniqueField
 } // class Field

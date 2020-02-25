@@ -1,17 +1,20 @@
 package com.janinc;
-import com.janinc.exceptions.ValidationException;
-import com.janinc.field.Field;
+
+import com.janinc.exceptions.*;
+import com.janinc.field.FieldManager;
 import com.janinc.interfaces.ISingletonDB;
+import com.janinc.pubsub.Channel;
+import com.janinc.pubsub.iface.AcknowledgeSubscriber;
+import com.janinc.pubsub.iface.Subscriber;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.lang.reflect.InvocationTargetException;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Database extends ISingletonDB {
     protected static Database mInstance = null;
+    protected boolean initialized = false;
 
     private String name = "";
     private String baseDir = "";
@@ -41,9 +44,19 @@ public class Database extends ISingletonDB {
             checkCreateFolder();
     } // Database:Database
 
-    public void initializeDB() {
+    public void initializeDB(Runnable initMethod) {
+        initMethod.run();
+        initialized = true;
         createClasses();
     } // initializeDB
+
+    public void setName(String name) {
+        this.name = name;
+    } // setName
+
+    public void setBaseDir(String baseDir) {
+        this.baseDir = baseDir;
+    } // setBaseDirs
 
     public void addClass(Class<? extends DataObject> dataClassName) {
         dataClassList.put(dataClassName, "");
@@ -71,7 +84,8 @@ public class Database extends ISingletonDB {
         return baseDir;
     } // getBaseDir
 
-    public LinkedHashMap<String, Table<? extends DataObject>> getTables() {
+    public LinkedHashMap<String, Table<? extends DataObject>> getTables() throws DatabaseNotInitializedException {
+        if (!initialized) throw new DatabaseNotInitializedException();
         return (LinkedHashMap<String, Table<? extends DataObject>>) tables;
     } // getTables
 
@@ -87,56 +101,86 @@ public class Database extends ISingletonDB {
     } // addTable
 
     public void removeTable(String name) {
+        if (!initialized) throw new DatabaseNotInitializedException();
         tables.remove(name);
     } // removeTable
 
-    public boolean dropTable(String name) {
+    public boolean dropTable(String name) throws DatabaseNotInitializedException {
+        if (!initialized) throw new DatabaseNotInitializedException();
         com.janinc.Table<? extends DataObject> t = tables.get(name);
         removeTable(name);
         return t.deleteTable();
     } // dropTable
 
-    public com.janinc.Table<? extends DataObject> getTable(String table) {
+    public com.janinc.Table<? extends DataObject> getTable(String table) throws DatabaseNotInitializedException {
+        if (!initialized) throw new DatabaseNotInitializedException();
         return tables.get(table);
     } // getTable
 
-    public com.janinc.Table<? extends DataObject> getTable(Class<? extends DataObject> dataClass) {
-        var t = dataClassList.get(dataClass);
-        return tables.get(t);
+    public com.janinc.Table<? extends DataObject> getTable(Class<? extends DataObject> dataClass) throws DatabaseNotInitializedException {
+        if (!initialized) throw new DatabaseNotInitializedException();
+        return tables.get(dataClassList.get(dataClass));
     } // getTable
 
-    public boolean tableExists(String table) {
+    public String getTableName(Class<? extends DataObject> dataClass) {
+        if (!initialized) throw new DatabaseNotInitializedException();
+        return dataClassList.get(dataClass);
+    } // getTableName
+
+    public boolean tableExists(String table) throws DatabaseNotInitializedException {
         return getTable(table) != null;
     } // tableExists
 
-    public void save(DataObject data) throws ValidationException {
+    public boolean tableExists(Class<? extends DataObject> dataClass) throws DatabaseNotInitializedException {
+        return getTable(dataClassList.get(dataClass)) != null;
+    } // getTable
+
+    public void save(DataObject data) throws ValidationException, DatabaseNotInitializedException, InvocationTargetException, IllegalAccessException {
         String className = dataClassList.get(data.getClass());
         getTable(className).save(data);
     } // save
 
-    public boolean addRecord(DataObject data) throws ValidationException {
+    public void refresh(DataObject data) {
         String className = dataClassList.get(data.getClass());
-        return getTable(className).addRecord(data);
+        getTable(className).refresh(data);
+    } // save
+
+    public void addRecord(DataObject data) throws ValidationException, DatabaseNotInitializedException, InvocationTargetException, IllegalAccessException {
+        String className = dataClassList.get(data.getClass());
+        getTable(className).addRecord(data);
     } // addRecord
 
-    public boolean deleteRecord(DataObject data) {
+    public boolean deleteRecord(DataObject data) throws DatabaseNotInitializedException, ReferentialIntegrityError {
         String className = dataClassList.get(data.getClass());
         return getTable(className).deleteRecord(data);
     } // deleteRecord
+
+    public boolean cascadeDelete(DataObject d) {
+        String className = dataClassList.get(d.getClass());
+        return getTable(className).cascadeDelete(d);
+    } // casecadeDelete
 
     public DataObject getRecord(Class<? extends DataObject> dataClass, String id) {
         return getTable(dataClass).getRecord(id);
     } // getRecord
 
-    public HashMap getRecords(String table) {
+    public HashMap<String, ? extends DataObject> getRecords(String table) throws DatabaseNotInitializedException {
         return getTable(table).getRecords();
     } // getRecords
 
-    public HashMap getRecords(Class<? extends DataObject> dataClass) {
+    public HashMap<String, ? extends DataObject> getRecords(Class<? extends DataObject> dataClass) {
         return getTable(dataClass).getRecords();
     } // getRecords
 
-    public long getNumberOfRecords(String table) {
+    public Iterator<? extends Map.Entry<String,? extends DataObject>> getIterator(String table) throws DatabaseNotInitializedException {
+        return getTable(table).getIterator();
+    } // getIterator
+
+    public Iterator<? extends Map.Entry<String,? extends DataObject>> getIterator(Class<? extends DataObject> dataClass) {
+        return getTable(dataClass).getIterator();
+    } // getIterator
+
+    public long getNumberOfRecords(String table) throws DatabaseNotInitializedException {
         return  getTable(table).getNumberOfRecords();
     } // getNumberOfRecords
 
@@ -144,10 +188,45 @@ public class Database extends ISingletonDB {
         return getTable(dataClass).getNumberOfRecords();
     } // getNumberOfRecords
 
-    public ArrayList<DataObject> search(String table, String searchField, String searchTerm) {
-//        return getTable(table).search(searchField, searchTerm);
-        return null;
-    } // search
+    public FieldManager getFieldManager(String table) {
+        return getTable(table).getFieldManager();
+    } // getFieldManager
+
+    public FieldManager getFieldManager(Class<? extends DataObject> dataClass) {
+        return getTable(dataClass).getFieldManager();
+    } // getFieldManager
+
+    public void addSubscriber(String table, Channel channel, Subscriber subscriber) {
+        getTable(table).getPublisherService().addSubscriber(channel, subscriber);
+    } // addSubscriber
+
+    public void addSubscriber(Class<? extends DataObject> dataClass, Channel channel, Subscriber subscriber) {
+        getTable(dataClass).getPublisherService().addSubscriber(channel, subscriber);
+    } // addSubscriber
+
+    public void removeSubscriber(String table, Channel channel, Subscriber subscriber) {
+        getTable(table).getPublisherService().removeSubscriber(channel, subscriber);
+    } // removeSubscriber
+
+    public void removeSubscriber(Class<? extends DataObject> dataClass, Channel channel, Subscriber subscriber) {
+        getTable(dataClass).getPublisherService().removeSubscriber(channel, subscriber);
+    } // removeSubscriber
+
+    public void addAcknowledgeSubscriber(String table, Channel channel, AcknowledgeSubscriber subscriber) {
+        getTable(table).getPublisherService().addAcknowledgeSubscriber(channel, subscriber);
+    } // addAcknowledgeSubscriber
+
+    public void addAcknowledgeSubscriber(Class<? extends DataObject> dataClass, Channel channel, AcknowledgeSubscriber subscriber) {
+        getTable(dataClass).getPublisherService().addAcknowledgeSubscriber(channel, subscriber);
+    } // addAcknowledgeSubscriber
+
+    public void removeAcknowledgeSubscriber(String table, Channel channel, AcknowledgeSubscriber subscriber) {
+        getTable(table).getPublisherService().removeAcknowledgeSubscriber(channel, subscriber);
+    } // removeAcknowledgeSubscriber
+
+    public void removeAcknowledgeSubscriber(Class<? extends DataObject> dataClass, Channel channel, AcknowledgeSubscriber subscriber) {
+        getTable(dataClass).getPublisherService().removeAcknowledgeSubscriber(channel, subscriber);
+    } // removeAcknowledgeSubscriber
 
     @Override
     public String toString() {

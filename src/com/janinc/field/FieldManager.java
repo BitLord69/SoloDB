@@ -9,6 +9,7 @@ CopyLeft 2020 - JanInc
 import com.janinc.DataObject;
 import com.janinc.exceptions.ValidationException;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.stream.Collectors;
@@ -41,7 +42,15 @@ public class FieldManager {
         return fields;
     } // getFields
 
-    public void validateData(DataObject data) throws ValidationException {
+    public boolean isFieldUnique(String field) {
+        return getField(field).isUnique();
+    } // isFieldUnique
+
+    public void updateDirtyFields(DataObject data) {
+        fields.values().forEach(f -> f.updateDirtyField(data));
+    } // setDirtyValues
+
+    public void validateData(DataObject data) throws ValidationException, InvocationTargetException, IllegalAccessException {
         for (Field f : fields.values()) {
             f.validate(data);
         } // for f...
@@ -52,11 +61,10 @@ public class FieldManager {
         String s = String.format("\t\t---------- FieldManager for table '%s' : number of  validation fields: %d ----------", dataClass.getSimpleName(), fields.size());
         return String.format("%s%n%s%n\t\t%s",
                 s,
-                fields
-                        .entrySet()
-                        .stream()
-                        .map(o -> "\t\t\t" + ((Field)o.getValue()).toString())
-                        .collect(Collectors.joining("\n")),
+                fields.values()
+                      .stream()
+                      .map(field -> "\t\t\t" + field.toString())
+                      .collect(Collectors.joining("\n")),
                 "-".repeat(s.length()));
     } // toString
 } // class FieldManager
