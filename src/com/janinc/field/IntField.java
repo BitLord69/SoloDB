@@ -23,7 +23,7 @@ public class IntField<D> extends Field<D>{
     private boolean unique = false;
 
     public IntField(String name) {
-        super(name, Type.INT);
+        super(name);
     }
 
     public IntField(String name, com.janinc.annotations.IntField annotation) {

@@ -22,7 +22,7 @@ public class StringField<T> extends Field<T> {
     private boolean unique = false;
 
     public StringField(String name) {
-        super(name, Type.STRING);
+        super(name);
     }
 
     public StringField(String name, com.janinc.annotations.StringField annotation) {

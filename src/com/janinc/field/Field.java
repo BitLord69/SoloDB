@@ -14,26 +14,19 @@ import java.util.stream.Stream;
 
 public abstract class Field<T> implements IValidateable, IUniqueField {
     private String name;
-    private Type type;
 
-    public Field(String name, Type type) {
+    public Field(String name) {
         this.name = name;
-        this.type = type;
     }
 
     public String getName() {
         return name;
     }
 
-    public Type getType() {
-        return type;
-    }
-
     @Override
     public String toString() {
-        return "name='" + name + '\'' + ", type=" + type;
+        return "name='" + name;
     }
-//    public abstract boolean validate(T t);
     public boolean isUnique() {
         return false;
     } // isUniqueField
