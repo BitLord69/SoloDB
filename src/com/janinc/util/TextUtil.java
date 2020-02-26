@@ -7,6 +7,7 @@ CopyLeft 2020 - JanInc
 */
 
 import java.util.Arrays;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 public class TextUtil {
@@ -79,4 +80,17 @@ public class TextUtil {
                         .toLowerCase())
                 .collect(Collectors.joining(" "));
     } // titleCase
-} // class TExtUtil
+
+    public static String generateRandomString (int targetStringLength) {
+        int leftLimit = 97; // letter 'a'
+        int rightLimit = 122; // letter 'z'
+        Random random = new Random();
+
+        String generatedString = random.ints(leftLimit, rightLimit + 1)
+                .limit(targetStringLength)
+                .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+                .toString();
+
+        return generatedString;
+    } // generateRandomString
+} // class TextUtil

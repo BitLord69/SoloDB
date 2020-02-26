@@ -16,6 +16,7 @@ import com.janinc.pubsub.iface.Subscriber;
 import com.janinc.query.*;
 import com.janinc.testapp.testdb.*;
 import com.janinc.util.RandomEnum;
+import com.janinc.util.TextUtil;
 
 import java.time.Instant;
 import java.time.temporal.ChronoField;
@@ -36,7 +37,6 @@ public class TestApp implements Subscriber {
     } // printDBStatus
 
     private void saveDisc(Disc d) {
-        // TODO: 2020-02-21 Taktiktips - kolla med Dennis om det blir bättre att ha refresh-koden i själva db.save-metoden
         Database db = Database.getInstance();
         try {
             db.save(d);
@@ -49,19 +49,6 @@ public class TestApp implements Subscriber {
             e.printStackTrace();
         } // catch
     } // saveDisc
-
-    public String generateRandomString (int targetStringLength) {
-        int leftLimit = 97; // letter 'a'
-        int rightLimit = 122; // letter 'z'
-        Random random = new Random();
-
-        String generatedString = random.ints(leftLimit, rightLimit + 1)
-                .limit(targetStringLength)
-                .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
-                .toString();
-
-        return generatedString;
-    } // generateRandomString
 
     private void testValidation() {
         Database db = Database.getInstance();
@@ -90,7 +77,7 @@ public class TestApp implements Subscriber {
         System.out.println("Disc after illegal name: '" + d + "'");
 
         System.out.println("\nTrying to set a random name for disc '" + d + "'");
-        d.setName(generateRandomString(10));
+        d.setName(TextUtil.generateRandomString(10));
         saveDisc(d);
         System.out.println("Disc after name change: '" + d + "'");
 
@@ -101,7 +88,7 @@ public class TestApp implements Subscriber {
         System.out.println("Weight after (hopefully) successful change: " + d + "\n");
 
         System.out.println("Testing to set a too long name!");
-        d.setName(generateRandomString(305));
+        d.setName(TextUtil.generateRandomString(305));
         saveDisc(d);
 
         System.out.println("\nTesting a mandatory field, creating a disc without a name!");
@@ -226,7 +213,7 @@ public class TestApp implements Subscriber {
         System.out.println(String.format("%n%s Testing the subscription service! %s%n", "-".repeat(50), "-".repeat(50)));
         Manufacturer manufacturer = new Manufacturer(
                 String.format("A new manufacturer! %d", Instant.now().get(ChronoField.MILLI_OF_SECOND)),
-                generateRandomString(3));
+                TextUtil.generateRandomString(3));
         try {
             db.addRecord(manufacturer);
         } catch (ValidationException | InvocationTargetException | IllegalAccessException e) {
@@ -267,7 +254,7 @@ public class TestApp implements Subscriber {
         System.out.println("\nCreating a new record and deleting it right away; should be OK!");
         Manufacturer m2 = new Manufacturer(
                 String.format("Yet another manufacturer! %d", Instant.now().get(ChronoField.MILLI_OF_SECOND)),
-                generateRandomString(3));
+                TextUtil.generateRandomString(3));
         try {
             db.addRecord(m2);
             db.deleteRecord(m2);
@@ -318,10 +305,10 @@ public class TestApp implements Subscriber {
         TestDataFactory.createTestRecordsIfNone();
 
         printDBStatus();
-//        testValidation();
-//        testQueries();
-//
-//        subscribeToChangesInDb();
-//        testSubscriptions();
+        testValidation();
+        testQueries();
+
+        subscribeToChangesInDb();
+        testSubscriptions();
     } // run
 } // class TestApp

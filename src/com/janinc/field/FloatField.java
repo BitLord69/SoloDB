@@ -19,7 +19,7 @@ public class FloatField<T> extends Field<T> {
     private float maxValue = Float.MAX_VALUE;
 
     public FloatField(String name) {
-        super(name, Type.FLOAT);
+        super(name);
     }
 
     public FloatField(String name, com.janinc.annotations.FloatField annotation) {
